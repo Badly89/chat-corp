@@ -54,7 +54,8 @@ sites:
 ` composer create-project --prefer-dist laravel/laravel laravel ` - следует понимать что последнее "laravel" в команде - имя создаваемой папки - должны быть похоже на ту что указывали в Homestead.yaml в блоке sites 
  - последнеечт нужно сделать это в файл hosts (C:\Windows\System32\drivers\etc\hosts) нужно добавить наш сайт ` 192.168.10.10 chat-corp.local` (в файле ip) (у вас может быть другое название)
  - так же обращаю сразу внимание, что в файле конфигурации нужно указать НЕОБХОДИМОЕ название базы данных 
- ``` databases:
+ ``` 
+ databases:
     - chat-corp
     ```
 
