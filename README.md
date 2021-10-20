@@ -5,15 +5,6 @@
 
 <h3 align="center">Корпоративный чат</h3>
 
-<div align="center">
-
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
-
-</div>
-
 ---
 
 <p align="center"> Few lines describing your project.
@@ -32,31 +23,26 @@
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgement)
 
-## 🧐 About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+### Установка
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+Для запуска на локальной машине необходимо установкить Homestead.
+Перед выполнением дальнейших действий необходимо установить 
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them.
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+- [Git ](https://git-scm.com/) - Git
+- [VirtualBox ](https://www.virtualbox.org/) - virtual PC
+- [Vagrant ](https://vuejs.org/) 
+- [HeidiSQL](https://nodejs.org/en/) - utils from work with BD
 
 ```
-Give the example
+Далее откроем консоль git в любом месте. Для этого следует щелкнуть левой кнопкой мыши и выбрать "Git Bash Here".
+В консоли вводим `vagrant box add laravel/homestead` - произойдет загрузка образа homestead на ваш компьютер (потребуется около 4Гб на жестком диске).
+````
+Создаем папку где будем хранить настройки виртуальной машины. Заходим в нее и запускаем консоль Git ("Git Bash Here").
+В консоль вводим `git clone https://github.com/laravel/homestead.git ./ `
+После окончания данных с репозитория нужно перейти в стабильную ветку - ` git checkout release `
 ```
+Запускаем init.bat (находится в папке виртуальной машины) - создаст файл с расширением <b>yaml</b>
 
 And repeat
 
@@ -96,10 +82,7 @@ Add additional notes about how to deploy this on a live system.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
-- [Git ](https://git-scm.com/) - Git
-- [VirtualBox ](https://www.virtualbox.org/) - virtual PC
-- [Vagrant ](https://vuejs.org/) 
-- [HeidiSQL](https://nodejs.org/en/) - utils from work with BD
+
 
 
 
