@@ -4,39 +4,51 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>BoobleChat</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
          <link href="{{mix('css/app.css')}}" rel="stylesheet" type="text/css">
 
       
-        
-
-      
     </head>
     <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+        <h2 style="text-align: center"> Корпоративный чат </h2>
+       <div class=" flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
+                        @if (Route::has('login'))
+                        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                            @auth
+                            <a
+                                href="{{ url('/home') }}"
+                                class="text-sm text-gray-700 dark:text-gray-500 underline"
+                            >
+                                Home
+                            </a>
+                            @else
+                            <a
+                                href="{{ route('login') }}"
+                                class="text-sm text-gray-700 dark:text-gray-500 underline"
+                            >
+                                Log in
+                            </a>
+                            @if (Route::has('register'))
+                            <a
+                                href="{{ route('register') }}"
+                                class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline"
+                            >
+                                Register
+                            </a>
+                            @endif @endauth
+                        </div>
                         @endif
-                    @endauth
-                </div>
-            @endif
+                         <div id="root">
+                        </div>
+                    </div>
 
-             <h2 style="text-align: center"> Laravel and React application </h2>
-        <div id="root">
-        </div>
+             
+       
         
-        <script src="{{mix('js/app.js')}}" ></script>
-    </body>
-        </div>
+        <script src="{{mix('js/index.js')}}" ></script>
+   
     </body>
 </html>

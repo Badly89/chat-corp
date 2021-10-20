@@ -1,0 +1,2 @@
+export const SEND_MESSAGE = "MESSAGES::SEND_MESSAGE";
+export const DEL_MESSAGE = "MESSAGE::DEL_MESSAGE";
