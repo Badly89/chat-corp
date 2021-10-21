@@ -4,48 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>BoobleChat</title>
+        <title>GBChat</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-         <link href="{{mix('css/app.css')}}" rel="stylesheet" type="text/css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        
+        <link href="{{mix('css/app.css')}}" rel="stylesheet" type="text/css">
 
       
     </head>
     <body class="antialiased">
-        <h2 style="text-align: center"> Корпоративный чат </h2>
-       <div class=" flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-                        @if (Route::has('login'))
-                        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                            @auth
-                            <a
-                                href="{{ url('/home') }}"
-                                class="text-sm text-gray-700 dark:text-gray-500 underline"
-                            >
-                                Home
-                            </a>
-                            @else
-                            <a
-                                href="{{ route('login') }}"
-                                class="text-sm text-gray-700 dark:text-gray-500 underline"
-                            >
-                                Log in
-                            </a>
-                            @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline"
-                            >
-                                Register
-                            </a>
-                            @endif @endauth
-                        </div>
-                        @endif
-                         <div id="root">
-                        </div>
-                    </div>
+        <h2 style="text-align: center"> GBChat </h2>
+       
 
-             
+              <div id="root">
+                        </div>
        
         
         <script src="{{mix('js/index.js')}}" ></script>
