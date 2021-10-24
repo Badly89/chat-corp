@@ -6,8 +6,6 @@ import { Routes } from "./components/routes";
 import { store, persistor } from "./store";
 export const App = () => (
     <Provider store={store}>
-        <PersistGate loading={<span>loading....</span>} persistor={persistor}>
-            <Routes />
-        </PersistGate>
+        <Routes />
     </Provider>
 );
