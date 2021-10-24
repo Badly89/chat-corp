@@ -4,6 +4,7 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
+<<<<<<< HEAD
 require('./bootstrap');
 
 /**
@@ -13,3 +14,11 @@ require('./bootstrap');
  */
 
 require('./components/Example');
+=======
+import { store, persistor } from "./store";
+export const App = () => (
+    <Provider store={store}>
+        <Routes />
+    </Provider>
+);
+>>>>>>> 0b5acadb1c6a895bb0e3a7c604ee6303de44d726

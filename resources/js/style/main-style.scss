@@ -1,0 +1,123 @@
+.main-window {
+    display: grid;
+    grid-template-columns: 0.25fr 2fr 3fr;
+    grid-template-rows: 2fr;
+    gap: 0px 0px;
+    grid-template-areas: "sideBar chatList messageList";
+}
+
+.sideBar {
+    grid-area: sideBar;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #7fc485;
+}
+.wrap {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+.far,
+.fas {
+    font-size: 28px;
+
+    color: rgba(43, 46, 115, 0.5);
+}
+
+.chatList {
+    max-width: 440px;
+    overflow-y: auto;
+    grid-area: chatList;
+    height: 100vh;
+}
+.group-chats {
+    background: #eff1f1;
+    height: 100vh;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+}
+.card {
+    flex-direction: row;
+    align-items: center;
+    border-radius: 12px;
+    border: 1px solid #c9cccd;
+    justify-content: space-around;
+}
+.card-title {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #2b2e73;
+}
+.card-text {
+    font-size: 14px;
+    line-height: 16px;
+    color: #c9cccd;
+}
+
+.select-group {
+    display: flex;
+}
+.select-style {
+    width: 50%;
+    padding: 0;
+    margin: 0;
+}
+.select-style selected {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    color: #2b2e73;
+}
+.input-group .btn {
+    border: 0px;
+    right: 39px;
+    z-index: 3;
+    background: transparent;
+
+    color: #2b2e73;
+}
+.input-group input {
+    z-index: 2;
+    border-radius: 12px;
+}
+.input-group input[type="text"] {
+    font-size: 14px;
+    line-height: 16px;
+    color: #c9cccd;
+}
+.fas-search {
+    font-size: 16px;
+    background: white;
+}
+.fas:hover,
+.far:hover {
+    color: #2b2e73;
+}
+.input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n + 3),
+.input-group:not(.has-validation)
+    > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu) {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.messageList {
+    grid-area: messageList;
+}
+.title-welcome {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    color: #2b2e73;
+}
+.text-welcome {
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #626465;
+}
