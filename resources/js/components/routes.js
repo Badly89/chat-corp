@@ -1,22 +1,42 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { Header } from "./Header";
-import Container from "react-bootstrap/Container";
-import { Main } from "./Main";
-import { ListGroup, ListGroupItem } from "react-bootstrap";
-
+import { LeftSideBar } from "./leftSideBar";
+import { ChatList } from "./chatList";
+import { FieldMessage } from "./fieldMessage";
+import { ListGroup } from "react-bootstrap";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { UserProfile } from "./userProfile";
+import { FriendsList } from "./friendsList";
+import { CallList } from "./callList";
 export const Routes = () => {
     return (
         <>
             <BrowserRouter>
-                <ListGroup>
-                    <ListGroupItem>
-                        <Header />
-                    </ListGroupItem>
+                <ListGroup horizontal>
+                    <ListGroup.Item>
+                        <LeftSideBar />
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                        <ChatList />
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                        <FieldMessage />
+                    </ListGroup.Item>
                 </ListGroup>
-                <ListGroupItem>
-                    <Main />
-                </ListGroupItem>
+
+                <Switch>
+                    <Route exact path="/chats">
+                        <ChatList />
+                    </Route>
+                    <Route exact path="/profile">
+                        <UserProfile />
+                    </Route>
+                    <Route exact path="/friends">
+                        <FriendsList />
+                    </Route>
+                    <Route exact path="/calls">
+                        <CallList />
+                    </Route>
+                </Switch>
             </BrowserRouter>
         </>
     );
