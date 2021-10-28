@@ -6,7 +6,7 @@ import { selectMessages } from "../../store/messages/selectors";
 
 import { actionDelMessage, actionMessage } from "../../store/messages/actions";
 import { HeaderChat } from "./HeaderChat";
-import { InputText } from "./input";
+import { InputMessage } from "./input";
 
 export const FieldMessages = () => {
     const { chatId } = useParams();
@@ -59,7 +59,7 @@ export const FieldMessages = () => {
                         onDelMessage={delMessages}
                     />
                 </main>
-                <InputText onSendMessage={sendNewMessage} />
+                <InputMessage onSendMessage={sendNewMessage} />
             </div>
         </>
     );

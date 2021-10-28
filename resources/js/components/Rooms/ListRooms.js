@@ -11,7 +11,7 @@ const chatOptions = [
     { value: "groups", label: "Группы" },
     { value: "arhives", label: "Архивы" },
 ];
-export const ListChats = () => {
+export const ListRooms = () => {
     const [selectedChat, useSelectChat] = useState("allChats");
 
     const [value, setValue] = useState("");
