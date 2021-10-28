@@ -16,10 +16,10 @@ export const SideBar = () => {
                 <Link
                     to="/"
                     className="d-block p-3 link-dark text-decoration-none"
-                    title=""
                 >
                     <img src="/image/logo.png" alt="Логотип" />
                 </Link>
+
                 <div className="wrap">
                     <div>
                         <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
@@ -41,7 +41,6 @@ export const SideBar = () => {
                                 <Link
                                     to="/calls"
                                     className="nav-link py-3 border-bottom"
-                                    title=""
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="right"
                                     data-bs-original-title="calls"
@@ -53,7 +52,6 @@ export const SideBar = () => {
                                 <Link
                                     to="/friends"
                                     className="nav-link py-3 border-bottom"
-                                    title=""
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="right"
                                     data-bs-original-title="friends"

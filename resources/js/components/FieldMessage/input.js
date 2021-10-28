@@ -3,7 +3,7 @@ import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { AUTHORS } from "../../utils/constant";
 import { BsArrowReturnLeft } from "react-icons/bs";
 
-export const InputText = ({ onSendMessage }) => {
+export const InputMessage = ({ onSendMessage }) => {
     const [value, setValue] = useState("");
 
     const handleChange = (e) => {
