@@ -10,25 +10,26 @@ import { ListCalls } from "./Calls/ListCalls";
 export const MainContainer = () => {
     return (
         <>
-            <BrowserRouter>
-                <SideBar />
-                <ListChats />
+            <div className=" main-window">
+                <BrowserRouter>
+                    <SideBar />
 
-                <Switch>
-                    <Route exact path="/chats/:chatId">
-                        <FieldMessages />
-                    </Route>
-                    <Route exact path="/profile">
-                        <UserProfile />
-                    </Route>
-                    <Route exact path="/friends">
-                        <ListFriends />
-                    </Route>
-                    <Route exact path="/calls">
-                        <ListCalls />
-                    </Route>
-                </Switch>
-            </BrowserRouter>
+                    <Switch>
+                        <Route exact path="/chats/:chatId">
+                            <FieldMessages />
+                        </Route>
+                        <Route exact path="/profile">
+                            <UserProfile />
+                        </Route>
+                        <Route exact path="/friends">
+                            <ListFriends />
+                        </Route>
+                        <Route exact path="/calls">
+                            <ListCalls />
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
+            </div>
         </>
     );
 };
