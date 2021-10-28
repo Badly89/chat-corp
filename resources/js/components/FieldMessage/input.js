@@ -1,10 +1,9 @@
 import React, { useState } from "react";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { AUTHORS } from "../../utils/constant";
-import { TextField } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import SendRoundedIcon from "@material-ui/icons/SendRounded";
+import { BsArrowReturnLeft } from "react-icons/bs";
 
-export const InputText = ({ onSendMessage }) => {
+export const InputMessage = ({ onSendMessage }) => {
     const [value, setValue] = useState("");
 
     const handleChange = (e) => {
@@ -17,20 +16,28 @@ export const InputText = ({ onSendMessage }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                type="text"
-                value={value}
-                onChange={handleChange}
-                style={{ fontSize: "16px" }}
-            />
-            <Button
-                type="submit"
-                size="small"
-                variant="contained"
-                color="primary"
-                endIcon={<SendRoundedIcon />}
-            ></Button>
-        </form>
+        <footer>
+            <form onSubmit={handleSubmit}>
+                <InputGroup className="mb-3">
+                    <FormControl
+                        type="text"
+                        value={value}
+                        placeholder="Введите сообщение"
+                        aria-label="Введите сообщение"
+                        aria-describedby="basic-addon2"
+                        onChange={handleChange}
+                    />
+                    <Button
+                        type="submit"
+                        size="small"
+                        variant="contained"
+                        color="outline-secondary"
+                        id="button-addon2"
+                    >
+                        <BsArrowReturnLeft />
+                    </Button>
+                </InputGroup>
+            </form>
+        </footer>
     );
 };
