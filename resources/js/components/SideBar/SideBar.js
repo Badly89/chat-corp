@@ -4,7 +4,7 @@ import { BrowserRouter, Link, Switch, Route, NavLink } from "react-router-dom";
 
 import "../../style/main-style.css";
 import { ListCalls } from "../Calls/ListCalls";
-
+import { ListChats } from "../Rooms/ListChats";
 import { FieldMessages } from "../FieldMessage/FieldMessages";
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../userProfile";
@@ -79,10 +79,10 @@ export const SideBar = () => {
             </div>
             <Switch>
                 <Route exact path="/chats">
-                    <Lis />
+                    <ListChats />
                 </Route>
                 <Route exact path="/chats/:chatId">
-                    <ListRooms />
+                    <ListChats />
                     <FieldMessages />
                 </Route>
                 <Route exact path="/calls">
