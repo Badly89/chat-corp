@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Conversation;
+use App\Events\NewMessage;
 use Illuminate\Http\Request;
 
 class ConversationCotroller extends Controller
