@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Message, MessageField } from "./message";
@@ -11,6 +11,7 @@ import { InputMessage } from "./input";
 export const FieldMessages = () => {
     const { chatId } = useParams();
     const messages = useSelector(selectMessages);
+
     const dispatch = useDispatch();
 
     const sendNewMessage = useCallback(
@@ -36,20 +37,8 @@ export const FieldMessages = () => {
         },
         [chatId, messages]
     );
-    // const delMessages = useCallback(
-    //     (selMessage) => {
-    //         dispatch(
-    //             actionDelMessage(chatId, {
-    //                 ...selMessage,
-    //             })
-    //         );
-    //     },
-
-    //     [messages]
-    // );
     return (
         <>
-            {" "}
             <div className="messageList">
                 <HeaderChat />
 
@@ -64,6 +53,18 @@ export const FieldMessages = () => {
         </>
     );
 };
+
+// const delMessages = useCallback(
+//     (selMessage) => {
+//         dispatch(
+//             actionDelMessage(chatId, {
+//                 ...selMessage,
+//             })
+//         );
+//     },
+
+//     [messages]
+// );
 
 //  <div className="px-4 py-5 my-5 text-center">
 //             <img
