@@ -2,8 +2,8 @@ import axios from "axios";
 
 const API_URL = "http://chat-corp/api/";
 
-const register = (name, email, password) => {
-    return axios.post(API_URL + "create-account", {
+const register = (name, email, password, password_confirmation) => {
+    return axios.post(API_URL + "add_user", {
         name,
         email,
         password,
@@ -13,7 +13,7 @@ const register = (name, email, password) => {
 
 const login = (email, password) => {
     return axios
-        .post(API_URL + "signin", {
+        .post(API_URL + "login", {
             email,
             password,
         })

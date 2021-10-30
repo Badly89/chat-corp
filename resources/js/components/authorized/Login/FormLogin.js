@@ -33,7 +33,7 @@ export const FormLogin = () => {
         //     if (checkBtn.current.context._errors.length === 0) {
         dispatch(login(email, password))
             .then(() => {
-                props.history.push("/profile");
+                props.history.push("/chats");
                 window.location.reload();
             })
             .catch(() => {
