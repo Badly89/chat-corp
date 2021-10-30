@@ -110,7 +110,6 @@ export const SideBar = () => {
                     </Route>
                     <Route exact path="/profile">
                         <UserProfile />
-                        <SideBar />
                     </Route>
                     <Route exact path="/login" component={FormLogin} />
                     <Route exact path="/register" component={FormRegister} />
