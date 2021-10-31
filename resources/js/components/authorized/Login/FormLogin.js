@@ -33,7 +33,7 @@ export const FormLogin = () => {
         //     if (checkBtn.current.context._errors.length === 0) {
         dispatch(login(email, password))
             .then(() => {
-                props.history.push("/chats");
+                props.history.push("/profile");
                 window.location.reload();
             })
             .catch(() => {
@@ -45,7 +45,7 @@ export const FormLogin = () => {
     };
 
     if (isLoggedIn) {
-        return <Redirect to="/profile" />;
+        return <Redirect to="/" />;
     }
     return (
         <>
@@ -129,7 +129,9 @@ export const FormLogin = () => {
                 <div className="bottom-text">
                     <span className="px-3">У вас еще нет учетной записи?</span>
 
-                    <Link to="/register" className="a-text" />
+                    <Link to="/register" className="a-text">
+                        Регистрация
+                    </Link>
                 </div>
             </div>
         </>

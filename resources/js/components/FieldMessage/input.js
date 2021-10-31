@@ -1,17 +1,18 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { AUTHORS } from "../../utils/constant";
 import { BsArrowReturnLeft } from "react-icons/bs";
 
 export const InputMessage = ({ onSendMessage }) => {
     const [value, setValue] = useState("");
-
+    const { user: currentUser } = useSelector((state) => state.auth.user);
     const handleChange = (e) => {
         setValue(e.target.value);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSendMessage({ text: value, sender: AUTHORS.HUMAN });
+        onSendMessage({ text: value, sender: currentUser.name });
         setValue("");
     };
 
