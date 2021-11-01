@@ -4,7 +4,7 @@ import "../../../style/style.css";
 
 import { register } from "../../../store/auth/actions";
 import { Redirect } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export const FormRegister = () => {
@@ -13,6 +13,7 @@ export const FormRegister = () => {
     const [password, setPassword] = useState("");
     const [password_confirmation, setPasswordConfirmation] = useState("");
     const [successful, setSuccessful] = useState(false);
+    const { status } = useSelector((state) => state.status);
 
     const dispatch = useDispatch();
     const onChangeUsername = (e) => {

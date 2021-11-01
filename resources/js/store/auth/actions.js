@@ -6,6 +6,7 @@ import {
     LOGOUT,
 } from "./types";
 
+import { SET_MESSAGE } from "../status/types";
 import AuthService from "../../providers/authProvider";
 
 export const register =
@@ -21,10 +22,10 @@ export const register =
                     type: REGISTER_SUCCESS,
                 });
 
-                // dispatch({
-                //     type: SET_MESSAGE,
-                //     payload: response.data.message,
-                // });
+                dispatch({
+                    type: SET_MESSAGE,
+                    payload: response.data.message,
+                });
 
                 return Promise.resolve();
             },
@@ -40,10 +41,10 @@ export const register =
                     type: REGISTER_FAIL,
                 });
 
-                // dispatch({
-                //     type: SET_MESSAGE,
-                //     payload: message,
-                // });
+                dispatch({
+                    type: SET_MESSAGE,
+                    payload: message,
+                });
 
                 return Promise.reject();
             }

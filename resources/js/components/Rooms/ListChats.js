@@ -18,6 +18,7 @@ export const ListChats = () => {
     const chats = useSelector((state) => state.chats);
 
     const dispatch = useDispatch();
+
     const handleSelect = (selectedChat) => {
         useSelectChat(selectedChat);
     };
