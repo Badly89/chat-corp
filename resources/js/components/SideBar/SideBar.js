@@ -25,75 +25,75 @@ export const SideBar = () => {
     return (
         <div className=" main-window">
             <Router history={history}>
-                {currentUser ? (
-                    <div className="sideBar">
-                        <Link
-                            to="/"
-                            className="d-block p-3 link-dark text-decoration-none"
-                        >
-                            <img src="/image/logo.png" alt="Логотип" />
-                        </Link>
+                {/* {currentUser ? ( */}
+                <div className="sideBar">
+                    <Link
+                        to="/"
+                        className="d-block p-3 link-dark text-decoration-none"
+                    >
+                        <img src="/image/logo.png" alt="Логотип" />
+                    </Link>
 
-                        <div className="wrap">
-                            <div>
-                                <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/chats"
-                                            className="nav-link py-3
+                    <div className="wrap">
+                        <div>
+                            <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
+                                <li className="nav-item">
+                                    <Link
+                                        to="/chats"
+                                        className="nav-link py-3
                                     border-bottom"
-                                            aria-current="page"
-                                            title=""
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="right"
-                                            data-bs-original-title="chats"
-                                        >
-                                            <i className="far fa-comment-dots"></i>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to="/calls"
-                                            className="nav-link py-3 border-bottom"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="right"
-                                            data-bs-original-title="calls"
-                                        >
-                                            <i className="fas fa-phone"></i>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to="/friends"
-                                            className="nav-link py-3 border-bottom"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="right"
-                                            data-bs-original-title="friends"
-                                        >
-                                            <i className="fas fa-user-friends"></i>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            to="/profile"
-                                            className="nav-link py-3 border-bottom"
-                                            title=""
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="right"
-                                            data-bs-original-title="profile"
-                                        >
-                                            <i className="far fa-user-circle"></i>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
+                                        aria-current="page"
+                                        title=""
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        data-bs-original-title="chats"
+                                    >
+                                        <i className="far fa-comment-dots"></i>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/calls"
+                                        className="nav-link py-3 border-bottom"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        data-bs-original-title="calls"
+                                    >
+                                        <i className="fas fa-phone"></i>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/friends"
+                                        className="nav-link py-3 border-bottom"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        data-bs-original-title="friends"
+                                    >
+                                        <i className="fas fa-user-friends"></i>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/profile"
+                                        className="nav-link py-3 border-bottom"
+                                        title=""
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        data-bs-original-title="profile"
+                                    >
+                                        <i className="far fa-user-circle"></i>
+                                    </Link>
+                                </li>
+                            </ul>
                         </div>
-
-                        <div className="dropdown border-top"></div>
                     </div>
-                ) : (
+
+                    <div className="dropdown border-top"></div>
+                </div>
+                {/* ) : (
                     <FormRegister />
-                )}
+                )} */}
                 <Switch>
                     <Route exact path="/chats">
                         <ListChats />
@@ -110,7 +110,6 @@ export const SideBar = () => {
                     </Route>
                     <Route exact path="/profile">
                         <UserProfile />
-                        <SideBar />
                     </Route>
                     <Route exact path="/login" component={FormLogin} />
                     <Route exact path="/register" component={FormRegister} />

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,15 +18,19 @@ use App\Http\Controllers\AuthenticationController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/create-account', [AuthenticationController::class, 'createAccount']);
-//login user
-Route::post('/signin', [AuthenticationController::class, 'signin']);
-//using middleware
+Route::post('/register', [AuthenticationController::class, 'register']);
+Route::post('/login', [AuthenticationController::class, 'login']);
+
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::get('/users/search/{name}', [UserController::class, 'search']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/profile', function(Request $request) {
-        return auth()->user();
-    });
-    Route::post('/sign-out', [AuthenticationController::class, 'logout']);
+    Route::get('/profile', function(Request $request) {   return auth()->user();   });
+    Route::post('/logout', [AuthenticationController::class, 'logout']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
 });
 
 

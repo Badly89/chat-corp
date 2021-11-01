@@ -45,7 +45,7 @@ export const FormLogin = () => {
     };
 
     if (isLoggedIn) {
-        return <Redirect to="/profile" />;
+        return <Redirect to="/" />;
     }
     return (
         <>
@@ -129,7 +129,9 @@ export const FormLogin = () => {
                 <div className="bottom-text">
                     <span className="px-3">У вас еще нет учетной записи?</span>
 
-                    <Link to="/register" className="a-text" />
+                    <Link to="/register" className="a-text">
+                        Регистрация
+                    </Link>
                 </div>
             </div>
         </>
