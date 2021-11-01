@@ -221,6 +221,10 @@
   display: flex;
 }
 
+.btn-sumbit {
+  width: 45px;
+}
+
 .btn-del {
   display: none;
   margin: 0 auto;

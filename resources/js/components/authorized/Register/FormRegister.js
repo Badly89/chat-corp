@@ -5,6 +5,7 @@ import "../../../style/style.css";
 import { register } from "../../../store/auth/actions";
 import { Redirect } from "react-router";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 export const FormRegister = () => {
     const [name, setUsername] = useState("");
@@ -42,14 +43,16 @@ export const FormRegister = () => {
         dispatch(register(name, email, password, password_confirmation))
             .then(() => {
                 props.history.push("/login");
-                <Redirect to="/login" />;
+
                 setSuccessful(true);
             })
             .catch(() => {
                 setSuccessful(false);
             });
     };
-
+    if (successful) {
+        <Redirect to="/login" />;
+    }
     return (
         <>
             <div className="form-authorizate">
@@ -135,9 +138,9 @@ export const FormRegister = () => {
 
                 <div className="bottom-text">
                     <span className="px-3">У вас уже есть учетная запись?</span>
-                    <a href="#" target="_blank" className="a-text">
+                    <Link to="/login" className="a-text">
                         Войти.
-                    </a>
+                    </Link>
                 </div>
             </div>
         </>
