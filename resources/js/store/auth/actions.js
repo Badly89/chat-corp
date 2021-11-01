@@ -6,8 +6,9 @@ import {
     LOGOUT,
 } from "./types";
 
-import { SET_MESSAGE } from "../status/types";
 import AuthService from "../../providers/authProvider";
+
+import { returnStatus } from "../status/actions";
 
 export const register =
     (name, email, password, password_confirmation) => (dispatch) => {
@@ -21,12 +22,13 @@ export const register =
                 dispatch({
                     type: REGISTER_SUCCESS,
                 });
-
-                dispatch({
-                    type: SET_MESSAGE,
-                    payload: response.data.message,
-                });
-
+                dispatch(
+                    returnStatus(
+                        response.data,
+                        response.status,
+                        "REGISTER_SUCCESS"
+                    )
+                );
                 return Promise.resolve();
             },
             (error) => {
@@ -41,10 +43,13 @@ export const register =
                     type: REGISTER_FAIL,
                 });
 
-                dispatch({
-                    type: SET_MESSAGE,
-                    payload: message,
-                });
+                dispatch(
+                    returnStatus(
+                        err.response.data,
+                        err.response.data.message,
+                        "REGISTER_FAIL"
+                    )
+                );
 
                 return Promise.reject();
             }

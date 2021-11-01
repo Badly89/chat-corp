@@ -1,17 +1,28 @@
-import { CLEAR_MESSAGE, SET_MESSAGE } from "./types";
+import { GET_STATUS, CLEAR_STATUS } from "./types";
 
-const initialState = {};
+const initialState = {
+    statusMsg: {},
+    respCode: null,
+    id: null,
+};
 
-export function messageAuth(state = initialState, action) {
-    const { type, payload } = action;
+export default function statusReducer(state = initialState, action) {
+    switch (action.type) {
+        case GET_STATUS:
+            return {
+                statusMsg: action.payload.msg,
+                respCode: action.payload.status,
+                id: action.payload.id,
+            };
 
-    switch (type) {
-        case SET_MESSAGE:
-            return { ...state, message: payload };
-        case CLEAR_MESSAGE:
-            return { ...state, message: "" };
+        case CLEAR_STATUS:
+            return {
+                statusMsg: {},
+                respCode: null,
+                id: null,
+            };
 
         default:
-            break;
+            return state;
     }
 }

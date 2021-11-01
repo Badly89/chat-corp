@@ -4,6 +4,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
+    SET_MESSAGE,
+    CLEAR_MESSAGE,
 } from "./types";
 
 const user = JSON.parse(localStorage.getItem("user"));
@@ -44,6 +46,7 @@ export function authReducer(state = initialState, action) {
                 isLoggedIn: false,
                 user: null,
             };
+
         default:
             return state;
     }

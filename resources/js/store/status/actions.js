@@ -1,10 +1,16 @@
-import { SET_MESSAGE, CLEAR_MESSAGE } from "./types";
+import { GET_STATUS, CLEAR_STATUS } from "./types";
 
-export const setStatusMessage = (message) => ({
-    type: SET_MESSAGE,
-    payload: message,
-});
+// RETURN STATUS
+export const returnStatus = (msg, status, id = null) => {
+    return {
+        type: GET_STATUS,
+        payload: { msg, status, id },
+    };
+};
 
-export const clearStatusMessage = () => ({
-    type: CLEAR_MESSAGE,
-});
+// CLEAR STATUS
+export const clearStatus = () => {
+    return {
+        type: CLEAR_STATUS,
+    };
+};
