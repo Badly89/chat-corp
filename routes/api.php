@@ -18,8 +18,8 @@ use App\Http\Controllers\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/add_user', [AuthenticationController::class, 'createAccount']);
-Route::post('/login', [AuthenticationController::class, 'signin']);
+Route::post('/register', [AuthenticationController::class, 'register']);
+Route::post('/login', [AuthenticationController::class, 'login']);
 
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);

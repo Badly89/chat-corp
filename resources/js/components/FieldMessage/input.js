@@ -29,6 +29,7 @@ export const InputMessage = ({ onSendMessage }) => {
                         onChange={handleChange}
                     />
                     <Button
+                        className="btn-sumbit"
                         type="submit"
                         size="small"
                         variant="contained"

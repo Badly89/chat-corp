@@ -12,7 +12,7 @@ export default function PublicRoute({
                 authenticated === false ? (
                     <Component {...props} />
                 ) : (
-                    <Redirect to="/chats" />
+                    <Redirect to="/" />
                 )
             }
         />

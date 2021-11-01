@@ -43,14 +43,16 @@ export const FormRegister = () => {
         dispatch(register(name, email, password, password_confirmation))
             .then(() => {
                 props.history.push("/login");
-                <Redirect to="/login" />;
+
                 setSuccessful(true);
             })
             .catch(() => {
                 setSuccessful(false);
             });
     };
-
+    if (successful) {
+        <Redirect to="/login" />;
+    }
     return (
         <>
             <div className="form-authorizate">
@@ -136,7 +138,7 @@ export const FormRegister = () => {
 
                 <div className="bottom-text">
                     <span className="px-3">У вас уже есть учетная запись?</span>
-                    <Link to="/login" target="_blank" className="a-text">
+                    <Link to="/login" className="a-text">
                         Войти.
                     </Link>
                 </div>

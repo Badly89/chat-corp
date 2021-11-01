@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_URL = "http://chat-corp/api/";
+const API_URL = "https://chat-corp.herokuapp.com/api/";
 
 const register = (name, email, password, password_confirmation) => {
-    return axios.post(API_URL + "add_user", {
+    return axios.post(API_URL + "register", {
         name,
         email,
         password,

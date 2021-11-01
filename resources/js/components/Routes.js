@@ -39,6 +39,11 @@ export const Routes = () => {
                     path="/login"
                     component={FormLogin}
                 />
+                <PublicRoute
+                    authenticated={authed}
+                    path="/register"
+                    component={FormRegister}
+                />
                 <PrivateRoute
                     path="/"
                     authenticated={authed}

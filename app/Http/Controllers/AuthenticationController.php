@@ -34,7 +34,7 @@ class AuthenticationController extends Controller
         return response($response, 201);
     }
     //use this method to signin users
-    public function signin(Request $request) {
+    public function login(Request $request) {
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
