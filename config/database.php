@@ -7,7 +7,8 @@ $host = $url["host"];
 $username = $url["user"];
 $password = $url["pass"];
 $database = substr($url["path"], 1);
-
+$DATABASE_URL=parse_url('postgres://gcvtkdpjbvxwli:179fa6f8a8fe95b8efa97569a597d806dac6e9cefea90200c4c058df55776509@ec2-3-233-55-123.compute-1.amazonaws.com:5432/dc7uakuoanhvis
+');
 return [
 
     /*
@@ -72,13 +73,16 @@ return [
         ],
         'pgsql' => array(
         'driver'   => 'pgsql',
-        'host'     => $host,
-        'database' => $database,
-        'username' => $username,
-        'password' => $password,
+        'host'     => $DATABASE_URL["host"],
+        'port'     => $DATABASE_URL["port"],
+        'database' => ltrim($DATABASE_URL["path"],"/"),
+        'username' => $DATABASE_URL["user"],
+        'password' => $DATABASE_URL["pass"],
         'charset'  => 'utf8',
         'prefix'   => '',
-        'schema'   => 'public',
+        'prefix_indexes' => true,
+        'schema' => 'public',
+        'sslmode' => 'prefer',
     ),
 
         // 'pgsql' => [
