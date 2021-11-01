@@ -7,6 +7,7 @@ import { compose } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
+import statusReducer from "./status/reducer";
 import { authReducer } from "./auth/reducer";
 
 const persistConfig = { key: "chat-corp", storage };
@@ -18,6 +19,7 @@ const persistedReducer = persistReducer(
         messages: msgReducer,
         friends: usersReducer,
         auth: authReducer,
+        status: statusReducer,
     })
 );
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
