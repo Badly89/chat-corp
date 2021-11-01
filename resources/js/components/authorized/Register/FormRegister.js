@@ -2,10 +2,12 @@ import React, { useState } from "react";
 
 import "../../../style/style.css";
 
-import { register } from "../../../store/auth/actions";
+import { login, register } from "../../../store/auth/actions";
 import { Redirect } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { selectStatus } from "../../../store/status/selectors";
+import { history } from "../../../helpers/history";
 
 export const FormRegister = () => {
     const [name, setUsername] = useState("");
@@ -14,6 +16,9 @@ export const FormRegister = () => {
     const [password_confirmation, setPasswordConfirmation] = useState("");
     const [successful, setSuccessful] = useState(false);
 
+    const { status } = useSelector(selectStatus);
+
+    console.log(status);
     const dispatch = useDispatch();
     const onChangeUsername = (e) => {
         const name = e.target.value;
@@ -42,7 +47,7 @@ export const FormRegister = () => {
         // if (checkBtn.current.context._errors.length === 0) {
         dispatch(register(name, email, password, password_confirmation))
             .then(() => {
-                props.history.push("/login");
+                history.push("/login");
 
                 setSuccessful(true);
             })
@@ -51,7 +56,9 @@ export const FormRegister = () => {
             });
     };
     if (successful) {
-        <Redirect to="/login" />;
+        // <Redirect to="/login" />;
+        dispatch(login(email, password));
+        console.log("REGISTER_SUCCESS");
     }
     return (
         <>
@@ -136,6 +143,20 @@ export const FormRegister = () => {
                     </form>
                 </div>
 
+                {status && (
+                    <div className="form-group">
+                        <div
+                            className={
+                                successful
+                                    ? "alert alert-success"
+                                    : "alert alert-danger"
+                            }
+                            role="alert"
+                        >
+                            {status}
+                        </div>
+                    </div>
+                )}
                 <div className="bottom-text">
                     <span className="px-3">У вас уже есть учетная запись?</span>
                     <Link to="/login" className="a-text">

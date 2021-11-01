@@ -1,5 +1,5 @@
-export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
-export const REGISTER_FAIL = "REGISTER_FAIL";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAIL = "LOGIN_FAIL";
-export const LOGOUT = "LOGOUT";
+export const REGISTER_SUCCESS = "AUTH::REGISTER_SUCCESS";
+export const REGISTER_FAIL = "AUTH::REGISTER_FAIL";
+export const LOGIN_SUCCESS = "AUTH::LOGIN_SUCCESS";
+export const LOGIN_FAIL = "AUTH::LOGIN_FAIL";
+export const LOGOUT = "AUTH::LOGOUT";

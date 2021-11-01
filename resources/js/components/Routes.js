@@ -54,22 +54,6 @@ export const Routes = () => {
                     authenticated={authed}
                     component={UserProfile}
                 />
-
-                {/* <PublicRoute
-                    authenticated={authed}
-                    path="/register"
-                    component={FormRegister}
-                /> */}
-                {/* <PublicRoute
-                    path="/register"
-                    authenticated={authed}
-                    component={FormRegister}
-                /> */}
-                {/* <PublicRoute
-                    authenticated={authed}
-                    path="/login"
-                    component={FormLogin}
-                /> */}
             </Switch>
         </Router>
     );

@@ -14,17 +14,25 @@ class CreateMessagesTable extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->onDelete('cascade');
-            $table->foreignId('chat_id')
-                ->constrained('chats')
-                ->onDelete('cascade');
-            $table->text('content')->nullable();
-            $table->integer('is_read');
+            $table->increments('id');
+            $table->integer('sender_id')->unsigned();
+            $table->text('rec_id');
+            $table->text('message');
             $table->timestamps();
         });
+
+        // Schema::create('messages', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('user_id')
+        //         ->constrained('users')
+        //         ->onDelete('cascade');
+        //     $table->foreignId('chat_id')
+        //         ->constrained('chats')
+        //         ->onDelete('cascade');
+        //     $table->text('content')->nullable();
+        //     $table->integer('is_read');
+        //     $table->timestamps();
+        // });
     }
 
     /**

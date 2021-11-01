@@ -9,6 +9,13 @@ export const Message = ({ messages, onDelMessage }) => {
         onDelMessage(messages);
         console.log(test2);
     };
+    const bottomRef = useRef(null);
+    const scrollBottom = () => {
+        bottomRef.current?.scrollBottom({ behavior: "smooth" });
+    };
+    useEffect(() => {
+        scrollBottom();
+    }, [messages]);
     return (
         <>
             <div className="message-content">
