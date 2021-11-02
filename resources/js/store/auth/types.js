@@ -12,3 +12,5 @@ export const USER_DESC_UPDATED = "AUTH::USER_DESC_UPDATED";
 export const LOGOUT_SUCCESS = "AUTH::LOGOUT_SUCCESS";
 
 export const AUTH_ERROR = "AUTH::AUTH_ERROR";
+
+export const IS_LOADING = "AUTH::IS_LOADING";

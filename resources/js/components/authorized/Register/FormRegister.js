@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import "../../../style/style.css";
 
@@ -14,10 +14,14 @@ export const FormRegister = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [password_confirmation, setPasswordConfirmation] = useState("");
+
     const [successful, setSuccessful] = useState(false);
     const [statusMsg, setStatusMsg] = useState("");
-    const { status } = useSelector((state) => state.status);
-    console.log(statusMsg);
+    const { status } = useSelector(selectStatus);
+    const testMsg = useSelector((state) => {
+        state.status.statusMsg.message;
+    });
+
     const dispatch = useDispatch();
     const onChangeUsername = (e) => {
         const name = e.target.value;
@@ -55,22 +59,31 @@ export const FormRegister = () => {
     //     }
     // }
 
-    const handleRegister = (e) => {
-        e.preventDefault();
-        const body = { name, email, password };
-        dispatch(register(body));
+    const handleRegister = useCallback(
+        async (e) => {
+            setStatusMsg("");
+            e.preventDefault();
+            const body = { name, email, password };
+            try {
+                await dispatch(register(body));
+                setStatusMsg(testMsg);
 
-        setSuccessful(true);
-    };
-    if (successful) {
-        // <Redirect to="/login" />;
-        setTimeout(() => {
-            // dispatch(login(email, password));
-            console.log("LIGN_SUCCESS");
-        }, 2000);
+                //login auto
+                setTimeout(() => {
+                    dispatch(login(email, password));
+                    console.log("LOGIN_SUCCESS");
+                    console.log(statusMsg);
+                }, 2000);
+            } catch (err) {
+                console.log(err);
+                setStatusMsg(err);
+            }
 
-        console.log("REGISTER_SUCCESS");
-    }
+            setSuccessful(true);
+        },
+        [name, email, password]
+    );
+
     return (
         <>
             <div className="form-authorizate">

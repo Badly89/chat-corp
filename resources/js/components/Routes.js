@@ -18,9 +18,9 @@ export const Routes = () => {
     const [loading, setLoading] = useState(false);
     const [authed, setAuth] = useState(false);
     const { user: currentUser } = useSelector((state) => state.auth);
-
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     useEffect(() => {
-        if (currentUser) {
+        if (isAuthenticated) {
             setAuth(true);
             setLoading(false);
         } else {
@@ -35,23 +35,23 @@ export const Routes = () => {
         <Router>
             <Switch>
                 <PublicRoute
-                    authenticated={authed}
+                    isAuthenticated={authed}
                     path="/login"
                     component={FormLogin}
                 />
                 <PublicRoute
-                    authenticated={authed}
+                    isAuthenticated={authed}
                     path="/register"
                     component={FormRegister}
                 />
                 <PrivateRoute
                     path="/"
-                    authenticated={authed}
+                    isAuthenticated={authed}
                     component={SideBar}
                 />
                 <PrivateRoute
                     path="/profile"
-                    authenticated={authed}
+                    isAuthenticated={authed}
                     component={UserProfile}
                 />
             </Switch>
