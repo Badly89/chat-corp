@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../../../style/style.css";
 
@@ -15,10 +15,9 @@ export const FormRegister = () => {
     const [password, setPassword] = useState("");
     const [password_confirmation, setPasswordConfirmation] = useState("");
     const [successful, setSuccessful] = useState(false);
-
-    const { status } = useSelector(selectStatus);
-
-    console.log(status);
+    const [statusMsg, setStatusMsg] = useState("");
+    const { status } = useSelector((state) => state.status);
+    console.log(statusMsg);
     const dispatch = useDispatch();
     const onChangeUsername = (e) => {
         const name = e.target.value;
@@ -37,27 +36,39 @@ export const FormRegister = () => {
         const password_confirmation = e.target.value;
         setPasswordConfirmation(password_confirmation);
     };
+
+    // useEffect(() => {
+    //     if (status === "REGISTER_FAIL") {
+    //         setStatusMsg({ msg: status.statusMsg.message });
+    //         console.log("REGISTER_FAIL");
+    //     }
+    //     if (status === "REGISTER_SUCCESS") {
+    //         setStatusMsg({ msg: status.statusMsg.message });
+    //         setTimeout(() => {
+    //             console.log("LOGIN");
+    //         }, 2000);
+    //     }
+    // }, [status]);
+    // if (status !== preventDefault) {
+    //     if (status.id === "REGISTER_FAIL") {
+    //         setStatusMsg();
+    //     }
+    // }
+
     const handleRegister = (e) => {
         e.preventDefault();
+        const body = { name, email, password };
+        dispatch(register(body));
 
-        setSuccessful(false);
-
-        // form.current.validateAll();
-
-        // if (checkBtn.current.context._errors.length === 0) {
-        dispatch(register(name, email, password, password_confirmation))
-            .then(() => {
-                history.push("/login");
-
-                setSuccessful(true);
-            })
-            .catch(() => {
-                setSuccessful(false);
-            });
+        setSuccessful(true);
     };
     if (successful) {
         // <Redirect to="/login" />;
-        dispatch(login(email, password));
+        setTimeout(() => {
+            // dispatch(login(email, password));
+            console.log("LIGN_SUCCESS");
+        }, 2000);
+
         console.log("REGISTER_SUCCESS");
     }
     return (

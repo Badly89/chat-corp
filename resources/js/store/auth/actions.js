@@ -9,51 +9,39 @@ import {
 import AuthService from "../../providers/authProvider";
 
 import { returnStatus } from "../status/actions";
+import axios from "axios";
 
 export const register =
-    (name, email, password, password_confirmation) => (dispatch) => {
-        return AuthService.register(
+    ({ name, email, password }, history) =>
+    (dispatch) => {
+        const headers = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        const body = JSON.stringify({
             name,
             email,
             password,
-            password_confirmation
-        ).then(
-            (response) => {
-                dispatch({
-                    type: REGISTER_SUCCESS,
-                });
+        });
+        axios
+            .post("/api/register", body, headers)
+            .then((res) => {
                 dispatch(
-                    returnStatus(
-                        response.data,
-                        response.status,
-                        "REGISTER_SUCCESS"
-                    )
+                    returnStatus(res.data, res.status, "REGISTER_SUCCESS")
                 );
-                return Promise.resolve();
-            },
-            (error) => {
-                const message =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-
-                dispatch({
-                    type: REGISTER_FAIL,
-                });
-
+                dispatch({ type: REGISTER_SUCCESS });
+            })
+            .catch((err) => {
                 dispatch(
                     returnStatus(
                         err.response.data,
-                        err.response.data.message,
+                        err.response.status,
                         "REGISTER_FAIL"
                     )
                 );
-
-                return Promise.reject();
-            }
-        );
+                dispatch({ type: REGISTER_FAIL });
+            });
     };
 
 export const login = (email, password) => (dispatch) => {

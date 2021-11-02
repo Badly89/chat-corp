@@ -10,6 +10,7 @@ export default function statusReducer(state = initialState, action) {
     switch (action.type) {
         case GET_STATUS:
             return {
+                ...state,
                 statusMsg: action.payload.msg,
                 respCode: action.payload.status,
                 id: action.payload.id,
@@ -17,6 +18,7 @@ export default function statusReducer(state = initialState, action) {
 
         case CLEAR_STATUS:
             return {
+                ...state,
                 statusMsg: {},
                 respCode: null,
                 id: null,
