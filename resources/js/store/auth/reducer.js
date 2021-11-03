@@ -33,11 +33,12 @@ export function authReducer(state = initialState, action) {
                 ...state,
                 isAuthenticated: true,
                 token: localStorage.getItem("token"),
+                currUser: action.payload,
             };
 
         case AUTH_ERROR:
         case LOGIN_FAIL:
-        case LOGIN_SUCCESS:
+
         case REGISTER_SUCCESS:
         case REGISTER_FAIL:
         case AUTH_FAIL:

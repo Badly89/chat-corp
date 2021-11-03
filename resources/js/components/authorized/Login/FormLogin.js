@@ -14,7 +14,7 @@ export const FormLogin = () => {
 
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     // const { message } = useSelector((state) => state.message);
-
+    console.log(isAuthenticated);
     const dispatch = useDispatch();
 
     const onChangeEmail = (e) => {
@@ -31,34 +31,18 @@ export const FormLogin = () => {
         async (e) => {
             e.preventDefault();
             const user = { email, password };
-            setLoading(true);
+            // setLoading(true);
             try {
                 await dispatch(login(user), history);
-                history.push("/");
-                window.location.reload();
-                <Redirect to="/" />;
+                // console.log(history);
+                // history.push("/chats");
             } catch (err) {
                 console.log(err);
             }
-
-            // .then(() => {
-            //     props.history.push("/profile");
-            //     window.location.reload();
-            //     <Redirect to="/" />;
-            // })
-            // .catch(() => {
-            //     setLoading(false);
-            // });
-            //     } else {
-            //         setLoading(false);
-            //     }
         },
         [email, password]
     );
 
-    // if (isAuthenticated) {
-    //     return <Redirect to="/" />;
-    // }
     return (
         <>
             <div className="form-authorizate">
