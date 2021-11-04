@@ -5,8 +5,10 @@ import { Redirect } from "react-router";
 import { logout } from "../store/auth/actions";
 
 export const UserProfile = () => {
-    const { user: currentUser } = useSelector((state) => state.auth);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const { currUser: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    console.log(currentUser);
     const handleLogOut = (e) => {
         e.preventDefault();
 
@@ -14,7 +16,7 @@ export const UserProfile = () => {
 
         // <Redirect to="/" />;
     };
-    if (!currentUser) {
+    if (!isAuthenticated) {
         return <Redirect to="/" />;
     }
     return (
@@ -23,19 +25,15 @@ export const UserProfile = () => {
                 <h1>Профиль юзера</h1>
                 <div className="container">
                     <header className="jumbotron">
-                        <h3>
-                            <strong>{currentUser.user.name}</strong>
-                        </h3>
+                        <h3>{/* <strong>{currUser.user.name}</strong> */}</h3>
                     </header>
                     <p>
                         <strong>Name:</strong>
-                        {currentUser.user.name}
+                        {/* {currentUser.user.name} */}
                     </p>
+                    <p>{/* <strong>Id:</strong> {currentUser.user.id} */}</p>
                     <p>
-                        <strong>Id:</strong> {currentUser.user.id}
-                    </p>
-                    <p>
-                        <strong>Email:</strong> {currentUser.user.email}
+                        {/* <strong>Email:</strong> {currentUser.user.email} */}
                     </p>
                 </div>
                 <Form onSubmit={handleLogOut}>

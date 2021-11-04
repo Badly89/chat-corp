@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\HomeController as HomeController;
 
 /*
@@ -18,10 +17,23 @@ use App\Http\Controllers\HomeController as HomeController;
 |
 */
 
-//  Route::get('/', function () {
-//      return view('welcome');
-//  });
+Route::post('/register', [AuthenticationController::class, 'register']);
+Route::post('/login', [AuthenticationController::class, 'login']);
 
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::get('/users/search/{name}', [UserController::class, 'search']);
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/profile', function(Request $request) {   return auth()->user();   });
+    Route::post('/logout', [AuthenticationController::class, 'logout']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+});
+
+
+Route::post('conversations/store', 'ConversationController@store');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 

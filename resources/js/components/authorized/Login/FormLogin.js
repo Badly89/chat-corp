@@ -1,16 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import "../../../style/style.css";
 import { login } from "../../../store/auth/actions";
+import { history } from "../../../helpers/history";
 
 export const FormLogin = () => {
+    const [token, setToken] = useState("");
     const [email, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
     // const { message } = useSelector((state) => state.message);
 
     const dispatch = useDispatch();
@@ -25,28 +27,38 @@ export const FormLogin = () => {
         setPassword(password);
     };
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-
-        setLoading(true);
-
-        //     if (checkBtn.current.context._errors.length === 0) {
-        dispatch(login(email, password))
-            .then(() => {
-                props.history.push("/profile");
+    const handleLogin = useCallback(
+        async (e) => {
+            e.preventDefault();
+            const user = { email, password };
+            setLoading(true);
+            try {
+                await dispatch(login(user), history);
+                history.push("/");
                 window.location.reload();
-            })
-            .catch(() => {
-                setLoading(false);
-            });
-        //     } else {
-        //         setLoading(false);
-        //     }
-    };
+                <Redirect to="/" />;
+            } catch (err) {
+                console.log(err);
+            }
 
-    if (isLoggedIn) {
-        return <Redirect to="/" />;
-    }
+            // .then(() => {
+            //     props.history.push("/profile");
+            //     window.location.reload();
+            //     <Redirect to="/" />;
+            // })
+            // .catch(() => {
+            //     setLoading(false);
+            // });
+            //     } else {
+            //         setLoading(false);
+            //     }
+        },
+        [email, password]
+    );
+
+    // if (isAuthenticated) {
+    //     return <Redirect to="/" />;
+    // }
     return (
         <>
             <div className="form-authorizate">

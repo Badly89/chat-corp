@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import "../../../style/style.css";
 
@@ -14,11 +14,14 @@ export const FormRegister = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [password_confirmation, setPasswordConfirmation] = useState("");
+
     const [successful, setSuccessful] = useState(false);
-
+    const [statusMsg, setStatusMsg] = useState("");
     const { status } = useSelector(selectStatus);
+    const testMsg = useSelector((state) => {
+        state.status.statusMsg.message;
+    });
 
-    console.log(status);
     const dispatch = useDispatch();
     const onChangeUsername = (e) => {
         const name = e.target.value;
@@ -37,29 +40,50 @@ export const FormRegister = () => {
         const password_confirmation = e.target.value;
         setPasswordConfirmation(password_confirmation);
     };
-    const handleRegister = (e) => {
-        e.preventDefault();
 
-        setSuccessful(false);
+    // useEffect(() => {
+    //     if (status === "REGISTER_FAIL") {
+    //         setStatusMsg({ msg: status.statusMsg.message });
+    //         console.log("REGISTER_FAIL");
+    //     }
+    //     if (status === "REGISTER_SUCCESS") {
+    //         setStatusMsg({ msg: status.statusMsg.message });
+    //         setTimeout(() => {
+    //             console.log("LOGIN");
+    //         }, 2000);
+    //     }
+    // }, [status]);
+    // if (status !== preventDefault) {
+    //     if (status.id === "REGISTER_FAIL") {
+    //         setStatusMsg();
+    //     }
+    // }
 
-        // form.current.validateAll();
+    const handleRegister = useCallback(
+        async (e) => {
+            setStatusMsg("");
+            e.preventDefault();
+            const body = { name, email, password };
+            try {
+                await dispatch(register(body));
+                setStatusMsg(testMsg);
 
-        // if (checkBtn.current.context._errors.length === 0) {
-        dispatch(register(name, email, password, password_confirmation))
-            .then(() => {
-                history.push("/login");
+                //login auto
+                setTimeout(() => {
+                    dispatch(login(email, password));
+                    console.log("LOGIN_SUCCESS");
+                    console.log(statusMsg);
+                }, 2000);
+            } catch (err) {
+                console.log(err);
+                setStatusMsg(err);
+            }
 
-                setSuccessful(true);
-            })
-            .catch(() => {
-                setSuccessful(false);
-            });
-    };
-    if (successful) {
-        // <Redirect to="/login" />;
-        dispatch(login(email, password));
-        console.log("REGISTER_SUCCESS");
-    }
+            setSuccessful(true);
+        },
+        [name, email, password]
+    );
+
     return (
         <>
             <div className="form-authorizate">
