@@ -1,21 +1,25 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
-import { profileReducer } from "./profile/reducer";
+import { profileReducer } from "./userProfile/reducer";
 import { chatsReducer } from "./chats/reducer";
 import { msgReducer } from "./messages/reducer";
-import { usersReducer } from "./users/reducer";
+import { usersReducer } from "./friends/reducer";
 import { compose } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
+import statusReducer from "./status/reducer";
+import { authReducer } from "./auth/reducer";
 
-const persistConfig = { key: "messager-chat", storage };
+const persistConfig = { key: "chat-corp", storage };
 const persistedReducer = persistReducer(
     persistConfig,
     combineReducers({
-        profile: profileReducer,
+        userProfile: profileReducer,
         chats: chatsReducer,
         messages: msgReducer,
-        users: usersReducer,
+        friends: usersReducer,
+        auth: authReducer,
+        status: statusReducer,
     })
 );
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

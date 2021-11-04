@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 
+$DATABASE_URL=parse_url('postgres://gcvtkdpjbvxwli:179fa6f8a8fe95b8efa97569a597d806dac6e9cefea90200c4c058df55776509@ec2-3-233-55-123.compute-1.amazonaws.com:5432/dc7uakuoanhvis');
 return [
 
     /*
@@ -15,7 +16,9 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    // 'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION','pgsql'),
+
 
     /*
     |--------------------------------------------------------------------------
@@ -62,21 +65,34 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-
         'pgsql' => [
-            'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'schema' => 'public',
-            'sslmode' => 'prefer',
+        'driver'   => 'pgsql',
+        'host'     => $DATABASE_URL["host"],
+        'port'     => $DATABASE_URL["port"],
+        'database' => ltrim($DATABASE_URL["path"],"/"),
+        'username' => $DATABASE_URL["user"],
+        'password' => $DATABASE_URL["pass"],
+        'charset'  => 'utf8',
+        'prefix'   => '',
+        'prefix_indexes' => true,
+        'schema' => 'public',
+        'sslmode' => 'prefer',
         ],
+
+        // 'pgsql' => [
+        //     'driver' => 'pgsql',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => env('DB_HOST', '127.0.0.1'),
+        //     'port' => env('DB_PORT', '5432'),
+        //     'database' => env('DB_DATABASE', 'forge'),
+        //     'username' => env('DB_USERNAME', 'forge'),
+        //     'password' => env('DB_PASSWORD', ''),
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        //     'schema' => 'public',
+        //     'sslmode' => 'prefer',
+        // ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

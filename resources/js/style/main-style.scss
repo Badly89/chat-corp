@@ -1,13 +1,16 @@
 .main-window {
-    display: grid;
-    grid-template-columns: 0.25fr 2fr 3fr;
-    grid-template-rows: 2fr;
-    gap: 0px 0px;
-    grid-template-areas: "sideBar chatList messageList";
+    display: flex;
+    height: 100vh;
+    // display: grid;
+    // grid-template-columns: 0.25fr 2fr 3fr;
+    // grid-template-rows: 2fr;
+    // gap: 0px 0px;
+    // grid-template-areas: "sideBar chatList messageList";
 }
 
 .sideBar {
-    grid-area: sideBar;
+    flex-shrink: 0;
+    flex-basis: 105px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -26,14 +29,12 @@
 }
 
 .chatList {
-    max-width: 440px;
+    flex: 0 1 440px;
     overflow-y: auto;
-    grid-area: chatList;
-    height: 100vh;
 }
 .group-chats {
     background: #eff1f1;
-    height: 100vh;
+    // height: 100vh;
 }
 
 .title {
@@ -107,7 +108,12 @@
 }
 
 .messageList {
-    grid-area: messageList;
+    // position: relative;
+    flex: 2 1;
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    flex-direction: column;
 }
 .title-welcome {
     font-weight: bold;
@@ -120,4 +126,55 @@
     line-height: 19px;
 
     color: #626465;
+}
+.message-field {
+    display: flex;
+
+    background: url("/image/background.png");
+    background-position: center center;
+    background-size: cover;
+    overflow: auto;
+}
+.message {
+    background-color: lightblue;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 18px;
+    margin: 5px;
+}
+.message-sender {
+    color: gray;
+    font-size: 14px;
+}
+.message-content {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.wrap-title-message {
+    width: 100%;
+    // height: 98px;
+}
+
+.card {
+    border: 0;
+}
+
+.wrap-title-message {
+    display: flex;
+}
+
+.btn-sumbit {
+    width: 45px;
+}
+.btn-del {
+    display: none;
+    margin: 0 auto;
+
+    padding-left: 5px;
+}
+
+.message:hover .btn-del {
+    display: inline-block;
 }
