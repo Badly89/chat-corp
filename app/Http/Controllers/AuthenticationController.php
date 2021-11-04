@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticationController extends Controller
 {
@@ -22,48 +23,34 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    //this method adds new users
+
     public function register(Request $request) {
-        $messages = [
-            "name.required" => "Name cannot be empty",
-            "name.max" => "Name cannot be more than 50 characters",
-            "email.required" => "Email cannot be empty",
-            "email.email" => "Email is not valid",
-            "password.required" => "Password cannot be empty",
-            "password.min" => "Password must be at least 6 characters"
+
+
+         $fields = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|unique:users,email',
+            'password' => 'required|string|confirmed'
+        ]);
+        $user = User::create([
+            'name' => $fields['name'],
+            'email' => $fields['email'],
+            'password' => bcrypt($fields['password'])
+        ]);
+        $token = $user->createToken('myapptoken')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token
         ];
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-            'email' => 'required|string|email',
-            'password' => 'required|string|min:6',
-        ], $messages);
-
-
-        if ($validator->fails()) {
-            return response(['message'=> $validator->getMessageBag()->first()], 422);
-        } else if (!empty(User::where('email',$request->email)->first())) {
-            return response(['message'=> "A User with that E-Mail already exists."], 422);
-
-        } else {
-            $user = new User([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password)
-            ]);
-            $user->save();
-
-            return response()->json([
-                'message' => 'You have Registered Successfully! Redirecting you to the Login page'
-            ], 201);
-
-
-
         return response($response, 201);
-        }
     }
-    //use this method to signin users
+
+
+
     public function login(Request $request) {
+
         $fields = $request->validate([
             'email' => 'required|string',
             'password' => 'required|string'
@@ -87,15 +74,25 @@ class AuthenticationController extends Controller
         ];
 
         return response($response, 201);
-    }
 
+    }
 
     public function logout(Request $request) {
-        // auth()->user()->token()->delete();
-        $request->user()->token()->revoke();
-        Cache::forget('user-is-online'.$request->user()->id);
-        return response()->json( [
-            'message' => 'Successfully logged out'
-        ],200)->cookie(Cookie::forget('jwt'));
+
+        auth()->user()->tokens()->delete();
+        return[
+            'message'=>'Logged out'
+        ];
+        // // Cache::forget('user-is-online'.$request->user()->id);
+        // return response()->json( [
+        //     'message' => 'Successfully logged out'
+        // ],200)->cookie(Cookie::forget('jwt'));
     }
+    public function user(Request $request){
+        $user = $request->user();
+        error_log($request->user());
+         if(User::find($request->user()->id->details)){}
+
+    }
+
 }

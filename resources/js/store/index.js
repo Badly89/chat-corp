@@ -1,5 +1,5 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
-import { profileReducer } from "./profile/reducer";
+import { profileReducer } from "./userProfile/reducer";
 import { chatsReducer } from "./chats/reducer";
 import { msgReducer } from "./messages/reducer";
 import { usersReducer } from "./friends/reducer";
@@ -14,7 +14,7 @@ const persistConfig = { key: "chat-corp", storage };
 const persistedReducer = persistReducer(
     persistConfig,
     combineReducers({
-        profile: profileReducer,
+        userProfile: profileReducer,
         chats: chatsReducer,
         messages: msgReducer,
         friends: usersReducer,

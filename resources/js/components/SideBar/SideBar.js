@@ -14,7 +14,7 @@ import { FormLogin } from "../authorized/Login/FormLogin";
 import { FormRegister } from "../authorized/Register/FormRegister";
 
 export const SideBar = () => {
-    const { user: currentUser } = useSelector((state) => state.auth);
+    const { user: currentUser } = useSelector((state) => state.auth.currUser);
 
     const dispatch = useDispatch;
     //очистка сообщений
@@ -51,7 +51,7 @@ export const SideBar = () => {
                                         <i className="far fa-comment-dots"></i>
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link
                                         to="/calls"
                                         className="nav-link py-3 border-bottom"
@@ -61,7 +61,7 @@ export const SideBar = () => {
                                     >
                                         <i className="fas fa-phone"></i>
                                     </Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     <Link
                                         to="/friends"
@@ -75,7 +75,7 @@ export const SideBar = () => {
                                 </li>
                                 <li>
                                     <Link
-                                        to="/profile"
+                                        to="/userProfile"
                                         className="nav-link py-3 border-bottom"
                                         title=""
                                         data-bs-toggle="tooltip"
@@ -108,7 +108,7 @@ export const SideBar = () => {
                     <Route exact path="/friends">
                         <ListFriends />
                     </Route>
-                    <Route exact path="/profile">
+                    <Route exact path="/userProfile">
                         <UserProfile />
                     </Route>
                     <Route exact path="/login" component={FormLogin} />

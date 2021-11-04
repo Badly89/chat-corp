@@ -5,6 +5,7 @@ import {
     LOGIN_FAIL,
     LOGOUT,
     IS_LOADING,
+    LOGOUT_SUCCESS,
 } from "./types";
 
 import AuthService from "../../providers/authProvider";
@@ -25,27 +26,29 @@ export const register =
             email,
             password,
         });
-        axios
-            .post("/register", body, headers)
-            .then((res) => {
-                dispatch(
-                    returnStatus(res.data, res.status, "REGISTER_SUCCESS")
-                );
-                dispatch({ type: REGISTER_SUCCESS });
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log("FROM REGISTRATION");
-                console.log(err.response.data);
-                dispatch(
-                    returnStatus(
-                        err.response.data,
-                        err.response.status,
-                        "REGISTER_FAIL"
-                    )
-                );
-                dispatch({ type: REGISTER_FAIL });
-            });
+        axios.get("/sanctum/csrf-cookie").then((respone) => {
+            axios
+                .post("/register", body, headers)
+                .then((res) => {
+                    dispatch(
+                        returnStatus(res.data, res.status, "REGISTER_SUCCESS")
+                    );
+                    dispatch({ type: REGISTER_SUCCESS });
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log("FROM REGISTRATION");
+                    console.log(err.response.data);
+                    dispatch(
+                        returnStatus(
+                            err.response.data,
+                            err.response.status,
+                            "REGISTER_FAIL"
+                        )
+                    );
+                    dispatch({ type: REGISTER_FAIL });
+                });
+        });
     };
 
 export const login =
@@ -57,28 +60,46 @@ export const login =
             },
         };
         const body = JSON.stringify({ email, password });
-        axios
-            .post("/login", body, headers)
-            .then((res) => {
-                console.log(res.data);
-                dispatch({ type: LOGIN_SUCCESS, payload: res.data });
-                dispatch({ type: IS_LOADING });
-            })
-            .catch((err) => {
-                dispatch(
-                    returnStatus(
-                        err.response.data,
-                        err.response.status,
-                        "LOGIN_FAIL"
-                    )
-                );
-            });
+        axios.get("/sanctum/csrf-cookie").then((respone) => {
+            axios
+                .post("/login", body, headers)
+                .then((respone) => {
+                    console.log(respone.data);
+                    dispatch({
+                        type: LOGIN_SUCCESS,
+                        payload: { currUser: respone.data },
+                    });
+
+                    dispatch({ type: IS_LOADING });
+                })
+                .catch((err) => {
+                    dispatch(
+                        returnStatus(
+                            err.response.data,
+                            err.response.status,
+                            "LOGIN_FAIL"
+                        )
+                    );
+                });
+        });
     };
 
 export const logout = () => (dispatch) => {
-    AuthService.logout();
-
-    dispatch({
-        type: LOGOUT,
-    });
+    localStorage.removeItem("user");
+    dispatch({ type: LOGOUT_SUCCESS });
 };
+// export const logout = () => (dispatch) => {
+//     // AuthService.logout();
+//     // window.Echo.disconnect();
+//     axios.get("/sanctum/csrf-cookie").then((respone) => {
+//         axios
+//             .get("/logout", { withCredentials: true })
+//             .then((res) => {
+//                 dispatch({ type: LOGOUT_SUCCESS });
+//             })
+//             .catch((err) => console.log(err));
+//         dispatch({
+//             type: LOGOUT,
+//         });
+//     });
+// };
