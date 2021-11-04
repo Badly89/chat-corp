@@ -50,7 +50,7 @@ export const Routes = () => {
                     component={SideBar}
                 />
                 <PrivateRoute
-                    path="/profile"
+                    path="/userProfile"
                     isAuthenticated={authed}
                     component={UserProfile}
                 />

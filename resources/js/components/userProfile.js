@@ -1,14 +1,32 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
+import { history } from "../helpers/history";
 import { logout } from "../store/auth/actions";
+import { getUserProfile } from "../store/userProfile/actions";
 
 export const UserProfile = () => {
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const { currUser: currentUser } = useSelector((state) => state.auth);
+    // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    // const { currUser: user } = useSelector((state) => state.auth.currUser);
+    const { profile: userInfo } = useSelector(
+        (state) => state.userProfile.profile
+    );
+    const error = useSelector((state) => state.userProfile.request.error);
+    const loading = useSelector((state) => state.userProfile.request.loading);
+    const { currUser: user } = useSelector((state) => state.auth.currUser);
     const dispatch = useDispatch();
-    console.log(currentUser);
+    console.log(user);
+    console.log(userInfo);
+
+    const requestUser = () => {
+        dispatch(getUserProfile);
+    };
+    useEffect(() => {
+        requestUser();
+    }, []);
+
     const handleLogOut = (e) => {
         e.preventDefault();
 
@@ -16,30 +34,30 @@ export const UserProfile = () => {
 
         // <Redirect to="/" />;
     };
-    if (!isAuthenticated) {
-        return <Redirect to="/" />;
-    }
+    // if (!isAuthenticated) {
+    //     <Redirect to="/" />;
+    // }
+    // axios.get("/sanctum/csrf-cookie").then((respone) => {
+
     return (
         <>
+            <h2>Профиль Юзера</h2>
+            {/* {userInfo?.map((info) => ( */}
             <div className="d-flex flex-column ">
                 <h1>Профиль юзера</h1>
                 <div className="container">
-                    <header className="jumbotron">
-                        <h3>{/* <strong>{currUser.user.name}</strong> */}</h3>
-                    </header>
                     <p>
                         <strong>Name:</strong>
-                        {/* {currentUser.user.name} */}
+                        {/* {info.name} */}
                     </p>
-                    <p>{/* <strong>Id:</strong> {currentUser.user.id} */}</p>
-                    <p>
-                        {/* <strong>Email:</strong> {currentUser.user.email} */}
-                    </p>
+                    <p>{/* <strong>Id:</strong> {info.id} */}</p>
+                    <p>{/* <strong>Email:</strong> {info.email} */}</p>
                 </div>
                 <Form onSubmit={handleLogOut}>
                     <Button type="summit">LogOut</Button>
                 </Form>
             </div>
+            {/* ))} */}
         </>
     );
 };
