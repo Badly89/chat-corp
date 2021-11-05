@@ -14,79 +14,93 @@ use Illuminate\Validation\ValidationException;
 
 class AuthenticationController extends Controller
 {
-    protected function authenticated(Request $request, $user)
-    {
-        return response([
-            $user->id,
-            $user->name,
-            $user->email,
-        ]);
-    }
+    // protected function authenticated(Request $request, $user)
+    // {
+    //     return response([
+    //         $user->id,
+    //         $user->name,
+    //         $user->email,
+    //     ]);
+    // }
 
 
     public function register(Request $request) {
 
-
-         $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
+         $validator = Validator::make($request->all(),[
+            'name'=>'required|max:191',
+            'email'=> 'required|string|max:191|unique:users,email',
+            'password' => 'required|min:6|confirmed',
         ]);
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
+
+         if($validator->fails()){
+            return response()-> json([
+                'validation_errors'=> $validator->messages(),
+            ]);
+        }
+        else
+        {
+        $user= User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->passwod),
         ]);
-        $token = $user->createToken('myapptoken')->plainTextToken;
+        $token = $user->createToken($user->email.'_Token')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
+                return response ([
+                'status'=>200,
+                'username'=>$user->name,
+                'token' => $token,
+                'message'=> 'Регистрация прошла успешно',
+            ]);
+        }
     }
-
-
 
     public function login(Request $request) {
 
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
+        $validator = Validator::make($request->all(),[
+            'email'=> 'required|string',
+            'password' => 'required|string',
         ]);
 
-        // Check email
-        $user = User::where('email', $fields['email'])->first();
 
-        // Check password
-        if(!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Bad creds'
-            ], 401);
+        if($validator->fails()){
+            return response()-> json([
+                'validation_errors'=> $validator->messages(),
+            ]);
+        }
+        else{
+            $user =User::where('email',$request->email)->first();
+            if(!$user || !Hash::check($request->password,  $user->password)){
+                return response ([
+                'status'=>401,
+                'message'=> 'Invalid Credential',
+                ]);
+            }
+            else
+            {
+                $token = $user->createToken($user->email.'_Token')->plainTextToken;
+
+                return response()-> json([
+                'status'=>200,
+                'username'=>$user,
+                'token' => $token,
+                'message'=> 'Авторизация прошла успешно',
+            ]);
+            }
         }
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
-
-        return response($response, 201);
 
     }
 
     public function logout(Request $request) {
 
         auth()->user()->tokens()->delete();
-        return[
-            'message'=>'Logged out'
-        ];
-        // // Cache::forget('user-is-online'.$request->user()->id);
-        // return response()->json( [
-        //     'message' => 'Successfully logged out'
-        // ],200)->cookie(Cookie::forget('jwt'));
+
+        return response()->json( [
+            'status' => 200,
+            'message' => 'Successfully logged out'
+        ]);
     }
     public function user(Request $request){
         $user = $request->user();

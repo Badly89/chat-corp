@@ -8,98 +8,142 @@ import {
     LOGOUT_SUCCESS,
 } from "./types";
 
-import AuthService from "../../providers/authProvider";
-
 import { returnStatus } from "../status/actions";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { Redirect } from "react-router";
 
 export const register =
-    ({ name, email, password }, history) =>
+    ({ name, email, password, password_confirmation }) =>
     (dispatch) => {
-        const headers = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
         const body = JSON.stringify({
             name,
             email,
             password,
+            password_confirmation,
         });
         axios.get("/sanctum/csrf-cookie").then((respone) => {
             axios
-                .post("/register", body, headers)
+                .post("/register", body)
                 .then((res) => {
-                    dispatch(
-                        returnStatus(res.data, res.status, "REGISTER_SUCCESS")
-                    );
-                    dispatch({ type: REGISTER_SUCCESS });
-                    console.log(res);
+                    if (res.data.status === 200) {
+                        localStorage.setItem("auth_token", res.data.token);
+                        localStorage.setItem("auth_name", res.data.username);
+                        console.log(res.data);
+
+                        Swal.fire({
+                            icon: "success",
+                            title: res.status.message,
+                            confirmButtonText: "Регистрация прошла успешно!",
+                        });
+                        dispatch(
+                            returnStatus(
+                                res.data.message,
+                                res.status,
+                                "REGISTER_SUCCESS"
+                            )
+                        );
+                        dispatch({ type: REGISTER_SUCCESS });
+                    } else {
+                        // console.log(res.data.validation_errors);
+                    }
                 })
                 .catch((err) => {
-                    console.log("FROM REGISTRATION");
-                    console.log(err.response.data);
-                    dispatch(
-                        returnStatus(
-                            err.response.data,
-                            err.response.status,
-                            "REGISTER_FAIL"
-                        )
-                    );
+                    // dispatch(
+                    //     returnStatus(
+                    //         err.response.data.validation_errors,
+                    //         err.response.status,
+                    //         "REGISTER_FAIL"
+                    //     )
+                    // );
                     dispatch({ type: REGISTER_FAIL });
                 });
         });
     };
 
 export const login =
-    ({ email, password }, history) =>
-    (dispatch, getState) => {
-        const headers = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
+    ({ email, password }) =>
+    (dispatch) => {
         const body = JSON.stringify({ email, password });
         axios.get("/sanctum/csrf-cookie").then((respone) => {
             axios
-                .post("/login", body, headers)
-                .then((respone) => {
-                    console.log(respone.data);
-                    dispatch({
-                        type: LOGIN_SUCCESS,
-                        payload: { currUser: respone.data },
-                    });
+                .post("/login", body)
+                .then((resp) => {
+                    if (resp.data.status === 200) {
+                        console.log(resp);
+                        localStorage.setItem("auth_token", resp.data.token);
+                        localStorage.setItem(
+                            "auth_name",
+                            resp.data.username.name
+                        );
+                        console.log(resp);
+                        Swal.fire({
+                            icon: "success",
+                            title: "Добро пожаловать!",
+                            text: resp.data.message,
+                        });
+                        dispatch(
+                            returnStatus(
+                                resp.data.message,
+                                resp.status,
+                                "LOGIN_SUCCESS"
+                            )
+                        );
+                        dispatch({
+                            type: LOGIN_SUCCESS,
+                            payload: { currUser: resp.data.username },
+                        });
 
-                    dispatch({ type: IS_LOADING });
+                        dispatch({ type: IS_LOADING });
+                    } else {
+                        console.log(resp.data.validation_errors);
+                    }
                 })
                 .catch((err) => {
-                    dispatch(
-                        returnStatus(
-                            err.response.data,
-                            err.response.status,
-                            "LOGIN_FAIL"
-                        )
-                    );
+                    // dispatch(
+                    //     returnStatus(
+                    //         resp.data.message,
+                    //         resp.status,
+                    //         "LOGIN_FAIL"
+                    //     )
+                    // );
+                    // dispatch({ type: LOGIN_FAIL });
+                    // console.log(err.response.validation_errors);
                 });
         });
     };
 
 export const logout = () => (dispatch) => {
-    localStorage.removeItem("user");
-    dispatch({ type: LOGOUT_SUCCESS });
+    // axios.get("/sanctum/csrf-cookie").then((respone) => {
+    axios
+        .post("/logout", { withCredentials: true })
+        .then((res) => {
+            console.log(res);
+            if (res.data.status === 200) {
+                localStorage.removeItem("auth_token");
+                localStorage.removeItem("auth_name");
+                history.push("/login");
+                Swal.fire({
+                    icon: "success",
+                    title: res.data.message,
+                });
+
+                dispatch(
+                    returnStatus(res.data.message, res.status, "LOGOUT_SUCCESS")
+                );
+                dispatch({
+                    type: LOGOUT_SUCCESS,
+                    payload: {
+                        currUser: {},
+                        isAuthenticated: false,
+                    },
+                });
+            } else {
+                console.log(res.data.validation_errors);
+            }
+        })
+        .catch(() => {
+            dispatch({ type: LOGOUT });
+        });
+    // });
 };
-// export const logout = () => (dispatch) => {
-//     // AuthService.logout();
-//     // window.Echo.disconnect();
-//     axios.get("/sanctum/csrf-cookie").then((respone) => {
-//         axios
-//             .get("/logout", { withCredentials: true })
-//             .then((res) => {
-//                 dispatch({ type: LOGOUT_SUCCESS });
-//             })
-//             .catch((err) => console.log(err));
-//         dispatch({
-//             type: LOGOUT,
-//         });
-//     });
-// };
