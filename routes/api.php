@@ -2,9 +2,9 @@
 
 use App\Http\Middleware\Authenticate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\UserController;
+use App\Mail\ForgotPassword as ForgotPassword;
 
 /*
 |--------------------------------------------------------------------------
