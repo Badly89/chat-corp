@@ -12,7 +12,7 @@ import { FormLogin } from "./authorized/Login/FormLogin";
 import { FormRegister } from "./authorized/Register/FormRegister";
 import { ListChats } from "./Chats/ListChats";
 import { SideBar } from "./SideBar/SideBar";
-import { UserProfile } from "./userProfile";
+import { UserProfile } from "../components/Profile/userProfile";
 import axios from "axios";
 
 export const Routes = () => {
