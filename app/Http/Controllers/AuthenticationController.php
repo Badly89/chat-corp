@@ -48,7 +48,7 @@ class AuthenticationController extends Controller
 
                 return response ([
                 'status'=>200,
-                'username'=>$user->name,
+                'username'=>$user,
                 'token' => $token,
                 'message'=> 'Регистрация прошла успешно',
             ]);

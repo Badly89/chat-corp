@@ -20,14 +20,22 @@ export const FormLogin = () => {
         setLogin({ ...loginInput, [e.target.name]: e.target.value });
     };
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        const data = {
-            email: loginInput.email,
-            password: loginInput.password,
-        };
-        dispatch(login(data));
-    };
+    const handleLogin = useCallback(
+        async (e) => {
+            e.preventDefault();
+
+            const data = {
+                email: loginInput.email,
+                password: loginInput.password,
+            };
+            try {
+                await dispatch(login(data));
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        [loginInput]
+    );
 
     return (
         <>
@@ -46,7 +54,7 @@ export const FormLogin = () => {
                             Какой-нибудь необычный слоган для пользователя.
                         </h3>
                     </div>
-                    <form
+                    <Form
                         className="form-signin form-floating pb-4"
                         onSubmit={handleLogin}
                     >
@@ -76,7 +84,6 @@ export const FormLogin = () => {
                                     id="floatingPassword"
                                     placeholder="Password"
                                     onChange={handleInput}
-                                    suggested="current-password"
                                     required
                                 />
                                 <label htmlFor="floatingPassword">
@@ -108,7 +115,7 @@ export const FormLogin = () => {
                         >
                             Войти
                         </button>
-                    </form>
+                    </Form>
                 </div>
 
                 <div className="bottom-text">

@@ -1,12 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useHistory } from "react-router";
 import "../../../style/style.css";
-import { login, register } from "../../../store/auth/actions";
+import { register } from "../../../store/auth/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
-import Swal from "sweetalert2";
-import { result } from "lodash";
 
 export const FormRegister = () => {
     const [registerInput, setRegister] = useState({
@@ -36,12 +33,12 @@ export const FormRegister = () => {
             try {
                 await dispatch(register(data));
 
-                setTimeout(() => {
-                    history.push("/login");
-                    // dispatch(
-                    //     login(registerInput.email, registerInput.password)
-                    // );
-                }, 2000);
+                // setTimeout(() => {
+                //     history.push("/login");
+                //     // dispatch(
+                //     //     login(registerInput.email, registerInput.password)
+                //     // );
+                // }, 2500);
             } catch (err) {
                 console.log(err);
             }

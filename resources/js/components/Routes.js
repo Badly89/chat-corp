@@ -15,16 +15,6 @@ import { SideBar } from "./SideBar/SideBar";
 import { UserProfile } from "./userProfile";
 import axios from "axios";
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.get["Accept"] = "application/json";
-axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem("auth_token");
-    config.headers.Authorization = token ? `Bearer ${token}` : "";
-    console.log(config);
-    return config;
-});
-axios.defaults.withCredentials = true;
-
 export const Routes = () => {
     const [loading, setLoading] = useState(false);
     const [authed, setAuth] = useState(false);

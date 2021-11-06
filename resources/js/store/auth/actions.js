@@ -13,6 +13,17 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { Redirect } from "react-router";
 
+axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.get["Accept"] = "application/json";
+axios.interceptors.request.use(function (config) {
+    const token = localStorage.getItem("auth_token");
+
+    config.headers.Authorization = token ? `Bearer ${token}` : "";
+    console.log(config);
+    return config;
+});
+axios.defaults.withCredentials = true;
+
 export const register =
     ({ name, email, password, password_confirmation }) =>
     (dispatch) => {
@@ -28,14 +39,29 @@ export const register =
                 .then((res) => {
                     if (res.data.status === 200) {
                         localStorage.setItem("auth_token", res.data.token);
-                        localStorage.setItem("auth_name", res.data.username);
+                        localStorage.setItem(
+                            "auth_name",
+                            res.data.username.name
+                        );
                         console.log(res.data);
 
-                        Swal.fire({
-                            icon: "success",
-                            title: res.status.message,
-                            confirmButtonText: "Регистрация прошла успешно!",
-                        });
+                        Swal.fire(
+                            {
+                                icon: "success",
+                                title: res.status.message,
+                                confirmButtonText:
+                                    "Регистрация прошла успешно!",
+                            }.then((result) => {
+                                if (result.isConfirmed) {
+                                    setTimeout(() => {
+                                        history.push("/login");
+                                        // dispatch(
+                                        //     login(registerInput.email, registerInput.password)
+                                        // );
+                                    }, 2500);
+                                }
+                            })
+                        );
                         dispatch(
                             returnStatus(
                                 res.data.message,
@@ -64,37 +90,36 @@ export const register =
 export const login =
     ({ email, password }) =>
     (dispatch) => {
+        const headers = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
         const body = JSON.stringify({ email, password });
         axios.get("/sanctum/csrf-cookie").then((respone) => {
             axios
-                .post("/login", body)
+                .post("/login", body, headers)
                 .then((resp) => {
                     if (resp.data.status === 200) {
-                        console.log(resp);
                         localStorage.setItem("auth_token", resp.data.token);
                         localStorage.setItem(
                             "auth_name",
                             resp.data.username.name
                         );
                         console.log(resp);
+
                         Swal.fire({
                             icon: "success",
                             title: "Добро пожаловать!",
                             text: resp.data.message,
                         });
-                        dispatch(
-                            returnStatus(
-                                resp.data.message,
-                                resp.status,
-                                "LOGIN_SUCCESS"
-                            )
-                        );
                         dispatch({
                             type: LOGIN_SUCCESS,
                             payload: { currUser: resp.data.username },
                         });
-
-                        dispatch({ type: IS_LOADING });
+                    } else if (resp.data.status === 401) {
+                        console.log(resp.data);
                     } else {
                         console.log(resp.data.validation_errors);
                     }
