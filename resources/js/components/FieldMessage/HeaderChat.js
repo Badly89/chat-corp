@@ -3,7 +3,6 @@ import "../../style/main-style.css";
 export const HeaderChat = () => {
     return (
         <>
-            {/* <Jumbotron> */}
             <header className="title-message-field">
                 <div className="container">
                     <div className="wrap-title-message">
@@ -33,7 +32,6 @@ export const HeaderChat = () => {
                     </div>
                 </div>
             </header>
-            {/* </Jumbotron> */}
         </>
     );
 };

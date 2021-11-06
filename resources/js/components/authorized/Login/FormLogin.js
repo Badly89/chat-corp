@@ -1,47 +1,34 @@
 import React, { useState, useRef, useCallback } from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import "../../../style/style.css";
 import { login } from "../../../store/auth/actions";
-import { history } from "../../../helpers/history";
 
 export const FormLogin = () => {
-    const [token, setToken] = useState("");
-    const [email, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
+    const status = useSelector((state) => state.status);
 
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    // const { message } = useSelector((state) => state.message);
-    console.log(isAuthenticated);
+    const [loginInput, setLogin] = useState({
+        email: "",
+        password: "",
+    });
     const dispatch = useDispatch();
+    const history = useHistory();
+    const handleInput = (e) => {
+        e.persist();
 
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setUsername(email);
+        setLogin({ ...loginInput, [e.target.name]: e.target.value });
     };
 
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
-    };
+    const handleLogin = (e) => {
+        e.preventDefault();
 
-    const handleLogin = useCallback(
-        async (e) => {
-            e.preventDefault();
-            const user = { email, password };
-            // setLoading(true);
-            try {
-                await dispatch(login(user), history);
-                // console.log(history);
-                // history.push("/chats");
-            } catch (err) {
-                console.log(err);
-            }
-        },
-        [email, password]
-    );
+        const data = {
+            email: loginInput.email,
+            password: loginInput.password,
+        };
+        dispatch(login(data));
+    };
 
     return (
         <>
@@ -60,34 +47,36 @@ export const FormLogin = () => {
                             Какой-нибудь необычный слоган для пользователя.
                         </h3>
                     </div>
-                    <form
+                    <Form
                         className="form-signin form-floating pb-4"
                         onSubmit={handleLogin}
                     >
                         <div className="input-block">
                             <div className="form-floating pb-3">
                                 <input
-                                    value={email}
+                                    value={loginInput.email}
+                                    name="email"
                                     type="text"
                                     className="form-control input"
-                                    id="floatingInput"
+                                    id="email"
                                     placeholder="Укажите ваш email"
-                                    onChange={onChangeEmail}
+                                    onChange={handleInput}
                                     required
                                 />
-                                <label htmlFor="floatingInput">
+                                <label htmlFor="email">
                                     Введите ваш e-mail
                                 </label>
                             </div>
 
                             <div className="form-floating pb-">
                                 <input
-                                    value={password}
+                                    value={loginInput.password}
                                     type="password"
+                                    name="password"
                                     className="form-control input"
                                     id="floatingPassword"
                                     placeholder="Password"
-                                    onChange={onChangePassword}
+                                    onChange={handleInput}
                                     required
                                 />
                                 <label htmlFor="floatingPassword">
@@ -119,7 +108,7 @@ export const FormLogin = () => {
                         >
                             Войти
                         </button>
-                    </form>
+                    </Form>
                 </div>
 
                 <div className="bottom-text">

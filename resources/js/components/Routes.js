@@ -10,15 +10,17 @@ import PrivateRoute from "../hocs/PrivateRoute";
 import PublicRoute from "../hocs/PublicRoute";
 import { FormLogin } from "./authorized/Login/FormLogin";
 import { FormRegister } from "./authorized/Register/FormRegister";
-import { ListChats } from "./Rooms/ListChats";
+import { ListChats } from "./Chats/ListChats";
 import { SideBar } from "./SideBar/SideBar";
 import { UserProfile } from "./userProfile";
+import axios from "axios";
 
 export const Routes = () => {
     const [loading, setLoading] = useState(false);
     const [authed, setAuth] = useState(false);
     const { user: currentUser } = useSelector((state) => state.auth);
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    console.log(isAuthenticated);
     useEffect(() => {
         if (isAuthenticated) {
             setAuth(true);

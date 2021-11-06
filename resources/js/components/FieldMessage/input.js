@@ -6,14 +6,14 @@ import { BsArrowReturnLeft } from "react-icons/bs";
 
 export const InputMessage = ({ onSendMessage }) => {
     const [value, setValue] = useState("");
-    const { currUser: user } = useSelector((state) => state.auth.currUser);
-    console.log(user);
+    const { currUser } = useSelector((state) => state.auth.currUser);
+
     const handleChange = (e) => {
         setValue(e.target.value);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSendMessage({ text: value, sender: user.user.name });
+        onSendMessage({ text: value, sender: currUser.name });
         setValue("");
     };
 

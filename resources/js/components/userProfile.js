@@ -2,24 +2,19 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router";
-import { history } from "../helpers/history";
+import { Redirect, useHistory } from "react-router";
+import Swal from "sweetalert2";
+
 import { logout } from "../store/auth/actions";
+import { LOGOUT_SUCCESS } from "../store/auth/types";
+import { returnStatus } from "../store/status/actions";
 import { getUserProfile } from "../store/userProfile/actions";
 
 export const UserProfile = () => {
-    // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    // const { currUser: user } = useSelector((state) => state.auth.currUser);
-    const { profile: userInfo } = useSelector(
-        (state) => state.userProfile.profile
-    );
-    const error = useSelector((state) => state.userProfile.request.error);
-    const loading = useSelector((state) => state.userProfile.request.loading);
-    const { currUser: user } = useSelector((state) => state.auth.currUser);
+    const { currUser } = useSelector((state) => state.auth.currUser);
+    const isAuthenticated = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    console.log(user);
-    console.log(userInfo);
-
+    const history = useHistory();
     const requestUser = () => {
         dispatch(getUserProfile);
     };
@@ -31,33 +26,34 @@ export const UserProfile = () => {
         e.preventDefault();
 
         dispatch(logout());
-
-        // <Redirect to="/" />;
+        history.push("/login");
     };
     // if (!isAuthenticated) {
     //     <Redirect to="/" />;
     // }
-    // axios.get("/sanctum/csrf-cookie").then((respone) => {
 
     return (
         <>
-            <h2>Профиль Юзера</h2>
-            {/* {userInfo?.map((info) => ( */}
             <div className="d-flex flex-column ">
                 <h1>Профиль юзера</h1>
                 <div className="container">
                     <p>
                         <strong>Name:</strong>
-                        {/* {info.name} */}
+                        {currUser.name}
                     </p>
-                    <p>{/* <strong>Id:</strong> {info.id} */}</p>
-                    <p>{/* <strong>Email:</strong> {info.email} */}</p>
+                    <p>
+                        <strong>Id:</strong> {currUser.id}
+                    </p>
+                    <p>
+                        <strong>Email:</strong> {currUser.email}
+                    </p>
                 </div>
                 <Form onSubmit={handleLogOut}>
-                    <Button type="summit">LogOut</Button>
+                    <Button type="summit" variant="outline-danger">
+                        LogOut
+                    </Button>
                 </Form>
             </div>
-            {/* ))} */}
         </>
     );
 };

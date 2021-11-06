@@ -1,27 +1,44 @@
 import React, { useEffect } from "react";
 import "../../style/main-style.css";
 import "../../style/style.css";
-import { Router, Link, Switch, Route, NavLink } from "react-router-dom";
+import {
+    Router,
+    Link,
+    Switch,
+    Route,
+    NavLink,
+    useHistory,
+} from "react-router-dom";
 import { ListCalls } from "../Calls/ListCalls";
-import { ListChats } from "../Rooms/ListChats";
+import { ListChats } from "../Chats/ListChats";
 import { FieldMessages } from "../FieldMessage/FieldMessages";
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../userProfile";
-import { logout } from "../../store/auth/actions";
+import { MdExitToApp } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { history } from "../../helpers/history";
 import { FormLogin } from "../authorized/Login/FormLogin";
 import { FormRegister } from "../authorized/Register/FormRegister";
+import { logout } from "../../store/auth/actions";
+import { Button, Form } from "react-bootstrap";
 
 export const SideBar = () => {
-    const { user: currentUser } = useSelector((state) => state.auth.currUser);
+    const history = useHistory();
+    const isAuthenticated = useSelector((state) => state.auth);
+    // const { user: currentUser } = useSelector((state) => state.auth.currUser);
+    const dispatch = useDispatch();
+    const handleLogOut = (e) => {
+        e.preventDefault();
 
-    const dispatch = useDispatch;
+        dispatch(logout());
+
+        history.push("/");
+    };
+    if (!isAuthenticated) {
+        <Redirect to="/" />;
+    }
+
     //очистка сообщений
 
-    const logOut = () => {
-        dispatch(logout());
-    };
     return (
         <div className=" main-window">
             <Router history={history}>
@@ -89,11 +106,56 @@ export const SideBar = () => {
                         </div>
                     </div>
 
-                    <div className="dropdown border-top"></div>
+                    <div className="dropdown border-top">
+                        <a
+                            href="#"
+                            className="d-flex align-items-center justify-content-center p-3 link-dark text-decoration-none dropdown-toggle"
+                            id="dropdownUser3"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <img
+                                src="/image/photo.png"
+                                alt="mdo"
+                                width="24"
+                                height="24"
+                                className="rounded-circle"
+                            />
+                        </a>
+                        <ul
+                            className="dropdown-menu text-small shadow"
+                            aria-labelledby="dropdownUser3"
+                        >
+                            <li>
+                                <a className="dropdown-item" href="#">
+                                    Settings
+                                </a>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/userProfile"
+                                    className="dropdown-item"
+                                >
+                                    Профиль
+                                </Link>
+                            </li>
+                            <li>
+                                <hr className="dropdown-divider" />
+                            </li>
+                            <li>
+                                <Form onSubmit={handleLogOut}>
+                                    <Button
+                                        type="summit"
+                                        variant="outline-danger"
+                                    >
+                                        <MdExitToApp />
+                                    </Button>
+                                </Form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                {/* ) : (
-                    <FormRegister />
-                )} */}
+
                 <Switch>
                     <Route exact path="/chats">
                         <ListChats />
@@ -102,9 +164,9 @@ export const SideBar = () => {
                         <ListChats />
                         <FieldMessages />
                     </Route>
-                    <Route exact path="/calls">
+                    {/* <Route exact path="/calls">
                         <ListCalls />
-                    </Route>
+                    </Route> */}
                     <Route exact path="/friends">
                         <ListFriends />
                     </Route>
