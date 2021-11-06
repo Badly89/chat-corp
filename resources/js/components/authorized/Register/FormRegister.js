@@ -21,30 +21,18 @@ export const FormRegister = () => {
         setRegister({ ...registerInput, [e.target.name]: e.target.value });
     };
 
-    const handleRegister = useCallback(
-        async (e) => {
-            e.preventDefault();
-            const data = {
-                name: registerInput.name,
-                email: registerInput.email,
-                password: registerInput.password,
-                password_confirmation: registerInput.password_confirmation,
-            };
-            try {
-                await dispatch(register(data));
+    const handleRegister = (e) => {
+        e.preventDefault();
+        const data = {
+            name: registerInput.name,
+            email: registerInput.email,
+            password: registerInput.password,
+            password_confirmation: registerInput.password_confirmation,
+        };
 
-                // setTimeout(() => {
-                //     history.push("/login");
-                //     // dispatch(
-                //     //     login(registerInput.email, registerInput.password)
-                //     // );
-                // }, 2500);
-            } catch (err) {
-                console.log(err);
-            }
-        },
-        [registerInput]
-    );
+        dispatch(register(data));
+        history.push("/login");
+    };
 
     return (
         <>
@@ -77,6 +65,7 @@ export const FormRegister = () => {
                                     id="name"
                                     placeholder="Введите имя"
                                     onChange={handleChange}
+                                    required
                                 />
                                 <label htmlFor="name">Введите имя</label>
                             </div>
@@ -89,6 +78,7 @@ export const FormRegister = () => {
                                     id="email"
                                     placeholder="name@example.com"
                                     onChange={handleChange}
+                                    required
                                 />
                                 <label htmlFor="email">Введите email</label>
                             </div>
@@ -102,9 +92,11 @@ export const FormRegister = () => {
                                     placeholder="Пароль"
                                     value={registerInput.password}
                                     onChange={handleChange}
+                                    required
                                 />
                                 <label htmlFor="password">Введите пароль</label>
                             </div>
+
                             <div className="form-floating pb-3">
                                 <input
                                     value={registerInput.password_confirmation}
@@ -130,20 +122,6 @@ export const FormRegister = () => {
                     </form>
                 </div>
 
-                {/* {status && (
-                    <div className="form-group">
-                        <div
-                            className={
-                                successful
-                                    ? "alert alert-success"
-                                    : "alert alert-danger"
-                            }
-                            role="alert"
-                        >
-                            {status}
-                        </div>
-                    </div>
-                )} */}
                 <div className="bottom-text">
                     <span className="px-3">У вас уже есть учетная запись?</span>
                     <Link to="/login" className="a-text">
@@ -172,3 +150,29 @@ export const FormRegister = () => {
 //         setStatusMsg();
 //     }
 // }
+
+// setTimeout(() => {
+//     history.push("/login");
+//     // dispatch(
+//     //     login(registerInput.email, registerInput.password)
+//     // );
+// }, 2500);
+
+{
+    /* {status && (
+                    <div className="form-group">
+                        <div
+                            className={
+                                successful
+                                    ? "alert alert-success"
+                                    : "alert alert-danger"
+                            }
+                            role="alert"
+                        >
+                            {status}
+                        </div>
+                    </div>
+                )} */
+}
+
+//

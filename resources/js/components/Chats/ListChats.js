@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addRoom, delChat } from "../../store/chats/actions";
+import { createChat, deleteChat } from "../../store/chats/actions";
 
 const chatOptions = [
     { value: "allChats", label: "Все чаты" },
@@ -28,11 +28,11 @@ export const ListChats = () => {
     };
 
     const handleClick = () => {
-        dispatch(addRoom(value));
+        dispatch(createChat(value));
         setValue("");
     };
     const handleDelete = (id) => {
-        dispatch(delChat(id));
+        dispatch(deleteChat(id));
     };
     return (
         <div className="chatList">

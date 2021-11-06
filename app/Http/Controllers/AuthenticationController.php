@@ -26,23 +26,23 @@ class AuthenticationController extends Controller
 
     public function register(Request $request) {
 
-         $validator = Validator::make($request->all(),[
-            'name'=>'required|max:191',
-            'email'=> 'required|string|max:191|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+          $fields = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|unique:users,email',
+            'password' => 'required|string|confirmed'
         ]);
 
-         if($validator->fails()){
-            return response()-> json([
-                'validation_errors'=> $validator->messages(),
-            ]);
-        }
-        else
-        {
+        //  if($validator->fails()){
+        //     return response()-> json([
+        //         'validation_errors'=> $validator->messages(),
+        //     ]);
+        // }
+        // else
+        // {
         $user= User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->passwod),
+            'name'=>$fields['name'],
+            'email'=>$fields['email'],
+            'password'=>bcrypt($fields['password'])
         ]);
         $token = $user->createToken($user->email.'_Token')->plainTextToken;
 
@@ -52,25 +52,22 @@ class AuthenticationController extends Controller
                 'token' => $token,
                 'message'=> 'Регистрация прошла успешно',
             ]);
-        }
+        // }
     }
 
     public function login(Request $request) {
-
-        $validator = Validator::make($request->all(),[
-            'email'=> 'required|string',
-            'password' => 'required|string',
+        $fields = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string'
         ]);
 
 
-        if($validator->fails()){
-            return response()-> json([
-                'validation_errors'=> $validator->messages(),
-            ]);
-        }
-        else{
-            $user =User::where('email',$request->email)->first();
-            if(!$user || !Hash::check($request->password,  $user->password)){
+
+
+           // Check email
+        $user = User::where('email', $fields['email'])->first();
+
+            if(!$user || !Hash::check( $fields['password'],  $user->password)){
                 return response ([
                 'status'=>401,
                 'message'=> 'Invalid Credential',
@@ -87,11 +84,10 @@ class AuthenticationController extends Controller
                 'message'=> 'Авторизация прошла успешно',
             ]);
             }
-        }
-
-
 
     }
+
+
 
     public function logout(Request $request) {
 
@@ -102,6 +98,9 @@ class AuthenticationController extends Controller
             'message' => 'Successfully logged out'
         ]);
     }
+
+
+
     public function user(Request $request){
         $user = $request->user();
         error_log($request->user());

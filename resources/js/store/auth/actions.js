@@ -7,11 +7,10 @@ import {
     IS_LOADING,
     LOGOUT_SUCCESS,
 } from "./types";
-
+import { echoInit } from "../../helpers/echo";
 import { returnStatus } from "../status/actions";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Redirect } from "react-router";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.get["Accept"] = "application/json";
@@ -43,25 +42,13 @@ export const register =
                             "auth_name",
                             res.data.username.name
                         );
-                        console.log(res.data);
 
-                        Swal.fire(
-                            {
-                                icon: "success",
-                                title: res.status.message,
-                                confirmButtonText:
-                                    "Регистрация прошла успешно!",
-                            }.then((result) => {
-                                if (result.isConfirmed) {
-                                    setTimeout(() => {
-                                        history.push("/login");
-                                        // dispatch(
-                                        //     login(registerInput.email, registerInput.password)
-                                        // );
-                                    }, 2500);
-                                }
-                            })
-                        );
+                        Swal.fire({
+                            icon: "success",
+                            title: res.status.message,
+                            confirmButtonText: "Регистрация прошла успешно!",
+                        });
+
                         dispatch(
                             returnStatus(
                                 res.data.message,
@@ -71,17 +58,9 @@ export const register =
                         );
                         dispatch({ type: REGISTER_SUCCESS });
                     } else {
-                        // console.log(res.data.validation_errors);
                     }
                 })
                 .catch((err) => {
-                    // dispatch(
-                    //     returnStatus(
-                    //         err.response.data.validation_errors,
-                    //         err.response.status,
-                    //         "REGISTER_FAIL"
-                    //     )
-                    // );
                     dispatch({ type: REGISTER_FAIL });
                 });
         });
@@ -90,16 +69,10 @@ export const register =
 export const login =
     ({ email, password }) =>
     (dispatch) => {
-        const headers = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-
         const body = JSON.stringify({ email, password });
         axios.get("/sanctum/csrf-cookie").then((respone) => {
             axios
-                .post("/login", body, headers)
+                .post("/login", body)
                 .then((resp) => {
                     if (resp.data.status === 200) {
                         localStorage.setItem("auth_token", resp.data.token);
@@ -121,25 +94,17 @@ export const login =
                     } else if (resp.data.status === 401) {
                         console.log(resp.data);
                     } else {
-                        console.log(resp.data.validation_errors);
+                        // console.log(resp.data.validation_errors);
                     }
                 })
                 .catch((err) => {
-                    // dispatch(
-                    //     returnStatus(
-                    //         resp.data.message,
-                    //         resp.status,
-                    //         "LOGIN_FAIL"
-                    //     )
-                    // );
-                    // dispatch({ type: LOGIN_FAIL });
-                    // console.log(err.response.validation_errors);
+                    dispatch({ type: LOGIN_FAIL });
                 });
         });
     };
 
 export const logout = () => (dispatch) => {
-    // axios.get("/sanctum/csrf-cookie").then((respone) => {
+    window.Echo.disconnect();
     axios
         .post("/logout", { withCredentials: true })
         .then((res) => {
@@ -147,7 +112,7 @@ export const logout = () => (dispatch) => {
             if (res.data.status === 200) {
                 localStorage.removeItem("auth_token");
                 localStorage.removeItem("auth_name");
-                history.push("/login");
+
                 Swal.fire({
                     icon: "success",
                     title: res.data.message,
@@ -158,17 +123,12 @@ export const logout = () => (dispatch) => {
                 );
                 dispatch({
                     type: LOGOUT_SUCCESS,
-                    payload: {
-                        currUser: {},
-                        isAuthenticated: false,
-                    },
+                    isAuthenticated: false,
                 });
             } else {
-                console.log(res.data.validation_errors);
             }
         })
         .catch(() => {
             dispatch({ type: LOGOUT });
         });
-    // });
 };

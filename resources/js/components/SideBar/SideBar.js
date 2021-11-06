@@ -30,6 +30,7 @@ export const SideBar = () => {
         e.preventDefault();
 
         dispatch(logout());
+
         history.push("/");
     };
     if (!isAuthenticated) {

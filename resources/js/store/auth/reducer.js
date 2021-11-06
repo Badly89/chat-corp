@@ -47,7 +47,7 @@ export function authReducer(state = initialState, action) {
                 isAuthenticated: false,
                 auth_token: localStorage.removeItem("auth_token"),
                 auth_name: localStorage.removeItem("auth_name"),
-                currUser: null,
+                currUser: {},
             };
 
         case REGISTER_SUCCESS:

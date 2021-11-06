@@ -20,22 +20,15 @@ export const FormLogin = () => {
         setLogin({ ...loginInput, [e.target.name]: e.target.value });
     };
 
-    const handleLogin = useCallback(
-        async (e) => {
-            e.preventDefault();
+    const handleLogin = (e) => {
+        e.preventDefault();
 
-            const data = {
-                email: loginInput.email,
-                password: loginInput.password,
-            };
-            try {
-                await dispatch(login(data));
-            } catch (err) {
-                console.log(err);
-            }
-        },
-        [loginInput]
-    );
+        const data = {
+            email: loginInput.email,
+            password: loginInput.password,
+        };
+        dispatch(login(data));
+    };
 
     return (
         <>

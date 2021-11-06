@@ -1,7 +1,7 @@
 import Echo from "laravel-echo";
 import axios from "axios";
-import store from "../../store";
-import { IS_ONLINE, IS_OFFLINE } from "../../actions/types";
+import { store } from "../store/index";
+import { IS_ONLINE, IS_OFFLINE } from "../store/chats/types";
 
 export const echoInit = (token) => {
     window.Pusher = require("pusher-js");
