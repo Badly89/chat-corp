@@ -34,8 +34,6 @@ export const UserProfile = () => {
 
     return (
         <>
-            <h2>Профиль Юзера</h2>
-
             <div className="d-flex flex-column ">
                 <h1>Профиль юзера</h1>
                 <div className="container">
