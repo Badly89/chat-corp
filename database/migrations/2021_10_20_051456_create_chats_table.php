@@ -15,6 +15,7 @@ class CreateChatsTable extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
+            $table->text('title')->nullable();
             $table->foreignId('user_id_creator')
                 ->constrained('users')
                 ->onDelete('cascade');
