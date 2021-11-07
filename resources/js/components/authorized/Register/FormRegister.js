@@ -1,65 +1,39 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState, useCallback } from "react";
+import { useHistory } from "react-router";
 import "../../../style/style.css";
-
-import { login, register } from "../../../store/auth/actions";
-import { Redirect } from "react-router";
+import { register } from "../../../store/auth/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { selectStatus } from "../../../store/status/selectors";
-import { history } from "../../../helpers/history";
 
 export const FormRegister = () => {
-    const [name, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [password_confirmation, setPasswordConfirmation] = useState("");
-    const [successful, setSuccessful] = useState(false);
-
-    const { status } = useSelector(selectStatus);
-
-    console.log(status);
+    const [registerInput, setRegister] = useState({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        error_list: [],
+    });
+    const history = useHistory();
+    const status = useSelector((state) => state.status.statusMsg);
     const dispatch = useDispatch();
-    const onChangeUsername = (e) => {
-        const name = e.target.value;
-        setUsername(name);
-    };
-    const onChangeEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
+    const handleChange = (e) => {
+        e.persist();
+        setRegister({ ...registerInput, [e.target.name]: e.target.value });
     };
 
-    const onChangePassword = (e) => {
-        const password = e.target.value;
-        setPassword(password);
-    };
-    const onChangePasswordConfirmation = (e) => {
-        const password_confirmation = e.target.value;
-        setPasswordConfirmation(password_confirmation);
-    };
     const handleRegister = (e) => {
         e.preventDefault();
+        const data = {
+            name: registerInput.name,
+            email: registerInput.email,
+            password: registerInput.password,
+            password_confirmation: registerInput.password_confirmation,
+        };
 
-        setSuccessful(false);
-
-        // form.current.validateAll();
-
-        // if (checkBtn.current.context._errors.length === 0) {
-        dispatch(register(name, email, password, password_confirmation))
-            .then(() => {
-                history.push("/login");
-
-                setSuccessful(true);
-            })
-            .catch(() => {
-                setSuccessful(false);
-            });
+        dispatch(register(data));
+        history.push("/login");
     };
-    if (successful) {
-        // <Redirect to="/login" />;
-        dispatch(login(email, password));
-        console.log("REGISTER_SUCCESS");
-    }
+
     return (
         <>
             <div className="form-authorizate">
@@ -84,24 +58,26 @@ export const FormRegister = () => {
                         <div className="input-block">
                             <div className="form-floating pb-3">
                                 <input
-                                    value={name}
+                                    value={registerInput.name}
+                                    name="name"
                                     type="text"
                                     className="form-control input"
                                     id="name"
-                                    placeholder=""
-                                    onChange={onChangeUsername}
+                                    placeholder="Введите имя"
+                                    onChange={handleChange}
                                     required
                                 />
                                 <label htmlFor="name">Введите имя</label>
                             </div>
                             <div className="form-floating pb-3">
                                 <input
-                                    value={email}
+                                    value={registerInput.email}
+                                    name="email"
                                     type="email"
                                     className="form-control input"
                                     id="email"
                                     placeholder="name@example.com"
-                                    onChange={onChangeEmail}
+                                    onChange={handleChange}
                                     required
                                 />
                                 <label htmlFor="email">Введите email</label>
@@ -110,23 +86,26 @@ export const FormRegister = () => {
                             <div className="form-floating pb-3">
                                 <input
                                     type="password"
+                                    name="password"
                                     className="form-control input"
                                     id="password"
                                     placeholder="Пароль"
-                                    value={password}
-                                    onChange={onChangePassword}
+                                    value={registerInput.password}
+                                    onChange={handleChange}
                                     required
                                 />
                                 <label htmlFor="password">Введите пароль</label>
                             </div>
+
                             <div className="form-floating pb-3">
                                 <input
-                                    value={password_confirmation}
+                                    value={registerInput.password_confirmation}
                                     type="password"
+                                    name="password_confirmation"
                                     className="form-control input"
                                     id="passwordRepeat"
                                     placeholder="Подверждение пароля"
-                                    onChange={onChangePasswordConfirmation}
+                                    onChange={handleChange}
                                 />
                                 <label htmlFor="passwordRepeat">
                                     Повторите пароль
@@ -143,7 +122,44 @@ export const FormRegister = () => {
                     </form>
                 </div>
 
-                {status && (
+                <div className="bottom-text">
+                    <span className="px-3">У вас уже есть учетная запись?</span>
+                    <Link to="/login" className="a-text">
+                        Войти.
+                    </Link>
+                </div>
+            </div>
+        </>
+    );
+};
+
+// useEffect(() => {
+//     if (status === "REGISTER_FAIL") {
+//         setStatusMsg({ msg: status.statusMsg.message });
+//         console.log("REGISTER_FAIL");
+//     }
+//     if (status === "REGISTER_SUCCESS") {
+//         setStatusMsg({ msg: status.statusMsg.message });
+//         setTimeout(() => {
+//             console.log("LOGIN");
+//         }, 2000);
+//     }
+// }, [status]);
+// if (status !== preventDefault) {
+//     if (status.id === "REGISTER_FAIL") {
+//         setStatusMsg();
+//     }
+// }
+
+// setTimeout(() => {
+//     history.push("/login");
+//     // dispatch(
+//     //     login(registerInput.email, registerInput.password)
+//     // );
+// }, 2500);
+
+{
+    /* {status && (
                     <div className="form-group">
                         <div
                             className={
@@ -156,14 +172,7 @@ export const FormRegister = () => {
                             {status}
                         </div>
                     </div>
-                )}
-                <div className="bottom-text">
-                    <span className="px-3">У вас уже есть учетная запись?</span>
-                    <Link to="/login" className="a-text">
-                        Войти.
-                    </Link>
-                </div>
-            </div>
-        </>
-    );
-};
+                )} */
+}
+
+//

@@ -13,4 +13,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/resource/style/*.css
+
+/resources/js/style/*.css
+/.env
+/yarn.lock
+/resources/js/style/*.css.map

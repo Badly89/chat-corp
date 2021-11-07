@@ -5,6 +5,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController as HomeController;
 
 use App\Http\Controllers\HomeController as HomeController;
 
@@ -50,3 +51,4 @@ Route::get('/{any}', function () {
     return view('welcome');
 })
     ->where('any','.*');
+

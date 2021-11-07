@@ -1,18 +1,18 @@
 import { delMessage } from "../messages/actions";
 import { ADD_ROOM, DEL_ROOM } from "./types";
 
-export const addRoom = (newRoom) => ({
+export const createChat = (newRoom) => ({
     type: ADD_ROOM,
     payload: newRoom,
 });
 
-export const delRoom = (id) => ({
+export const deleteSelectChat = (id) => ({
     type: DEL_ROOM,
     payload: id,
 });
 
 // export const actionChatList = id;
-export const delChat = (chatId, message) => async (dispatch, getState) => {
+export const deleteChat = (chatId, message) => async (dispatch, getState) => {
     const msg = getState().messages.messages[chatId];
     const messageLength = getState().messages.messages[chatId].length;
     if (messageLength > 0) {
