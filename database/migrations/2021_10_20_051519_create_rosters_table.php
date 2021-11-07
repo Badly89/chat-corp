@@ -32,6 +32,6 @@ class CreateRostersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roster');
+        Schema::dropIfExists('rosters');
     }
 }
