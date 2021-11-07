@@ -15,5 +15,15 @@ yarn-error.log
 /.vscode
 
 /resources/js/style/*.css
+<<<<<<< HEAD
+/resources/js/style/*.css.map
 
+/resources/js/components/profile/*.css
+/resources/js/components/profile/*.css.map
+
+/.env
+/yarn.lock
+=======
+
+>>>>>>> 2ccec025e8a66d020745a2b1c142dd8ec7782a89
 /resources/js/style/*.css.map
