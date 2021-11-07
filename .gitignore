@@ -15,6 +15,5 @@ yarn-error.log
 /.vscode
 
 /resources/js/style/*.css
-/.env
-/yarn.lock
+
 /resources/js/style/*.css.map
