@@ -2,22 +2,22 @@ import React from "react";
 import { DEL_MESSAGE, SEND_MESSAGE } from "./types";
 import { AUTHORS } from "../../utils/constant";
 
-export const sendMessage = (chatId, message) => ({
+export const sendMessage = (channelId, message) => ({
     type: SEND_MESSAGE,
-    payload: { message, chatId },
+    payload: { message, channelId },
 });
 
-export const delMessage = (chatId, message) => ({
+export const delMessage = (channelId, message) => ({
     type: DEL_MESSAGE,
-    payload: { message, chatId },
+    payload: { message, channelId },
 });
 
 export const actionMessage =
-    (chatId, message) => async (dispatch, getState) => {
+    (channelId, message) => async (dispatch, getState) => {
         try {
-            dispatch(sendMessage(chatId, message));
+            dispatch(sendMessage(channelId, message));
 
-            if (chatId !== null) {
+            if (channelId !== null) {
                 const res = await fetch(
                     `https://www.botlibre.com/rest/api/form-chat?instance=165&message="${message.text}"&application=428262090517998158`
                 );
@@ -28,13 +28,14 @@ export const actionMessage =
                     response.lastIndexOf("</message>")
                 );
 
-                const messLength = getState().messages.messages[chatId]?.length;
+                const messLength =
+                    getState().messages.messages[channelId]?.length;
 
                 dispatch(
-                    sendMessage(chatId, {
+                    sendMessage(channelId, {
                         text: answer,
                         sender: AUTHORS.BOT,
-                        id: `${chatId}-${messLength + 1}`,
+                        id: `${channelId}-${messLength + 1}`,
                     })
                 );
             }
@@ -49,9 +50,8 @@ export const actionMessage =
 // ) => {
 //   dispatch(delMessage(chatId, message));
 // };
-export const actionDelMessage = (message) => (dispatch, getState) => {
-    dispatch(delMessage(message));
-    const selMessage = getState().messages;
-    console.log(selMessage);
-    console.log("update");
-};
+export const actionDelMessage =
+    (channelId, message) => (dispatch, getState) => {
+        dispatch(delMessage(channelId, message));
+        const selMessage = getState().messages;
+    };

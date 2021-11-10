@@ -12,8 +12,8 @@ export const msgReducer = (state = initialMessage, action) => {
                 ...state,
                 messages: {
                     ...state.messages,
-                    [action.payload.chatId]: [
-                        ...(state.messages[action.payload.chatId] || []),
+                    [action.payload.channelId]: [
+                        ...(state.messages[action.payload.channelId] || []),
                         action.payload.message,
                     ],
                 },
@@ -21,14 +21,14 @@ export const msgReducer = (state = initialMessage, action) => {
         }
         case DEL_MESSAGE: {
             const msg = action.payload.message;
-            const arr = state.messages[action.payload.chatId];
+            const arr = state.messages[action.payload.channelId];
             const filterMessage = arr.filter((item) => item.id !== msg.id);
 
             return {
                 ...state,
                 messages: {
                     ...state.messages,
-                    [action.payload.chatId]: [...(filterMessage || [])],
+                    [action.payload.channelId]: [...(filterMessage || [])],
                 },
             };
         }

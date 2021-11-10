@@ -10,10 +10,10 @@ import PrivateRoute from "../hocs/PrivateRoute";
 import PublicRoute from "../hocs/PublicRoute";
 import { FormLogin } from "./authorized/Login/FormLogin";
 import { FormRegister } from "./authorized/Register/FormRegister";
-import { ListChats } from "./Chats/ListChats";
 import { SideBar } from "./SideBar/SideBar";
 import { UserProfile } from "../components/Profile/userProfile";
 import axios from "axios";
+import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword";
 
 export const Routes = () => {
     const [loading, setLoading] = useState(false);
@@ -45,6 +45,11 @@ export const Routes = () => {
                     isAuthenticated={authed}
                     path="/register"
                     component={FormRegister}
+                />
+                <PublicRoute
+                    isAuthenticated={authed}
+                    path="/reset"
+                    component={FormResetPassword}
                 />
                 <PrivateRoute
                     path="/"

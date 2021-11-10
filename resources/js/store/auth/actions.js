@@ -7,7 +7,7 @@ import {
     IS_LOADING,
     LOGOUT_SUCCESS,
 } from "./types";
-import { echoInit } from "../../helpers/echo";
+
 import { returnStatus } from "../status/actions";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -131,4 +131,49 @@ export const logout = () => (dispatch) => {
         .catch(() => {
             dispatch({ type: LOGOUT });
         });
+};
+
+export const resetPassword =
+    ({ email }) =>
+    (dispatch) => {
+        const body = JSON.stringify({ email });
+        axios.get("/sanctum/csrf-cookie").then((respone) => {
+            axios
+                .post("/forgot-password/`${email}`", body)
+                .then((resp) => {
+                    if (resp.data.status === 200) {
+                        console.log(resp);
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Восстановление пароля!",
+                            text: resp.data.message,
+                        });
+                    } else {
+                        // console.log(resp.data.validation_errors);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        });
+    };
+
+export const makeHeaders = (getState) => {
+    // Get token from localstorage
+    const token = getState().auth.token;
+    // console.log(token);
+    // Headers
+    const headersObj = {
+        headers: {
+            "Content-type": "application/json",
+        },
+    };
+
+    // If token, add to headers
+    // if (token) {
+    //   headersObj.headers["Authorization"] = "Bearer " + token;
+    // }
+
+    return headersObj;
 };

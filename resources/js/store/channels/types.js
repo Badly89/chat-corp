@@ -1,0 +1,5 @@
+export const CREATE_CHANNEL = "CHANNELS::CREATE_CHANNEL";
+export const DELETE_CHANNEL = "CHANNELS::DELETE_CHANNEL";
+
+export const IS_ONLINE = "IS_ONLINE";
+export const IS_OFFLINE = "IS_OFFLINE";

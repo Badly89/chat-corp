@@ -91,14 +91,9 @@ export const FormLogin = () => {
                                 Запомнить меня
                             </label>
                             <label className="px-3">
-                                <a
-                                    href="#"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="a-text"
-                                >
-                                    Забыли пароль
-                                </a>
+                                <Link to="/reset" className="a-text">
+                                    Забыли пароль?
+                                </Link>
                             </label>
                         </div>
 

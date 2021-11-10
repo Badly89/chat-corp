@@ -228,7 +228,12 @@
 .btn-del {
   display: none;
   margin: 0 auto;
+  width: 0;
   padding-left: 5px;
+}
+
+.btn {
+  width: 10px;
 }
 
 .message:hover .btn-del {
