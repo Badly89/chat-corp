@@ -40,10 +40,7 @@ class AuthenticationController extends Controller
     }
 
     public function login(UserCheckRequest $request) {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
+        $fields = $request->only(['email', 'password']);
 
            // Check email
         $user = User::where('email', $fields['email'])->first();
