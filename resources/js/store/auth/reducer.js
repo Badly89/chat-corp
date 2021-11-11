@@ -29,13 +29,10 @@ export function authReducer(state = initialState, action) {
                 currUser: action.payload,
             };
         case LOGIN_SUCCESS:
-            // localStorage.setItem("auth_token", action.payload.auth_token);
-            // localStorage.setItem("auth_name", action.payload.auth_name);
             return {
                 ...state,
                 isAuthenticated: true,
-                // auth_token: localStorage.getItem("auth_token"),
-                // auth_name: localStorage.getItem("auth_name"),
+
                 currUser: action.payload,
             };
 

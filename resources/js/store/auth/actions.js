@@ -47,6 +47,13 @@ export const register =
                         );
                         dispatch({ type: REGISTER_SUCCESS });
                     } else {
+                        dispatch(
+                            returnStatus(
+                                res.data.message,
+                                res.status,
+                                "REGISTER_FAIL"
+                            )
+                        );
                     }
                 })
                 .catch((err) => {
@@ -89,18 +96,32 @@ export const login =
                         });
                     } else if (resp.data.status === 401) {
                         console.log(resp.data);
+                        dispatch(
+                            returnStatus(
+                                resp.data.message,
+                                resp.data.status,
+                                "LOGIN_FAIL"
+                            )
+                        );
                     } else {
                         // console.log(resp.data.validation_errors);
                     }
                 })
                 .catch((err) => {
                     dispatch({ type: LOGIN_FAIL });
+                    dispatch(
+                        returnStatus(
+                            err.resp.data.message,
+                            err.resp.status,
+                            "LOGIN_FAIL"
+                        )
+                    );
                 });
         });
     };
 
 export const logout = () => (dispatch) => {
-    window.Echo.disconnect();
+    // window.Echo.disconnect();
     axios
         .post("/logout", { withCredentials: true })
         .then((res) => {

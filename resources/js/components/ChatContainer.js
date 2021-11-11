@@ -7,8 +7,16 @@ import { actionDelMessage, actionMessage } from "../store/messages/actions";
 import { selectMessages } from "../store/messages/selectors";
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
+import { getAllChannelList } from "../store/channels/actions";
 
 export const ChatContainer = () => {
+    const reaquestChannels = () => {
+        dispatch(getAllChannelList());
+    };
+
+    useEffect(() => {
+        reaquestChannels();
+    }, []);
     const { channelId } = useParams();
     const messages = useSelector(selectMessages);
     const channels = useSelector(channelSelect);

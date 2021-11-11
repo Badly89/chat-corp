@@ -12,7 +12,6 @@ import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword"
 import "../components/asset/css/main-style.css";
 import "../components/asset/css/auth-style.css";
 import "../components/asset/css/style-profile.css";
-import { getAllChannelList } from "../store/channels/actions";
 
 export const Routes = () => {
     const [loading, setLoading] = useState(false);
@@ -21,14 +20,6 @@ export const Routes = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
     const dispatch = useDispatch();
-
-    const reaquestChannels = () => {
-        dispatch(getAllChannelList());
-    };
-
-    useEffect(() => {
-        reaquestChannels();
-    }, []);
 
     console.log(isAuthenticated);
     useEffect(() => {

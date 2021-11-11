@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Alert, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import { login } from "../../../store/auth/actions";
 
 export const FormLogin = () => {
     const status = useSelector((state) => state.status);
-
+    const [errMsg, setErrMsg] = useState("");
     const [loginInput, setLogin] = useState({
         email: "",
         password: "",
@@ -19,7 +19,7 @@ export const FormLogin = () => {
 
         setLogin({ ...loginInput, [e.target.name]: e.target.value });
     };
-
+    console.log(status);
     const handleLogin = (e) => {
         e.preventDefault();
 
@@ -29,6 +29,15 @@ export const FormLogin = () => {
         };
         dispatch(login(data));
     };
+    useEffect(() => {
+        if (status.id === "LOGIN_FAIL") {
+            setErrMsg(status.msgStatus);
+            console.log("Bingo");
+        }
+        return () => {
+            console.log("Exit");
+        };
+    }, [errMsg]);
 
     return (
         <>
@@ -105,7 +114,7 @@ export const FormLogin = () => {
                         </button>
                     </Form>
                 </div>
-
+                {errMsg && <Alert variant="warning">{errMsg}</Alert>}
                 <div className="bottom-text">
                     <span className="px-3">У вас еще нет учетной записи?</span>
 

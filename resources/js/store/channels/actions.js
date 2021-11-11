@@ -53,9 +53,14 @@ export const deleteChannel =
     };
 
 export const getAllChannelList = () => (dispatch, getState) => {
-    axios.get("/getAllChannels").then((res) => {
-        const channels = res.data;
-        console.log(res.data);
-        dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-    });
+    const token = getState().auth.token;
+    axios
+        .get("/getAllChannels", token, {
+            withCredentials: true,
+        })
+        .then((res) => {
+            const channels = res.data;
+            console.log(res.data);
+            dispatch({ type: GET_ALL_CHANNELS, payload: channels });
+        });
 };
