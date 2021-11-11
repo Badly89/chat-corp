@@ -22,25 +22,74 @@ class MessageSent
      *
      * @return void
      */
-    public function __construct($sender_id,$rec_id,$msg)
-    {
-       $this->sender_id = $sender_id;
-        $this->rec_id = $rec_id;
-        $this->message = $msg;
-    }
+    // public function __construct($sender_id,$rec_id,$msg)
+    // {
+    //    $this->sender_id = $sender_id;
+    //     $this->rec_id = $rec_id;
+    //     $this->message = $msg;
+    // }
 
     /**
      * Get the channels the event should broadcast on.
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+    // public function broadcastOn()
+    // {
+    //     return[
+    //         new PrivateChannel('chat-'.$this->sender_id),
+    //         new PrivateChannel('chat-'.$this->rec_id)
+    //     ];
+
+    //     // return new PrivateChannel('channel-name');
+    // }
+    /**
+     * User that sent the message
+     *
+     * @var \App\User
+     */
+    public $user;
+
+    /**
+     * Message details
+     *
+     * @var \App\Message
+     */
+    // public $message;
+
+
+    public $channel;
+
+    public $type;
+
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
+    public function __construct($user, $message, $channel, $type)
+    {
+        error_log($user);
+
+        $this->user = $user;
+
+        $this->message = $message;
+
+        $this->channel = $channel;
+
+        $this->type = $type;
+
+    }
+
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return Channel|array
+     */
     public function broadcastOn()
     {
-        return[
-            new PrivateChannel('chat-'.$this->sender_id),
-            new PrivateChannel('chat-'.$this->rec_id)
-        ];
+         return new PresenceChannel("chat.channel.".$this->channel);
 
-        // return new PrivateChannel('channel-name');
     }
+
 }

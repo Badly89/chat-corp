@@ -1,11 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { Message, MessageField } from "./Message";
-import { selectMessages } from "../../store/messages/selectors";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Message } from "./Message";
 import { AUTHORS } from "../../utils/constant";
-
-import { actionDelMessage, actionMessage } from "../../store/messages/actions";
 import { HeaderChat } from "./HeaderChat";
 import { InputMessage } from "./InputMessage";
 

@@ -30,7 +30,7 @@ export const InputMessage = ({ onSendMessage }) => {
                         onChange={handleChange}
                     />
                     <Button
-                        className="btn-sumbit"
+                        className="btn-sumbit btn-send"
                         type="submit"
                         size="small"
                         variant="contained"

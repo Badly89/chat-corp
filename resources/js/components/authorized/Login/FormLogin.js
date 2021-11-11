@@ -1,8 +1,8 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import "../../../style/style.css";
+import { Link, useHistory } from "react-router-dom";
+
 import { login } from "../../../store/auth/actions";
 
 export const FormLogin = () => {

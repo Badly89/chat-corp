@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
-import "../../style/main-style.css";
-import "../../style/style.css";
 import { Router, Link, Switch, Route, useHistory } from "react-router-dom";
-
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../Profile/userProfile";
 import { useDispatch, useSelector } from "react-redux";

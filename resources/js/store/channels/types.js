@@ -3,3 +3,6 @@ export const DELETE_CHANNEL = "CHANNELS::DELETE_CHANNEL";
 
 export const IS_ONLINE = "IS_ONLINE";
 export const IS_OFFLINE = "IS_OFFLINE";
+
+export const GET_CHANNELS = "CHANNELS::GET_CHANNELS";
+export const GET_ALL_CHANNELS = "CHANNELS::GET_ALL_CHANNELS";

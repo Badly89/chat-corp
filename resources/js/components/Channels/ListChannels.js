@@ -15,7 +15,7 @@ export const ListChannels = () => {
     const [selectedChat, useSelectChat] = useState("allChats");
 
     const [value, setValue] = useState("");
-    const channels = useSelector((state) => state.channels);
+    const channels = useSelector((state) => state.channels.allChannels);
 
     const dispatch = useDispatch();
 
@@ -59,7 +59,7 @@ export const ListChannels = () => {
                                     aria-describedby="button-addon2"
                                 />
                                 <button
-                                    className="btn "
+                                    className="btn btn-search"
                                     type="button"
                                     id="button-addon2"
                                 >
@@ -70,7 +70,7 @@ export const ListChannels = () => {
                     </div>
                     {/* <!-- отрисовка компонента список чатов --> */}
                     <div className="group-chats">
-                        {channels.channel.map(({ id, name }) => (
+                        {channels.channels.map(({ id, name }) => (
                             <div className="card " key={id}>
                                 <div className="">
                                     <img

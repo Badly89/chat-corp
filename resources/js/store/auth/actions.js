@@ -12,17 +12,6 @@ import { returnStatus } from "../status/actions";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.get["Accept"] = "application/json";
-axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem("auth_token");
-
-    config.headers.Authorization = token ? `Bearer ${token}` : "";
-    console.log(config);
-    return config;
-});
-axios.defaults.withCredentials = true;
-
 export const register =
     ({ name, email, password, password_confirmation }) =>
     (dispatch) => {
@@ -61,6 +50,13 @@ export const register =
                     }
                 })
                 .catch((err) => {
+                    dispatch(
+                        returnStatus(
+                            err.res.data.message,
+                            err.res.status,
+                            "REGISTER_FAIL"
+                        )
+                    );
                     dispatch({ type: REGISTER_FAIL });
                 });
         });

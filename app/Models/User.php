@@ -43,8 +43,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function markAsOnline()
+    public function messages(){
+        return $this->hasMany(Message::class);
+    }
+    public function channels(){
+        return $this->belongsToMany('App\Models\Channel','user_channel')->withTimestamps();
+    }
+    public function details()
     {
-        return Cache::has('user-is-online-' . $this->id);
+        return $this->hasOne('App\Models\UserProfile');
     }
 }

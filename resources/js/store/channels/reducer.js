@@ -1,7 +1,15 @@
-import { CREATE_CHANNEL, DELETE_CHANNEL } from "./types";
+import {
+    CREATE_CHANNEL,
+    DELETE_CHANNEL,
+    GET_ALL_CHANNELS,
+    GET_CHANNELS,
+} from "./types";
 
 const initialRoom = {
-    channel: [{ id: "id0", name: "Главный канал" }],
+    channel: [],
+    // channel: [{ id: "id0", name: "Главный канал" }],
+    allChannels: [],
+    channels: [],
 };
 
 export const channelReducer = (state = initialRoom, action) => {
@@ -26,6 +34,13 @@ export const channelReducer = (state = initialRoom, action) => {
                         (item) => item.id !== action.payload
                     ),
                 ],
+            };
+        }
+
+        case GET_ALL_CHANNELS: {
+            return {
+                ...state,
+                allChannels: action.payload,
             };
         }
 

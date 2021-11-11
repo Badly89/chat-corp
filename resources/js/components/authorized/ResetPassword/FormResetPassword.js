@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useHistory } from "react-router";
-import "../../../style/style.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";

@@ -12,7 +12,7 @@ export const Message = ({ message, onDelMessage }) => {
     const scrollBottom = () => {
         bottomRef.current.scrollIntoView({
             behavior: "smooth",
-            block: "start",
+            block: "end",
         });
     };
     useEffect(() => {
@@ -20,10 +20,8 @@ export const Message = ({ message, onDelMessage }) => {
     }, [message]);
     return (
         <>
-            <div>{message.text}</div>
-            <div className="message-sender" ref={bottomRef}>
-                {message.sender}
-            </div>
+            <div ref={bottomRef}>{message.text}</div>
+            <div className="message-sender">{message.sender}</div>
             <div className="btn-del">
                 <MdDelete onClick={handleDelete} />
             </div>
