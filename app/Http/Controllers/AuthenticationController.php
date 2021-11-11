@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\{UserCheckRequest, UserCreateRequest};
+
 use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -14,35 +17,16 @@ use Illuminate\Validation\ValidationException;
 
 class AuthenticationController extends Controller
 {
-    // protected function authenticated(Request $request, $user)
-    // {
-    //     return response([
-    //         $user->id,
-    //         $user->name,
-    //         $user->email,
-    //     ]);
-    // }
 
+    public function register(UserCreateRequest $request) {
 
-    public function register(Request $request) {
+        $fields = $request->only(['name', 'email', 'password', 'password_confirmation']);
 
-          $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
-        ]);
-
-        //  if($validator->fails()){
-        //     return response()-> json([
-        //         'validation_errors'=> $validator->messages(),
-        //     ]);
-        // }
-        // else
-        // {
         $user= User::create([
-            'name'=>$fields['name'],
-            'email'=>$fields['email'],
-            'password'=>bcrypt($fields['password'])
+            'name' => $fields['name'],
+            'email' => $fields['email'],
+            'password' => Hash::make($fields['password']),
+            'password_confirmation' => $fields['password_confirmation']
         ]);
         $token = $user->createToken($user->email.'_Token')->plainTextToken;
 
@@ -55,14 +39,8 @@ class AuthenticationController extends Controller
         // }
     }
 
-    public function login(Request $request) {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
-
-
-
+    public function login(UserCheckRequest $request) {
+        $fields = $request->only(['email', 'password']);
 
            // Check email
         $user = User::where('email', $fields['email'])->first();
