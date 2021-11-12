@@ -1,5 +1,10 @@
 import { AUTHORS } from "../../utils/constant";
-import { SEND_MESSAGE, DEL_MESSAGE } from "./types";
+import {
+    SEND_MESSAGE,
+    DEL_MESSAGE,
+    GET_MESSAGES,
+    LOAD_MESSAGES,
+} from "./types";
 
 const initialMessage = {
     messages: {},
@@ -19,6 +24,15 @@ export const msgReducer = (state = initialMessage, action) => {
                 },
             };
         }
+        case LOAD_MESSAGES: {
+            return {
+                ...state,
+                messages: {
+                    ...state.messages,
+                    [action.payload.channelId]: [action.payload.message],
+                },
+            };
+        }
         case DEL_MESSAGE: {
             const msg = action.payload.message;
             const arr = state.messages[action.payload.channelId];
@@ -32,6 +46,7 @@ export const msgReducer = (state = initialMessage, action) => {
                 },
             };
         }
+
         default:
             return state;
     }

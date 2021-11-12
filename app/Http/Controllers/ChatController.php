@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Models\Channel;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class ChatController extends Controller
 
             return response ([
                 'channels' => $channels,
-                'message'=> 'Выгрузка списка чатов',]);
+                'message'=> 'Список чатов выгружен успешно',]);
     }
 
 
@@ -31,9 +32,14 @@ class ChatController extends Controller
             'channel_id' => $request->channel_id
         ]);
 
-        $user = User::where('id', auth()->user()->id)->with('detail')->first();
+        $user = User::where('id', auth()->user()->id)->with('detail_channels')->first();
 
         broadcast(new MessageSent($user, $message, $request->channel_id, $request->channel_type));
+
     }
 
+        public function getMessages(Request $request, $channel_id)
+    {
+        return Message::where("channel_id", $channel_id)->with('user.detail_channels')->get();
+    }
 }

@@ -12,37 +12,8 @@ use Illuminate\Queue\SerializesModels;
 
 class MessageSent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+   use Dispatchable, InteractsWithSockets;
 
-    public $sender_id;
-    public $rec_id;
-    public $message;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    // public function __construct($sender_id,$rec_id,$msg)
-    // {
-    //    $this->sender_id = $sender_id;
-    //     $this->rec_id = $rec_id;
-    //     $this->message = $msg;
-    // }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    // public function broadcastOn()
-    // {
-    //     return[
-    //         new PrivateChannel('chat-'.$this->sender_id),
-    //         new PrivateChannel('chat-'.$this->rec_id)
-    //     ];
-
-    //     // return new PrivateChannel('channel-name');
-    // }
     /**
      * User that sent the message
      *
@@ -55,7 +26,7 @@ class MessageSent
      *
      * @var \App\Message
      */
-    // public $message;
+    public $message;
 
 
     public $channel;
@@ -88,8 +59,11 @@ class MessageSent
      */
     public function broadcastOn()
     {
-         return new PresenceChannel("chat.channel.".$this->channel);
-
+        if($this->type === "public") {
+            return new PresenceChannel("chat.channel.".$this->channel);
+        } else if ($this->type === "private") {
+            return new PresenceChannel("chat.dm.".$this->channel);
+        }
     }
 
 }

@@ -1,27 +1,20 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { getMessages } from "../store/channels/actions";
 
 import { channelSelect } from "../store/channels/selectors";
 import { actionDelMessage, actionMessage } from "../store/messages/actions";
 import { selectMessages } from "../store/messages/selectors";
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
-import { getAllChannelList } from "../store/channels/actions";
 
 export const ChatContainer = () => {
-    const reaquestChannels = () => {
-        dispatch(getAllChannelList());
-    };
-
-    useEffect(() => {
-        reaquestChannels();
-    }, []);
     const { channelId } = useParams();
     const messages = useSelector(selectMessages);
     const channels = useSelector(channelSelect);
-
     const dispatch = useDispatch();
+
     const sendNewMessage = useCallback(
         (newMessage) => {
             dispatch(
@@ -41,6 +34,7 @@ export const ChatContainer = () => {
         },
         [messages]
     );
+
     return (
         <>
             <ListChannels />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Message } from "./Message";
 import { AUTHORS } from "../../utils/constant";
@@ -7,7 +7,7 @@ import { InputMessage } from "./InputMessage";
 
 export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
     const currUser = useSelector((state) => state.auth.currUser);
-    console.log(currUser.name);
+
     return (
         <>
             <div className="messageList">

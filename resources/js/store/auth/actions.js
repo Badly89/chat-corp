@@ -6,11 +6,14 @@ import {
     LOGOUT,
     IS_LOADING,
     LOGOUT_SUCCESS,
+    AUTH_SUCCESS,
+    AUTH_FAIL,
 } from "./types";
 
 import { returnStatus } from "../status/actions";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { getAllChannelList } from "../channels/actions";
 
 export const register =
     ({ name, email, password, password_confirmation }) =>
@@ -83,7 +86,6 @@ export const login =
                             "auth_name",
                             resp.data.username.name
                         );
-                        console.log(resp);
 
                         Swal.fire({
                             icon: "success",
@@ -94,6 +96,7 @@ export const login =
                             type: LOGIN_SUCCESS,
                             payload: { currUser: resp.data.username },
                         });
+                        dispatch(getAllChannelList);
                     } else if (resp.data.status === 401) {
                         console.log(resp.data);
                         dispatch(
@@ -103,6 +106,11 @@ export const login =
                                 "LOGIN_FAIL"
                             )
                         );
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Внимание!!!",
+                            text: resp.data.message,
+                        });
                     } else {
                         // console.log(resp.data.validation_errors);
                     }
@@ -193,4 +201,17 @@ export const makeHeaders = (getState) => {
     // }
 
     return headersObj;
+};
+
+export const getProfile = () => (dispatch, getState) => {
+    axios
+        .get("/profile", { withCredentials: true })
+        .then((resp) => {
+            dispatch({ type: AUTH_SUCCESS, payload: resp.data });
+            const selState = getState();
+            const useId = selState.auth.currUser.id;
+        })
+        .catch((err) => {
+            dispatch({ type: AUTH_FAIL });
+        });
 };
