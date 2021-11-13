@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/getAllChannels',[ChatController::class,'getAllChannels']);
     Route::post('/sendMessage',[ChatController::class,'sendMessage']);
     Route::get('/getMessages/{channel_id}', [ChatController::class,'getMessages']);
-
+    Route::get('/getChannelsUsers/{channel_id}',[ChatController::class,'getChannelsUsers']);
 });
 
 Route::post('/register', [AuthenticationController::class, 'register']);

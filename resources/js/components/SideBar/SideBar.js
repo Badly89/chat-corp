@@ -1,27 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Router, Link, Switch, Route, useHistory } from "react-router-dom";
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../Profile/userProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatContainer } from "../ChatContainer";
 import { ListChannels } from "../Channels/ListChannels";
+import { Spinner } from "react-bootstrap";
+import { getAllChannelList } from "../../store/channels/actions";
 
 export const SideBar = () => {
     const history = useHistory();
-    const isAuthenticated = useSelector((state) => state.auth);
-    // const { user: currentUser } = useSelector((state) => state.auth.currUser);
+    const [isLoading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
-    if (!isAuthenticated) {
-        <Redirect to="/" />;
-    }
-
-    //очистка сообщений
-
+    useEffect(() => {
+        dispatch(getAllChannelList());
+        setLoading(false);
+    }, []);
     return (
         <div className=" main-window">
             <Router history={history}>
-                {/* {currentUser ? ( */}
                 <div className="sideBar">
                     <Link
                         to="/"
@@ -79,7 +77,12 @@ export const SideBar = () => {
                 </div>
 
                 <Switch>
-                    <Route exact path="/channels" component={ListChannels} />
+                    <Route
+                        exact
+                        path="/channels"
+                        isLoading={isLoading}
+                        component={ListChannels}
+                    />
 
                     <Route
                         exact

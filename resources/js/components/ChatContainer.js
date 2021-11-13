@@ -1,19 +1,31 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { getMessages } from "../store/channels/actions";
+import { getAllChannelList, getMessages } from "../store/channels/actions";
 
 import { channelSelect } from "../store/channels/selectors";
-import { actionDelMessage, actionMessage } from "../store/messages/actions";
+import {
+    actionDelMessage,
+    actionMessage,
+    getMessagesChannel,
+} from "../store/messages/actions";
 import { selectMessages } from "../store/messages/selectors";
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
+import { Spinner } from "./Spinner";
 
-export const ChatContainer = () => {
+export const ChatContainer = ({ isLoading }) => {
     const { channelId } = useParams();
+
     const messages = useSelector(selectMessages);
-    const channels = useSelector(channelSelect);
     const dispatch = useDispatch();
+
+    console.log(isLoading);
+    useEffect(() => {
+        if (!messages.messages) {
+            dispatch(getMessagesChannel(channelId));
+        }
+    }, []);
 
     const sendNewMessage = useCallback(
         (newMessage) => {
@@ -35,9 +47,11 @@ export const ChatContainer = () => {
         [messages]
     );
 
-    return (
+    return isLoading ? (
+        <Spinner />
+    ) : (
         <>
-            <ListChannels />
+            <ListChannels isLoading={isLoading} />
             <FieldMessages
                 messages={messages[channelId]}
                 onSendMessage={sendNewMessage}

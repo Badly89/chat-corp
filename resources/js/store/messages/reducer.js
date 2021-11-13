@@ -4,6 +4,7 @@ import {
     DEL_MESSAGE,
     GET_MESSAGES,
     LOAD_MESSAGES,
+    UPDATE_MESSAGES,
 } from "./types";
 
 const initialMessage = {
@@ -25,14 +26,31 @@ export const msgReducer = (state = initialMessage, action) => {
             };
         }
         case LOAD_MESSAGES: {
+            const msg = action.payload.message;
+            const arr = state.messages[action.payload.channelId];
+            const filterMessage = arr.filter((item) => item.id == msg.id);
             return {
                 ...state,
                 messages: {
                     ...state.messages,
-                    [action.payload.channelId]: [action.payload.message],
+                    [action.payload.channelId]: [
+                        ...state.messages[action.payload.channelId],
+                        action.payload.message,
+                    ],
                 },
             };
         }
+        case UPDATE_MESSAGES: {
+            const updateItems = state.messages[action.payload.channelId].map(
+                (item) => {
+                    if (item.id === action.id) {
+                        console.log(item);
+                    }
+                }
+            );
+            return {};
+        }
+
         case DEL_MESSAGE: {
             const msg = action.payload.message;
             const arr = state.messages[action.payload.channelId];

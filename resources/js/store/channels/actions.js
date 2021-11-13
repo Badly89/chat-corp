@@ -22,7 +22,7 @@ export const deleteSelectChannel = (id) => ({
 // export const actionChatList = id;
 export const deleteChannel =
     (channelId, message) => async (dispatch, getState) => {
-        const msg = getState().messages.messages[chatId];
+        const msg = getState().messages.messages[channelId];
         const messageLength = getState().messages.messages[channelId].length;
         if (messageLength > 0) {
             if (
@@ -43,6 +43,7 @@ export const deleteChannel =
 
 export const getAllChannelList = () => (dispatch, getState) => {
     const token = getState().auth.token;
+
     axios
         .get("/getAllChannels", token, {
             withCredentials: true,
@@ -51,6 +52,16 @@ export const getAllChannelList = () => (dispatch, getState) => {
             const channels = res.data;
             console.log(res.data);
             dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-            //загружаем сообщения чатов
+            console.log("Список чатов");
+            // Swal.fire({
+            //     title: "Please Wait !",
+            //     html: "data uploading", // add html attribute if you want or remove
+            //     allowOutsideClick: false,
+            //     onBeforeOpen: () => {
+            //         Swal.showLoading();
+            //     },
+            // });
+
+            // dispatch(getMessagesChannel(channels.id));
         });
 };

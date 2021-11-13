@@ -20,6 +20,7 @@ class ChatController extends Controller
         //     ->select('channels.id', 'detail_channels.name', 'users.name as owner', 'detail_channels.desc', 'detail_channels.type', 'detail_channels.visible', 'detail_channels.owner_id')->distinct()->get();
 
             return response ([
+                'status' => 200,
                 'channels' => $channels,
                 'message'=> 'Список чатов выгружен успешно',]);
     }
@@ -41,5 +42,16 @@ class ChatController extends Controller
         public function getMessages(Request $request, $channel_id)
     {
         return Message::where("channel_id", $channel_id)->with('user.detail_channels')->get();
+    }
+    public function getChannelsUsers($channel_id) {
+        $channel = Channel::where("type","public")->where('id',$channel_id)->with(["users"])->get();
+
+        $channel = $this->listOnlineUsers($channel);
+
+        error_log("Получаем список пользователей канала");
+        error_log($channel);
+
+
+        return response()->json($channel);
     }
 }

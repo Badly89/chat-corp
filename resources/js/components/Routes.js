@@ -13,8 +13,12 @@ import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword"
 import "../components/asset/css/main-style.css";
 import "../components/asset/css/auth-style.css";
 import "../components/asset/css/style-profile.css";
+import { trackPromise } from "react-promise-tracker";
+
 import axios from "axios";
 import { isEmpty } from "lodash";
+import { Spinner } from "./Spinner";
+import { FaSpinner } from "react-icons/fa";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.get["Accept"] = "application/json";
@@ -27,17 +31,12 @@ axios.interceptors.request.use(function (config) {
 });
 axios.defaults.withCredentials = true;
 export const Routes = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [authed, setAuth] = useState(false);
     const { user: currentUser } = useSelector((state) => state.auth);
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const channels = useSelector((state) => state.channels.allChannels);
-    const dispatch = useDispatch();
 
-    const reaquestChannels = () => {
-        dispatch(getAllChannelList());
-        console.log();
-    };
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -49,24 +48,10 @@ export const Routes = () => {
         }
     });
 
-    useEffect(() => {
-        if (authed) {
-            reaquestChannels();
-        }
-    }, [authed]);
+    console.log(loading);
 
-    useEffect(() => {
-        if (!isEmpty(channels)) {
-            Object.values(channels.channels).map((item) => {
-                dispatch(getMessagesChannel(item.id));
-
-                console.log(item);
-            });
-        }
-    }, [channels]);
-
-    return loading === true ? (
-        <h2>Загрузка...</h2>
+    return loading ? (
+        <Spinner />
     ) : (
         <Router>
             <Switch>

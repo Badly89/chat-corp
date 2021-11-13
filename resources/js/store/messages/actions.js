@@ -25,9 +25,10 @@ export const delMessage = (channelId, message) => ({
 export const getMessagesChannel =
     (channelId, message) => async (dispatch, getState) => {
         try {
+            const messLength = getState().messages.messages[channelId]?.length;
             // dispatch(loadMessages(channelId, message));
             console.log("CURRENTLY SELECTED CHANNEL BELOW");
-            console.log(channelId);
+
             if (channelId !== null) {
                 axios
                     .get(`/getMessages/${channelId}`, {
@@ -37,36 +38,16 @@ export const getMessagesChannel =
                         console.log("LOAD MESSAGES OUTPUT BELOW");
                         console.log(res.data);
                         Object.values(res.data).map((value) => {
-                            console.log(value.id, value.message, value.user_id);
+                            // console.log(value.id, value.message, value.user_id);
+
                             dispatch(
                                 loadMessages(channelId, {
                                     text: value.message,
-                                    sender: value.user_id,
-                                    id: value.id,
+                                    sender: value.user.name,
+                                    id: `${channelId}-${messLength + 1}`,
                                 })
                             );
                         });
-
-                        // Object.values(res.data).map((item) => {
-                        //     console.log(item);
-                        //     dispatch(
-                        //         getMessages(channelId, {
-                        //             text: item.message,
-                        //             sender: item.user_id,
-                        //             id: item.id,
-                        //         })
-                        //     );
-                        // });
-                        // Object.values(res.data).forEach(([key, value]) => {
-
-                        // dispatch(
-                        //     loadMessages(channelId, {
-                        //         text: item.message,
-                        //         sender: item.user_id,
-                        //         id: item.id,
-                        //     })
-                        // );
-                        // });
                     })
                     .catch((err) => {});
             }

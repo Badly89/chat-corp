@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Message } from "./Message";
-import { AUTHORS } from "../../utils/constant";
+
 import { HeaderChat } from "./HeaderChat";
 import { InputMessage } from "./InputMessage";
 
 export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
-    const currUser = useSelector((state) => state.auth.currUser);
+    const { currUser } = useSelector((state) => state.auth.currUser);
 
     return (
         <>
@@ -21,7 +21,7 @@ export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
                                 className="message"
                                 style={{
                                     alignSelf:
-                                        message.sender == AUTHORS.BOT
+                                        message.sender !== currUser.name
                                             ? "flex-start"
                                             : "flex-end",
                                 }}
