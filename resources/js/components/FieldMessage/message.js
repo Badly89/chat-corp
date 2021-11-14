@@ -1,8 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-import { Button } from "react-bootstrap";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
 
 export const Message = ({ message, onDelMessage }) => {
     const handleDelete = () => {
@@ -20,9 +18,9 @@ export const Message = ({ message, onDelMessage }) => {
     }, [message]);
     return (
         <>
-            <div ref={bottomRef}>{message.text}</div>
+            <div>{message.text}</div>
             <div className="message-sender">{message.sender}</div>
-            <div>{message.timestamp}</div>
+            <div ref={bottomRef}>{message.timestamp}</div>
             <div className="btn-del">
                 <MdDelete onClick={handleDelete} />
             </div>
