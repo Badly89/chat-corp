@@ -48,7 +48,7 @@ class AuthenticationController extends Controller
             if(!$user || !Hash::check( $fields['password'],  $user->password)){
                 return response ([
                 'status'=>401,
-                'message'=> 'Invalid Credential',
+                'message'=> 'Отказ в доступе. Не верно указан логин или пароль.',
                 ]);
             }
             else

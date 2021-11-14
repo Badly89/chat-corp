@@ -1,40 +1,23 @@
-import React, { useEffect } from "react";
-import "../../style/main-style.css";
-import "../../style/style.css";
-import {
-    Router,
-    Link,
-    Switch,
-    Route,
-    NavLink,
-    useHistory,
-} from "react-router-dom";
-
-import { ListChats } from "../Chats/ListChats";
-import { FieldMessages } from "../FieldMessage/FieldMessages";
+import React, { useEffect, useState } from "react";
+import { Router, Link, Switch, Route, useHistory } from "react-router-dom";
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../Profile/userProfile";
-
 import { useDispatch, useSelector } from "react-redux";
-import { FormLogin } from "../authorized/Login/FormLogin";
-import { FormRegister } from "../authorized/Register/FormRegister";
+import { ChatContainer } from "../ChatContainer";
+import { ListChannels } from "../Channels/ListChannels";
+import { Spinner } from "react-bootstrap";
+import { getAllChannelList } from "../../store/channels/actions";
 
 export const SideBar = () => {
-    const history = useHistory();
-    const isAuthenticated = useSelector((state) => state.auth);
-    // const { user: currentUser } = useSelector((state) => state.auth.currUser);
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    if (!isAuthenticated) {
-        <Redirect to="/" />;
-    }
-
-    //очистка сообщений
-
+    useEffect(() => {
+        dispatch(getAllChannelList());
+    }, []);
     return (
         <div className=" main-window">
             <Router history={history}>
-                {/* {currentUser ? ( */}
                 <div className="sideBar">
                     <Link
                         to="/"
@@ -48,7 +31,7 @@ export const SideBar = () => {
                             <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
                                 <li className="nav-item">
                                     <Link
-                                        to="/chats"
+                                        to="/channels"
                                         className="nav-link py-3
                                     border-bottom"
                                         aria-current="page"
@@ -92,13 +75,14 @@ export const SideBar = () => {
                 </div>
 
                 <Switch>
-                    <Route exact path="/chats">
-                        <ListChats />
-                    </Route>
-                    <Route exact path="/chats/:chatId">
-                        <ListChats />
-                        <FieldMessages />
-                    </Route>
+                    <Route exact path="/channels" component={ListChannels} />
+
+                    <Route
+                        exact
+                        path="/channels/:channelId"
+                        component={ChatContainer}
+                    />
+
                     {/* <Route exact path="/calls">
                         <ListCalls />
                     </Route> */}
@@ -108,8 +92,6 @@ export const SideBar = () => {
                     <Route exact path="/userProfile">
                         <UserProfile />
                     </Route>
-                    <Route exact path="/login" component={FormLogin} />
-                    <Route exact path="/register" component={FormRegister} />
                 </Switch>
             </Router>
         </div>

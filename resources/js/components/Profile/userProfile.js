@@ -6,7 +6,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { MdExitToApp } from "react-icons/md";
 import { ListGroup } from "react-bootstrap";
 import { logout } from "../../store/auth/actions";
-import "./style-profile.css";
+
 export const UserProfile = () => {
     const { currUser } = useSelector((state) => state.auth.currUser);
     const isAuthenticated = useSelector((state) => state.auth);

@@ -1,5 +1,5 @@
 import React from "react";
-import "../../style/main-style.css";
+
 export const HeaderChat = () => {
     return (
         <>

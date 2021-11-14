@@ -6,22 +6,16 @@ import {
     LOGOUT,
     IS_LOADING,
     LOGOUT_SUCCESS,
+    AUTH_SUCCESS,
+    AUTH_FAIL,
 } from "./types";
-import { echoInit } from "../../helpers/echo";
+
 import { returnStatus } from "../status/actions";
 import axios from "axios";
 import Swal from "sweetalert2";
-
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.get["Accept"] = "application/json";
-axios.interceptors.request.use(function (config) {
-    const token = localStorage.getItem("auth_token");
-
-    config.headers.Authorization = token ? `Bearer ${token}` : "";
-    console.log(config);
-    return config;
-});
-axios.defaults.withCredentials = true;
+import { getAllChannelList } from "../channels/actions";
+import { CLEAR_CHANNELS } from "../channels/types";
+import { CLEAR_MESSAGES } from "../messages/types";
 
 export const register =
     ({ name, email, password, password_confirmation }) =>
@@ -58,9 +52,23 @@ export const register =
                         );
                         dispatch({ type: REGISTER_SUCCESS });
                     } else {
+                        dispatch(
+                            returnStatus(
+                                res.data.message,
+                                res.status,
+                                "REGISTER_FAIL"
+                            )
+                        );
                     }
                 })
                 .catch((err) => {
+                    dispatch(
+                        returnStatus(
+                            err.res.data.message,
+                            err.res.status,
+                            "REGISTER_FAIL"
+                        )
+                    );
                     dispatch({ type: REGISTER_FAIL });
                 });
         });
@@ -80,7 +88,6 @@ export const login =
                             "auth_name",
                             resp.data.username.name
                         );
-                        console.log(resp);
 
                         Swal.fire({
                             icon: "success",
@@ -91,20 +98,40 @@ export const login =
                             type: LOGIN_SUCCESS,
                             payload: { currUser: resp.data.username },
                         });
+                        dispatch(getAllChannelList);
                     } else if (resp.data.status === 401) {
                         console.log(resp.data);
+                        dispatch(
+                            returnStatus(
+                                resp.data.message,
+                                resp.data.status,
+                                "LOGIN_FAIL"
+                            )
+                        );
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Внимание!!!",
+                            text: resp.data.message,
+                        });
                     } else {
                         // console.log(resp.data.validation_errors);
                     }
                 })
                 .catch((err) => {
                     dispatch({ type: LOGIN_FAIL });
+                    dispatch(
+                        returnStatus(
+                            err.resp.data.message,
+                            err.resp.status,
+                            "LOGIN_FAIL"
+                        )
+                    );
                 });
         });
     };
 
 export const logout = () => (dispatch) => {
-    window.Echo.disconnect();
+    // window.Echo.disconnect();
     axios
         .post("/logout", { withCredentials: true })
         .then((res) => {
@@ -125,10 +152,70 @@ export const logout = () => (dispatch) => {
                     type: LOGOUT_SUCCESS,
                     isAuthenticated: false,
                 });
+                dispatch({ type: CLEAR_CHANNELS });
+                dispatch({ type: CLEAR_MESSAGES });
             } else {
             }
         })
         .catch(() => {
             dispatch({ type: LOGOUT });
+        });
+};
+
+export const resetPassword =
+    ({ email }) =>
+    (dispatch) => {
+        const body = JSON.stringify({ email });
+        axios.get("/sanctum/csrf-cookie").then((respone) => {
+            axios
+                .post("/forgot-password/`${email}`", body)
+                .then((resp) => {
+                    if (resp.data.status === 200) {
+                        console.log(resp);
+
+                        Swal.fire({
+                            icon: "success",
+                            title: "Восстановление пароля!",
+                            text: resp.data.message,
+                        });
+                    } else {
+                        // console.log(resp.data.validation_errors);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        });
+    };
+
+export const makeHeaders = (getState) => {
+    // Get token from localstorage
+    const token = getState().auth.token;
+    // console.log(token);
+    // Headers
+    const headersObj = {
+        headers: {
+            "Content-type": "application/json",
+        },
+    };
+
+    // If token, add to headers
+    // if (token) {
+    //   headersObj.headers["Authorization"] = "Bearer " + token;
+    // }
+
+    return headersObj;
+};
+
+export const getProfile = () => (dispatch, getState) => {
+    axios
+        .get("/profile", { withCredentials: true })
+        .then((resp) => {
+            dispatch({ type: AUTH_SUCCESS, payload: resp.data });
+            const selState = getState();
+            const useId = selState.auth.currUser.id;
+        })
+        .catch((err) => {
+            dispatch({ type: AUTH_FAIL });
         });
 };

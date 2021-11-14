@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -31,6 +32,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
+    //Route from Channels
+    Route::get('/getAllChannels',[ChatController::class,'getAllChannels']);
+    Route::post('/sendMessage',[ChatController::class,'sendMessage']);
+    Route::get('/getMessages/{channel_id}', [ChatController::class,'getMessages']);
+    // Route::get('/getChannelsUsers/{channel_id}',[ChatController::class,'getChannelsUsers']);
 });
 
 Route::post('/register', [AuthenticationController::class, 'register']);
@@ -45,6 +51,8 @@ Route::get('/users/search/{name}', [UserController::class, 'search']);
 // После того как запрос будет идти из формы заменю на POST.
 Route::get('/forgot-password/{email}', [MailController::class, 'forgotPassword'])
     ->name('forgot-password');
+
+
 
 Route::get('/{any}', function () {
     return view('welcome');

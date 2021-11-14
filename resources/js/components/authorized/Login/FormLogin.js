@@ -1,8 +1,8 @@
-import React, { useState, useRef, useCallback } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Alert, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import "../../../style/style.css";
+import { Link, useHistory } from "react-router-dom";
+
 import { login } from "../../../store/auth/actions";
 
 export const FormLogin = () => {
@@ -22,7 +22,6 @@ export const FormLogin = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-
         const data = {
             email: loginInput.email,
             password: loginInput.password,
@@ -91,14 +90,9 @@ export const FormLogin = () => {
                                 Запомнить меня
                             </label>
                             <label className="px-3">
-                                <a
-                                    href="#"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="a-text"
-                                >
-                                    Забыли пароль
-                                </a>
+                                <Link to="/reset" className="a-text">
+                                    Забыли пароль?
+                                </Link>
                             </label>
                         </div>
 

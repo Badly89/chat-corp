@@ -1,6 +1,6 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { profileReducer } from "./userProfile/reducer";
-import { chatsReducer } from "./chats/reducer";
+
 import { msgReducer } from "./messages/reducer";
 import { usersReducer } from "./friends/reducer";
 import { compose } from "redux";
@@ -9,13 +9,14 @@ import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import statusReducer from "./status/reducer";
 import { authReducer } from "./auth/reducer";
+import { channelReducer } from "./channels/reducer";
 
 const persistConfig = { key: "chat-corp", storage };
 const persistedReducer = persistReducer(
     persistConfig,
     combineReducers({
         userProfile: profileReducer,
-        chats: chatsReducer,
+        channels: channelReducer,
         messages: msgReducer,
         friends: usersReducer,
         auth: authReducer,
