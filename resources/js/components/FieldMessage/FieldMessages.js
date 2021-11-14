@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Message } from "./Message";
+import { Message } from "./OneMessage";
 
 import { HeaderChat } from "./HeaderChat";
 import { InputMessage } from "./InputMessage";
