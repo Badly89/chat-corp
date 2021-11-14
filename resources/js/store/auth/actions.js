@@ -14,6 +14,8 @@ import { returnStatus } from "../status/actions";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { getAllChannelList } from "../channels/actions";
+import { CLEAR_CHANNELS } from "../channels/types";
+import { CLEAR_MESSAGES } from "../messages/types";
 
 export const register =
     ({ name, email, password, password_confirmation }) =>
@@ -150,6 +152,8 @@ export const logout = () => (dispatch) => {
                     type: LOGOUT_SUCCESS,
                     isAuthenticated: false,
                 });
+                dispatch({ type: CLEAR_CHANNELS });
+                dispatch({ type: CLEAR_MESSAGES });
             } else {
             }
         })

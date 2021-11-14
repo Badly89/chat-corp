@@ -31,14 +31,14 @@ class MessageSent
 
     public $channel;
 
-    public $type;
+    // public $type;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user, $message, $channel, $type)
+    public function __construct($user, $message, $channel)
     {
         error_log($user);
 
@@ -48,7 +48,7 @@ class MessageSent
 
         $this->channel = $channel;
 
-        $this->type = $type;
+        // $this->type = $type;
 
     }
 

@@ -1,4 +1,5 @@
 import {
+    CLEAR_CHANNELS,
     CREATE_CHANNEL,
     DELETE_CHANNEL,
     GET_ALL_CHANNELS,
@@ -10,6 +11,7 @@ const initialRoom = {
     // channel: [{ id: "id0", name: "Главный канал" }],
     allChannels: [],
     channels: [],
+    ofset: null,
 };
 
 export const channelReducer = (state = initialRoom, action) => {
@@ -41,9 +43,17 @@ export const channelReducer = (state = initialRoom, action) => {
             return {
                 ...state,
                 allChannels: action.payload,
+                ofset: true,
             };
         }
-
+        case CLEAR_CHANNELS: {
+            return {
+                ...state,
+                allChannels: [],
+                channels: [],
+                ofset: false,
+            };
+        }
         default:
             return state;
     }

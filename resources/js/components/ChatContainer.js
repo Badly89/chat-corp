@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { getAllChannelList, getMessages } from "../store/channels/actions";
 
-import { channelSelect } from "../store/channels/selectors";
 import {
     actionDelMessage,
     actionMessage,
@@ -12,21 +10,21 @@ import {
 import { selectMessages } from "../store/messages/selectors";
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
-import { Spinner } from "./Spinner";
 
-export const ChatContainer = ({ isLoading }) => {
+export const ChatContainer = () => {
     const { channelId } = useParams();
-
+    const [loading, setLoading] = useState(false);
     const messages = useSelector(selectMessages);
     const dispatch = useDispatch();
+    // console.log(messages[channelId]?.length);
 
-    console.log(isLoading);
     useEffect(() => {
         if (!messages.messages) {
             dispatch(getMessagesChannel(channelId));
         }
     }, []);
 
+    console.log(loading);
     const sendNewMessage = useCallback(
         (newMessage) => {
             dispatch(
@@ -47,11 +45,9 @@ export const ChatContainer = ({ isLoading }) => {
         [messages]
     );
 
-    return isLoading ? (
-        <Spinner />
-    ) : (
+    return (
         <>
-            <ListChannels isLoading={isLoading} />
+            <ListChannels />
             <FieldMessages
                 messages={messages[channelId]}
                 onSendMessage={sendNewMessage}

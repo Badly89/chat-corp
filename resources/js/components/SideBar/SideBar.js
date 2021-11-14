@@ -9,13 +9,11 @@ import { Spinner } from "react-bootstrap";
 import { getAllChannelList } from "../../store/channels/actions";
 
 export const SideBar = () => {
-    const history = useHistory();
-    const [isLoading, setLoading] = useState(true);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     useEffect(() => {
         dispatch(getAllChannelList());
-        setLoading(false);
     }, []);
     return (
         <div className=" main-window">
@@ -77,12 +75,7 @@ export const SideBar = () => {
                 </div>
 
                 <Switch>
-                    <Route
-                        exact
-                        path="/channels"
-                        isLoading={isLoading}
-                        component={ListChannels}
-                    />
+                    <Route exact path="/channels" component={ListChannels} />
 
                     <Route
                         exact

@@ -12,7 +12,7 @@ const chatOptions = [
     { value: "groups", label: "Группы" },
     { value: "arhives", label: "Архивы" },
 ];
-export const ListChannels = ({ isLoading }) => {
+export const ListChannels = () => {
     const [selectedChat, useSelectChat] = useState("allChats");
 
     const [value, setValue] = useState("");
@@ -35,9 +35,7 @@ export const ListChannels = ({ isLoading }) => {
     const handleDelete = (id) => {
         dispatch(deleteChannel(id));
     };
-    return isLoading ? (
-        <Spinner />
-    ) : (
+    return (
         <div className="chatList">
             <div className="container">
                 <div className="d-flex flex-column   bg-white">

@@ -5,10 +5,16 @@ import {
     GET_MESSAGES,
     LOAD_MESSAGES,
     UPDATE_MESSAGES,
+    GET_MESSAGES_SUCCESS,
+    GET_MESSAGES_FAIL,
+    GET_MESSAGES_REQUEST,
+    CLEAR_MESSAGES,
 } from "./types";
 
 const initialMessage = {
     messages: {},
+    loadMessages: {},
+    // offset: false,
 };
 
 export const msgReducer = (state = initialMessage, action) => {
@@ -25,19 +31,29 @@ export const msgReducer = (state = initialMessage, action) => {
                 },
             };
         }
-        case LOAD_MESSAGES: {
-            const msg = action.payload.message;
-            const arr = state.messages[action.payload.channelId];
-            const filterMessage = arr.filter((item) => item.id == msg.id);
+        case GET_MESSAGES_REQUEST: {
             return {
                 ...state,
+                offset: false,
                 messages: {
                     ...state.messages,
                     [action.payload.channelId]: [
-                        ...state.messages[action.payload.channelId],
+                        ...(state.messages[action.payload.channelId] || []),
                         action.payload.message,
                     ],
                 },
+            };
+        }
+        case GET_MESSAGES_SUCCESS: {
+            return {
+                ...state,
+                ofset: true,
+            };
+        }
+        case GET_MESSAGES_FAIL: {
+            return {
+                ...state,
+                ofset: false,
             };
         }
         case UPDATE_MESSAGES: {
@@ -64,7 +80,9 @@ export const msgReducer = (state = initialMessage, action) => {
                 },
             };
         }
-
+        case CLEAR_MESSAGES: {
+            return { ...state, messages: {} };
+        }
         default:
             return state;
     }

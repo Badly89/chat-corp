@@ -1,8 +1,9 @@
 import React from "react";
 import {
     DEL_MESSAGE,
-    GET_MESSAGES,
-    LOAD_MESSAGES,
+    GET_MESSAGES_FAIL,
+    GET_MESSAGES_REQUEST,
+    GET_MESSAGES_SUCCESS,
     SEND_MESSAGE,
 } from "./types";
 import { AUTHORS } from "../../utils/constant";
@@ -13,7 +14,7 @@ export const sendMessage = (channelId, message) => ({
     payload: { message, channelId },
 });
 export const loadMessages = (channelId, message) => ({
-    type: LOAD_MESSAGES,
+    type: GET_MESSAGES_REQUEST,
     payload: { message, channelId },
 });
 
@@ -23,79 +24,103 @@ export const delMessage = (channelId, message) => ({
 });
 
 export const getMessagesChannel =
-    (channelId, message) => async (dispatch, getState) => {
-        try {
-            const messLength = getState().messages.messages[channelId]?.length;
-            // dispatch(loadMessages(channelId, message));
-            console.log("CURRENTLY SELECTED CHANNEL BELOW");
+    (channelId, message) => (dispatch, getState) => {
+        // try {
+        const messLength = getState().messages.messages[channelId]?.length;
+        const offset = getState().messages.messages;
 
-            if (channelId !== null) {
-                axios
-                    .get(`/getMessages/${channelId}`, {
-                        withCredentials: true,
-                    })
-                    .then((res) => {
-                        console.log("LOAD MESSAGES OUTPUT BELOW");
-                        console.log(res.data);
-                        Object.values(res.data).map((value) => {
-                            // console.log(value.id, value.message, value.user_id);
-
+        console.log(Date());
+        console.log("CURRENTLY SELECTED CHANNEL BELOW");
+        // if (!offset) {
+        if (channelId !== null) {
+            axios
+                .get(`/getMessages/${channelId}`, {
+                    withCredentials: true,
+                })
+                .then((res) => {
+                    console.log("LOAD MESSAGES OUTPUT BELOW");
+                    console.log(res.data);
+                    Object.values(res.data).map((value) => {
+                        // console.log(value.id, value.message, value.user_id);
+                        if (value.created_at <= Date()) {
                             dispatch(
                                 loadMessages(channelId, {
                                     text: value.message,
                                     sender: value.user.name,
-                                    id: `${channelId}-${messLength + 1}`,
+                                    id: value.id,
+                                    timestamp: value.created_at,
+                                    offset: true,
                                 })
                             );
-                        });
-                    })
-                    .catch((err) => {});
-            }
-        } catch (err) {
-            console.log(err);
+                            dispatch({ type: GET_MESSAGES_SUCCESS });
+                        }
+                    });
+                })
+                .catch((err) => {
+                    dispatch({ type: GET_MESSAGES_FAIL });
+                });
         }
+        // }
+        // } catch (err) {
+        //     console.log(err);
+        // }
     };
 
 export const actionMessage =
     (channelId, message) => async (dispatch, getState) => {
+        const body = JSON.stringify({ message, channelId });
+
+        const lrc_token = localStorage.getItem("LRC_TOken");
+        console.log(Object.values(message));
+
+        console.log(body);
+        // console.log(lrc_token);
         try {
-            dispatch(sendMessage(channelId, message));
+            axios
+                .post("/sendMessage", message.text, channelId)
+                .then((res) => {
+                    dispatch(sendMessage(channelId, message));
 
-            if (channelId !== null) {
-                const res = await fetch(
-                    `https://www.botlibre.com/rest/api/form-chat?instance=165&message="${message.text}"&application=428262090517998158`
-                );
-
-                const response = await res.text();
-                const answer = response.substring(
-                    response.lastIndexOf("<message>") + 9,
-                    response.lastIndexOf("</message>")
-                );
-
-                const messLength =
-                    getState().messages.messages[channelId]?.length;
-
-                dispatch(
-                    sendMessage(channelId, {
-                        text: answer,
-                        sender: AUTHORS.BOT,
-                        id: `${channelId}-${messLength + 1}`,
-                    })
-                );
-            }
+                    console.log(res);
+                })
+                .catch((err) => {
+                    const errors = err.response.data.errors;
+                    console.log(errors);
+                    // Object.values(errors).map((error) => {
+                    //     console.log(error.toString());
+                    // });
+                });
         } catch (err) {
             console.log(err);
         }
     };
 
-// export const actionDelMessage = (chatId, message) => async (
-//   dispatch,
-//   getState
-// ) => {
-//   dispatch(delMessage(chatId, message));
-// };
 export const actionDelMessage =
     (channelId, message) => (dispatch, getState) => {
         dispatch(delMessage(channelId, message));
         const selMessage = getState().messages;
     };
+
+// dispatch(sendMessage(channelId, message));
+
+// if (channelId !== null) {
+//     const res = await fetch(
+//         `https://www.botlibre.com/rest/api/form-chat?instance=165&message="${message.text}"&application=428262090517998158`
+//     );
+
+//     const response = await res.text();
+//     const answer = response.substring(
+//         response.lastIndexOf("<message>") + 9,
+//         response.lastIndexOf("</message>")
+//     );
+
+//     const messLength =
+//         getState().messages.messages[channelId]?.length;
+
+//     dispatch(
+//         sendMessage(channelId, {
+//             text: answer,
+//             sender: AUTHORS.BOT,
+//             id: `${channelId}-${messLength + 1}`,
+//         })
+//     );

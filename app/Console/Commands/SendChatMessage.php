@@ -18,6 +18,6 @@ class SendChatMessage extends Command
         $user = User::first();
         $message = $this->argument('message');
 
-        event(new ChatMessageReceived($message, $user));
+        // event(new ChatMessageReceived($message, $user));
     }
 }

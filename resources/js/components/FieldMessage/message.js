@@ -22,6 +22,7 @@ export const Message = ({ message, onDelMessage }) => {
         <>
             <div ref={bottomRef}>{message.text}</div>
             <div className="message-sender">{message.sender}</div>
+            <div>{message.timestamp}</div>
             <div className="btn-del">
                 <MdDelete onClick={handleDelete} />
             </div>

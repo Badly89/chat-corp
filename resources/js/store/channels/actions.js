@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 import { makeHeaders } from "../auth/actions";
 import { delMessage, getMessagesChannel } from "../messages/actions";
 import { ADD_MESSAGE, GET_MESSAGES } from "../messages/types";
@@ -43,25 +44,27 @@ export const deleteChannel =
 
 export const getAllChannelList = () => (dispatch, getState) => {
     const token = getState().auth.token;
-
-    axios
-        .get("/getAllChannels", token, {
-            withCredentials: true,
-        })
-        .then((res) => {
-            const channels = res.data;
-            console.log(res.data);
-            dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-            console.log("Список чатов");
-            // Swal.fire({
-            //     title: "Please Wait !",
-            //     html: "data uploading", // add html attribute if you want or remove
-            //     allowOutsideClick: false,
-            //     onBeforeOpen: () => {
-            //         Swal.showLoading();
-            //     },
-            // });
-
-            // dispatch(getMessagesChannel(channels.id));
+    const ofset = getState().channels.ofset;
+    if (!ofset) {
+        Swal.fire({
+            title: "Загружаем данные",
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            },
         });
+        axios
+            .get("/getAllChannels", token, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                const channels = res.data;
+                console.log(res.data);
+                dispatch({ type: GET_ALL_CHANNELS, payload: channels });
+                console.log("Список чатов");
+                Swal.close();
+
+                // dispatch(getMessagesChannel(channels.id));
+            });
+    }
 };
