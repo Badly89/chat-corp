@@ -26,6 +26,12 @@ export const register =
             password,
             password_confirmation,
         });
+        Swal.fire({
+            title: "Отправка запроса",
+            allowOutsideClick: false,
+        });
+        Swal.showLoading();
+
         axios.get("/sanctum/csrf-cookie").then((respone) => {
             axios
                 .post("/register", body)
@@ -78,6 +84,11 @@ export const login =
     ({ email, password }) =>
     (dispatch) => {
         const body = JSON.stringify({ email, password });
+        Swal.fire({
+            title: "Авторизация...",
+            allowOutsideClick: false,
+        });
+        Swal.showLoading();
         axios.get("/sanctum/csrf-cookie").then((respone) => {
             axios
                 .post("/login", body)
@@ -94,11 +105,13 @@ export const login =
                             title: "Добро пожаловать!",
                             text: resp.data.message,
                         });
+
                         dispatch({
                             type: LOGIN_SUCCESS,
                             payload: { currUser: resp.data.username },
                         });
-                        dispatch(getAllChannelList);
+
+                        dispatch(getAllChannelList());
                     } else if (resp.data.status === 401) {
                         console.log(resp.data);
                         dispatch(
@@ -118,19 +131,25 @@ export const login =
                     }
                 })
                 .catch((err) => {
+                    console.log(err);
                     dispatch({ type: LOGIN_FAIL });
-                    dispatch(
-                        returnStatus(
-                            err.resp.data.message,
-                            err.resp.status,
-                            "LOGIN_FAIL"
-                        )
-                    );
+                    // dispatch(
+                    //     returnStatus(
+                    //         err.data.message,
+                    //         err.data.status,
+                    //         "LOGIN_FAIL"
+                    //     )
+                    // );
                 });
         });
     };
 
 export const logout = () => (dispatch) => {
+    Swal.fire({
+        title: "Завершения сеанса",
+        allowOutsideClick: false,
+    });
+    Swal.showLoading();
     // window.Echo.disconnect();
     axios
         .post("/logout", { withCredentials: true })
