@@ -18,8 +18,8 @@ class CreateRostersTable extends Migration
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->onDelete('cascade');
-            $table->foreignId('chat_id')
-                ->constrained('chats')
+            $table->foreignId('channels_id')
+                ->constrained('channels')
                 ->onDelete('cascade');
             $table->timestamps();
         });
