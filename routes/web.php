@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -33,9 +33,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     //Route from Channels
-    Route::get('/getAllChannels',[ChatController::class,'getAllChannels']);
-    Route::post('/sendMessage',[ChatController::class,'sendMessage']);
-    Route::get('/getMessages/{channel_id}', [ChatController::class,'getMessages']);
+    Route::get('/getAllChannels',[ChannelController::class,'getAllChannels']);
+    Route::post('/sendMessage',[ChannelController::class,'sendMessage']);
+    Route::get('/getMessages/{channel_id}', [ChannelController::class,'getMessages']);
     // Route::get('/getChannelsUsers/{channel_id}',[ChatController::class,'getChannelsUsers']);
 });
 
@@ -47,8 +47,6 @@ Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::get('/users/search/{name}', [UserController::class, 'search']);
 
-//Get роут временное решение.
-// После того как запрос будет идти из формы заменю на POST.
 Route::post('/forgot-password/{email}', [MailController::class, 'forgotPassword'])
     ->name('forgot-password');
 

@@ -25,7 +25,7 @@ class UserCreateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:100'],
-            'email' => ['required', 'email:rfc,dns', 'min:5'],
+            'email' => ['required', 'unique:users,email', 'email:rfc,dns', 'min:5'],
             'password' => ['required', 'confirmed', 'min:6', 'max:100'],
             'password_confirmation' => ['required', 'min:6']
         ];
@@ -37,7 +37,8 @@ class UserCreateRequest extends FormRequest
             'required' => 'Поле :attribute нужно заполнить!',
             'min' => 'Поле :attribute содержит недопустимое количество символов!',
             'max' => 'Поле :attribute содержит недопустимое количество символов!',
-            'email' => 'Неверно указан e-mail!'
+            'email' => 'Неверно указан e-mail!',
+            'unique' => 'Пользователь с таким :attribute уже зарегистрирован!',
         ];
     }
 
