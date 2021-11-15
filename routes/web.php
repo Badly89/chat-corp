@@ -49,7 +49,7 @@ Route::get('/users/search/{name}', [UserController::class, 'search']);
 
 //Get роут временное решение.
 // После того как запрос будет идти из формы заменю на POST.
-Route::get('/forgot-password/{email}', [MailController::class, 'forgotPassword'])
+Route::post('/forgot-password/{email}', [MailController::class, 'forgotPassword'])
     ->name('forgot-password');
 
 

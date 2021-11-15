@@ -24,7 +24,7 @@ class ForgotPassword extends Mailable
     {
         $new_password = Str::random(10);
 
-        $user = User::firstWhere('email', $request->email);
+        $user = User::firstWhere('email', 'test@test.com');
         $user->password = Hash::make($new_password);
         $user->save();
 
