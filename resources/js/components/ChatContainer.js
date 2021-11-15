@@ -18,11 +18,11 @@ export const ChatContainer = () => {
     const dispatch = useDispatch();
     // console.log(messages[channelId]?.length);
 
-    useEffect(() => {
-        if (!messages.messages) {
-            dispatch(getMessagesChannel(channelId));
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (!messages.messages) {
+    //         dispatch(getMessagesChannel(channelId));
+    //     }
+    // }, []);
 
     console.log(loading);
     const sendNewMessage = useCallback(
@@ -35,6 +35,9 @@ export const ChatContainer = () => {
                     }`,
                 })
             );
+            // после отправки сообщений сделать обновление state messages
+            //добавление сообщений путем сравнения id загруженных с последним id уже имеющихся сообщения,
+            //не забываем про флаг offset
         },
         [channelId, messages]
     );
