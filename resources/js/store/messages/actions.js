@@ -26,10 +26,9 @@ export const delMessage = (channelId, message) => ({
 export const getMessagesChannel =
     (channelId, message) => (dispatch, getState) => {
         // try {
-        const messLength = getState().messages.messages[channelId]?.length;
-        const offset = getState().messages.messages;
 
-        console.log(Date());
+        const offset = getState().messages;
+
         console.log("CURRENTLY SELECTED CHANNEL BELOW");
         // if (!offset) {
         if (channelId !== null) {
@@ -41,19 +40,15 @@ export const getMessagesChannel =
                     console.log("LOAD MESSAGES OUTPUT BELOW");
                     console.log(res.data);
                     Object.values(res.data).map((value) => {
-                        // console.log(value.id, value.message, value.user_id);
-                        if (value.created_at <= Date()) {
-                            dispatch(
-                                loadMessages(channelId, {
-                                    text: value.message,
-                                    sender: value.user.name,
-                                    id: value.id,
-                                    timestamp: value.created_at,
-                                    offset: true,
-                                })
-                            );
-                            dispatch({ type: GET_MESSAGES_SUCCESS });
-                        }
+                        dispatch(
+                            loadMessages(channelId, {
+                                text: value.message,
+                                sender: value.user.name,
+                                id: value.id,
+                                timestamp: value.created_at,
+                            })
+                        );
+                        dispatch({ type: GET_MESSAGES_SUCCESS });
                     });
                 })
                 .catch((err) => {
@@ -69,7 +64,10 @@ export const getMessagesChannel =
 export const UpdateMessages = (channelId, message) => (dispatch, getState) => {
     console.log("Обновляем сообщения");
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57dd39f236ec89679be479b5155ea340b5faad8b
 export const actionMessage =
     (channelId, message) => async (dispatch, getState) => {
         const msg = message.text;
@@ -128,4 +126,4 @@ export const actionDelMessage =
 //             sender: AUTHORS.BOT,
 //             id: `${channelId}-${messLength + 1}`,
 //         })
-//     );
+//     )

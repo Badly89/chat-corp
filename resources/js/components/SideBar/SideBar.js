@@ -13,7 +13,7 @@ export const SideBar = () => {
     const history = useHistory();
 
     useEffect(() => {
-        dispatch(getAllChannelList());
+        // dispatch(getAllChannelList());
     }, []);
     return (
         <div className=" main-window">

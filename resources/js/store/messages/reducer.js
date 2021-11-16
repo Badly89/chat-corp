@@ -14,7 +14,7 @@ import {
 const initialMessage = {
     messages: {},
     loadMessages: {},
-    // offset: false,
+    offset: false,
 };
 
 export const msgReducer = (state = initialMessage, action) => {

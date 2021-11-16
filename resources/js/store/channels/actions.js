@@ -51,15 +51,22 @@ export const getAllChannelList = () => (dispatch, getState) => {
     });
     Swal.showLoading();
     if (!ofset) {
+        Swal.fire({
+            title: "Загружаем данные",
+            allowOutsideClick: false,
+        });
+        Swal.showLoading();
+
         axios
             .get("/getAllChannels", token, {
                 withCredentials: true,
             })
             .then((res) => {
                 const channels = res.data;
-                console.log(res.data);
+
+                console.log(res.data.channels);
                 dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-                console.log("Список чатов");
+                console.log("Список чатов загружен");
 
                 res.data.channels.map((item) => {
                     console.log(item);
@@ -67,12 +74,9 @@ export const getAllChannelList = () => (dispatch, getState) => {
                     console.log("Загрузка сообщений канала");
                 });
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Добро пожаловать!",
-                    text: res.data.message,
-                });
-                Swal.close;
+                Swal.close();
             });
+
+        // dispatch(getMessagesChannel(chat_id));
     }
 };
