@@ -12,7 +12,8 @@ import {
 } from "./types";
 
 const initialState = {
-    token: localStorage.getItem("token"),
+    auth_token: localStorage.getItem("auth_token"),
+    auth_name: localStorage.getItem("auth_name"),
     isAuthenticated: null,
     currUser: {},
 };
@@ -28,21 +29,28 @@ export function authReducer(state = initialState, action) {
                 currUser: action.payload,
             };
         case LOGIN_SUCCESS:
-            localStorage.setItem("token", action.payload.token);
             return {
                 ...state,
                 isAuthenticated: true,
-                token: localStorage.getItem("token"),
+
                 currUser: action.payload,
             };
 
         case AUTH_ERROR:
         case LOGIN_FAIL:
+        case LOGOUT_SUCCESS:
+            return {
+                ...state,
+                isAuthenticated: false,
+                auth_token: localStorage.removeItem("auth_token"),
+                auth_name: localStorage.removeItem("auth_name"),
+                currUser: {},
+            };
 
         case REGISTER_SUCCESS:
         case REGISTER_FAIL:
         case AUTH_FAIL:
-            localStorage.removeItem("token");
+            localStorage.removeItem("auth_token");
             // window.Echo.disconnect();
             return {
                 ...state,

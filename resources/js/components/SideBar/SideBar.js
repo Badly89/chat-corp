@@ -1,31 +1,23 @@
-import React, { useEffect } from "react";
-import "../../style/main-style.css";
-import "../../style/style.css";
-import { Router, Link, Switch, Route, NavLink } from "react-router-dom";
-import { ListCalls } from "../Calls/ListCalls";
-import { ListChats } from "../Rooms/ListChats";
-import { FieldMessages } from "../FieldMessage/FieldMessages";
+import React, { useEffect, useState } from "react";
+import { Router, Link, Switch, Route, useHistory } from "react-router-dom";
 import { ListFriends } from "../ListFriends/ListFriends";
-import { UserProfile } from "../userProfile";
-import { logout } from "../../store/auth/actions";
+import { UserProfile } from "../Profile/userProfile";
 import { useDispatch, useSelector } from "react-redux";
-import { history } from "../../helpers/history";
-import { FormLogin } from "../authorized/Login/FormLogin";
-import { FormRegister } from "../authorized/Register/FormRegister";
+import { ChatContainer } from "../ChatContainer";
+import { ListChannels } from "../Channels/ListChannels";
+import { Spinner } from "react-bootstrap";
+import { getAllChannelList } from "../../store/channels/actions";
 
 export const SideBar = () => {
-    const { user: currentUser } = useSelector((state) => state.auth.currUser);
+    const dispatch = useDispatch();
+    const history = useHistory();
 
-    const dispatch = useDispatch;
-    //очистка сообщений
-
-    const logOut = () => {
-        dispatch(logout());
-    };
+    useEffect(() => {
+        dispatch(getAllChannelList());
+    }, []);
     return (
         <div className=" main-window">
             <Router history={history}>
-                {/* {currentUser ? ( */}
                 <div className="sideBar">
                     <Link
                         to="/"
@@ -34,12 +26,12 @@ export const SideBar = () => {
                         <img src="/image/logo.png" alt="Логотип" />
                     </Link>
 
-                    <div className="wrap">
+                    <div className="wrap-sidebar">
                         <div>
                             <ul className="nav nav-pills nav-flush flex-column mb-auto text-center">
                                 <li className="nav-item">
                                     <Link
-                                        to="/chats"
+                                        to="/channels"
                                         className="nav-link py-3
                                     border-bottom"
                                         aria-current="page"
@@ -51,17 +43,7 @@ export const SideBar = () => {
                                         <i className="far fa-comment-dots"></i>
                                     </Link>
                                 </li>
-                                {/* <li>
-                                    <Link
-                                        to="/calls"
-                                        className="nav-link py-3 border-bottom"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="right"
-                                        data-bs-original-title="calls"
-                                    >
-                                        <i className="fas fa-phone"></i>
-                                    </Link>
-                                </li> */}
+
                                 <li>
                                     <Link
                                         to="/friends"
@@ -91,28 +73,25 @@ export const SideBar = () => {
 
                     <div className="dropdown border-top"></div>
                 </div>
-                {/* ) : (
-                    <FormRegister />
-                )} */}
+
                 <Switch>
-                    <Route exact path="/chats">
-                        <ListChats />
-                    </Route>
-                    <Route exact path="/chats/:chatId">
-                        <ListChats />
-                        <FieldMessages />
-                    </Route>
-                    <Route exact path="/calls">
+                    <Route exact path="/channels" component={ListChannels} />
+
+                    <Route
+                        exact
+                        path="/channels/:channelId"
+                        component={ChatContainer}
+                    />
+
+                    {/* <Route exact path="/calls">
                         <ListCalls />
-                    </Route>
+                    </Route> */}
                     <Route exact path="/friends">
                         <ListFriends />
                     </Route>
                     <Route exact path="/userProfile">
                         <UserProfile />
                     </Route>
-                    <Route exact path="/login" component={FormLogin} />
-                    <Route exact path="/register" component={FormRegister} />
                 </Switch>
             </Router>
         </div>

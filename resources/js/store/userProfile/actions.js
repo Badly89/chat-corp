@@ -19,14 +19,4 @@ export const getProfileFailure = () => ({
     error: err,
 });
 
-export const getUserProfile = () => async (dispantch) => {
-    try {
-        dispantch(getProfileRequest());
-        const res = await axios.get("/profile");
-        console.log(res.data);
-        dispantch(getProfileSuccess(res.data));
-    } catch (err) {
-        console.log(err);
-        dispantch(getProfileFailure(err));
-    }
-};
+export const getUserProfile = (token) => (dispantch) => {};

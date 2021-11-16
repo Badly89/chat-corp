@@ -1,0 +1,113 @@
+.form-authorizate {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    height: 100vh;
+    font-family: "Roboto", sans-serif;
+    background: url("/image/background.png");
+}
+
+.block-center {
+    width: 100%;
+    max-width: 512px;
+    padding: 15px;
+    margin: auto;
+    background: #ffffff;
+    box-shadow: 0px 1px 12px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+}
+
+.h1-title {
+    font-weight: bold;
+    font-size: 40px;
+    color: #2b2e73;
+    line-height: 47px;
+}
+.h3-title {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    padding: 0 58px;
+    text-align: center;
+    color: #626465;
+}
+.logo {
+    width: 65px;
+    height: 32px;
+}
+.form-signin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+}
+.input-block {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+}
+.input {
+    width: 304px;
+    height: 40px;
+    border-radius: 12px;
+}
+
+.btn {
+    width: 304px;
+    background: #add9b1;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #ffffff;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-select {
+    height: calc(2.75rem + 2px);
+    line-height: 1.25;
+}
+
+.form-floating > label {
+    padding: 0.75rem 0.5rem;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+
+    color: #626465;
+}
+.a-text {
+    font-size: 16px;
+    line-height: 19px;
+    text-decoration: none;
+    color: #7fc485;
+}
+.checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.bottom-text {
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.bottom-text span {
+    font-size: 16px;
+    line-height: 19px;
+    color: #626465;
+}
+
+.alert {
+    padding: 0.25rem 0.25rem;
+    margin: 3px 0;
+    max-width: 300px;
+    font-size: 12px;
+}
