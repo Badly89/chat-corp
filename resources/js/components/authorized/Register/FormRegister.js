@@ -31,6 +31,7 @@ export const FormRegister = () => {
         };
 
         dispatch(register(data));
+        history.push("/login");
     };
 
     return (
