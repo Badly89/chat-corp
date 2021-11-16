@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ChatController extends Controller
+class ChannelController extends Controller
 {
     public function getAllChannels(Request $request)
     {

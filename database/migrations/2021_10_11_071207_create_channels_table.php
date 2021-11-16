@@ -14,10 +14,16 @@ class CreateChannelsTable extends Migration
     public function up()
     {
        Schema::create('channels', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string('name');
-            $table->enum("type", array("public", "private"));
+           $table->id();
+           $table->text('title')->nullable();
+           $table->text('description');
+           $table->foreignId('user_id_creator')
+               ->constrained('users')
+               ->onDelete('cascade');
+           $table->timestamps();
+           $table->text('image');
+           $table->boolean('visible');
+           $table->enum("type", array("public", "private"));
         });
 
     }
