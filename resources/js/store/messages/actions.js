@@ -64,10 +64,6 @@ export const getMessagesChannel =
 export const UpdateMessages = (channelId, message) => (dispatch, getState) => {
     console.log("Обновляем сообщения");
 };
-<<<<<<< HEAD
-
-=======
->>>>>>> 57dd39f236ec89679be479b5155ea340b5faad8b
 export const actionMessage =
     (channelId, message) => async (dispatch, getState) => {
         const msg = message.text;

@@ -51,14 +51,10 @@ export const getAllChannelList = () => (dispatch, getState) => {
     });
     Swal.showLoading();
     if (!ofset) {
-        Swal.fire({
-            title: "Загружаем данные",
-            allowOutsideClick: false,
-        });
         Swal.showLoading();
 
         axios
-            .get("/getAllChannels", token, {
+            .get("/getAllChannels", {
                 withCredentials: true,
             })
             .then((res) => {
@@ -73,8 +69,12 @@ export const getAllChannelList = () => (dispatch, getState) => {
                     dispatch(getMessagesChannel(item.id));
                     console.log("Загрузка сообщений канала");
                 });
-
-                Swal.close();
+                Swal.fire({
+                    icon: "success",
+                    title: "Добро пожаловать!",
+                    text: res.data.message,
+                });
+                Swal.close;
             });
 
         // dispatch(getMessagesChannel(chat_id));

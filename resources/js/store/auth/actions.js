@@ -38,7 +38,7 @@ export const register =
                     localStorage.setItem("auth_token", res.data.token);
                     localStorage.setItem("auth_name", res.data.username.name);
 
-                    await axios.get("/sanctum/csrf-cookie").then((respone) => {
+                    axios.get("/sanctum/csrf-cookie").then((respone) => {
                         axios
                             .post("/register", body)
                             .then((res) => {
@@ -173,6 +173,7 @@ export const login =
                         });
 
                         dispatch(getAllChannelList());
+                        Swal.close;
                     } else if (resp.data.status === 401) {
                         console.log(resp.data);
                         dispatch(
@@ -191,27 +192,80 @@ export const login =
                         // console.log(resp.data.validation_errors);
                     }
                 })
-                .catch((err) => {
-                    console.log(err);
-                    dispatch({ type: LOGIN_FAIL });
-                    // dispatch(
-                    //     returnStatus(
-                    //         err.data.message,
-                    //         err.data.status,
-                    //         "LOGIN_FAIL"
-                    //     )
-                    // );
+                .catch((error) => {
+                    if (error.response) {
+                        const errEmail =
+                            error.response.data.errors.email.join(" ");
+                        const errPass =
+                            error.response.data.errors.password.join(" ");
+                        Swal.fire({
+                            icon: "error",
+                            title: "Внимание!!!",
+                            html:
+                                "<div>" +
+                                errEmail +
+                                "</div>" +
+                                " <div>" +
+                                errPass +
+                                "</div>",
+                        });
+                        dispatch({ type: LOGIN_FAIL });
+                        dispatch(
+                            returnStatus(
+                                error.response.data.errors,
+                                error.response.status,
+                                "LOGIN_FAIL"
+                            )
+                        );
+                    }
                 });
         });
     };
 
 export const logout = () => (dispatch) => {
     Swal.fire({
-        title: "Завершения сеанса",
+        title: "Завершение сеанса",
         allowOutsideClick: false,
     });
     Swal.showLoading();
     // window.Echo.disconnect();
+    try {
+        axios
+            .post("/logout", { withCredentials: true })
+            .then((res) => {
+                console.log(res);
+                if (res.data.status === 200) {
+                    localStorage.removeItem("auth_token");
+                    localStorage.removeItem("auth_name");
+
+                    Swal.fire({
+                        icon: "success",
+                        title: res.data.message,
+                    });
+                    Swal.close;
+
+                    dispatch(
+                        returnStatus(
+                            res.data.message,
+                            res.status,
+                            "LOGOUT_SUCCESS"
+                        )
+                    );
+                    dispatch({
+                        type: LOGOUT_SUCCESS,
+                        isAuthenticated: false,
+                    });
+                    dispatch({ type: CLEAR_CHANNELS });
+                    dispatch({ type: CLEAR_MESSAGES });
+                } else {
+                }
+            })
+            .catch(() => {
+                dispatch({ type: LOGOUT });
+            });
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 export const resetPassword =
