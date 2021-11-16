@@ -8,16 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Channel extends Model
 {
      protected $attributes = [
-        'name' => null,
+        'title' => null,
     ];
 
     protected $fillable = [
-        'name'
+        'title',
+        'description',
+        'image',
+        'visible',
+        'type',
+
     ];
     protected $hidden = ['pivot'];
 
    public function users() {
-        return $this->belongsToMany('App\Models\User', 'user_channel')->withTimestamps()->select('name','id');
+        return $this->belongsToMany('App\Models\User', 'user_channel')->withTimestamps()->select('title','id');
     }
 
 }

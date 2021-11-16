@@ -39,6 +39,7 @@ class UserCreateRequest extends FormRequest
             'max' => 'Поле :attribute содержит недопустимое количество символов!',
             'email' => 'Неверно указан e-mail!',
             'unique' => 'Пользователь с таким :attribute уже зарегистрирован!',
+            'confirmed' => 'Введенные пароли не совпадают!',
         ];
     }
 

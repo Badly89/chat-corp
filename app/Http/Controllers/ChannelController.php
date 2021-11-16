@@ -11,22 +11,20 @@ use Illuminate\Support\Facades\DB;
 
 class ChannelController extends Controller
 {
-    public function getAllChannels(Request $request)
-    {
-        $user = auth()->user()->id;
+    public function getAllChannels() {
+         auth()->user()->id;
 
-         $channels=Channel::where('type','public')->select('name','id')->get();
+         $channels = Channel::where('type','public')->select('title','id')->get();
 
-
-            return response ([
+         return response ([
                 'status' => 200,
                 'channels' => $channels,
-                'message'=> 'Список чатов выгружен успешно',]);
+                'message'=> 'Список чатов выгружен успешно',
+         ]);
     }
 
 
-     public function sendMessage(Request $request)
-    {
+     public function sendMessage(Request $request) {
         $message = auth()->user()->messages()->create([
             'message' => $request->message,
             'channel_id' => $request->channel_id
@@ -36,12 +34,12 @@ class ChannelController extends Controller
 
         broadcast(new MessageSent($user, $message, $request->channel_id));
 
-    }
+     }
 
-        public function getMessages(Request $request, $channel_id)
-    {
+    public function getMessages(Request $request, $channel_id) {
         return Message::where("channel_id", $channel_id)->with('user.detail_channels')->get();
     }
+
     public function getChannelsUsers($channel_id) {
         $channel = Channel::where("type","public")->where('id',$channel_id)->with(["users"])->get();
 

@@ -16,14 +16,14 @@ class CreateChannelsTable extends Migration
        Schema::create('channels', function (Blueprint $table) {
            $table->id();
            $table->text('title')->nullable();
-           $table->text('description');
+           $table->text('description')->nullable();
            $table->foreignId('user_id_creator')
                ->constrained('users')
                ->onDelete('cascade');
            $table->timestamps();
-           $table->text('image');
-           $table->boolean('visible');
-           $table->enum("type", array("public", "private"));
+           $table->text('image')->nullable();
+           $table->boolean('visible')->nullable();
+           $table->enum("type", array("public", "private"))->nullable();
         });
 
     }
