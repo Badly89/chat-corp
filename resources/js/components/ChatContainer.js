@@ -20,7 +20,7 @@ export const ChatContainer = () => {
 
     useEffect(() => {
         if (!messages.messages) {
-            dispatch(getMessagesChannel(channelId));
+            // dispatch(getMessagesChannel(channelId));
         }
     }, []);
 
@@ -30,12 +30,13 @@ export const ChatContainer = () => {
             dispatch(
                 actionMessage(channelId, {
                     ...newMessage,
-                    id: `${channelId}-${
-                        (messages[channelId]?.length || 0) - 1
-                    }`,
+                    id: `${(messages[channelId]?.length || 0) - 1}`,
                 })
             );
         },
+        // после отправки сообщений сделать обновление state messages
+        //добавление сообщений путем сравнения id загруженных с последним id уже имеющихся сообщения,
+        //не забываем про флаг offset
         [channelId, messages]
     );
     const deleteMessages = useCallback(

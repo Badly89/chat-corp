@@ -57,14 +57,17 @@ export const msgReducer = (state = initialMessage, action) => {
             };
         }
         case UPDATE_MESSAGES: {
-            const updateItems = state.messages[action.payload.channelId].map(
-                (item) => {
-                    if (item.id === action.id) {
-                        console.log(item);
-                    }
-                }
+            const oldMessages = state.messages[action.payload.channelId];
+            const newMessages = oldMessages.filter(
+                (item) => item.id !== msg.id
             );
-            return {};
+            return {
+                ...state,
+                messages: {
+                    ...state.messages,
+                    [action.payload.channelId]: [...(newMessages || [])],
+                },
+            };
         }
 
         case DEL_MESSAGE: {

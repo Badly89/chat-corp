@@ -66,9 +66,14 @@ export const getMessagesChannel =
         // }
     };
 
+export const UpdateMessages = (channelId, message) => (dispatch, getState) => {
+    console.log("Обновляем сообщения");
+};
+
 export const actionMessage =
     (channelId, message) => async (dispatch, getState) => {
-        const body = JSON.stringify({ message, channelId });
+        const msg = message.text;
+        const body = JSON.stringify({ msg, channelId });
 
         const lrc_token = localStorage.getItem("LRC_TOken");
         console.log(Object.values(message));
@@ -77,7 +82,7 @@ export const actionMessage =
         // console.log(lrc_token);
         try {
             axios
-                .post("/sendMessage", message.text, channelId)
+                .post("/sendMessage", body)
                 .then((res) => {
                     dispatch(sendMessage(channelId, message));
 

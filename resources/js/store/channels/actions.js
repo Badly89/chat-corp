@@ -45,14 +45,12 @@ export const deleteChannel =
 export const getAllChannelList = () => (dispatch, getState) => {
     const token = getState().auth.token;
     const ofset = getState().channels.ofset;
+    Swal.fire({
+        title: "Загружаем данные",
+        allowOutsideClick: false,
+    });
+    Swal.showLoading();
     if (!ofset) {
-        Swal.fire({
-            title: "Загружаем данные",
-            allowOutsideClick: false,
-            onBeforeOpen: () => {
-                Swal.showLoading();
-            },
-        });
         axios
             .get("/getAllChannels", token, {
                 withCredentials: true,
@@ -62,9 +60,19 @@ export const getAllChannelList = () => (dispatch, getState) => {
                 console.log(res.data);
                 dispatch({ type: GET_ALL_CHANNELS, payload: channels });
                 console.log("Список чатов");
-                Swal.close();
 
-                // dispatch(getMessagesChannel(channels.id));
+                res.data.channels.map((item) => {
+                    console.log(item);
+                    dispatch(getMessagesChannel(item.id));
+                    console.log("Загрузка сообщений канала");
+                });
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Добро пожаловать!",
+                    text: res.data.message,
+                });
+                Swal.close;
             });
     }
 };
