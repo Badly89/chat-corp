@@ -71,7 +71,7 @@ export const ListChannels = () => {
                     </div>
                     {/* <!-- отрисовка компонента список чатов --> */}
                     <div className="group-chats">
-                        {channels.channels.map(({ id, name }) => (
+                        {channels.channels.map(({ id, title }) => (
                             <div className="card " key={id}>
                                 <div className="">
                                     <img
@@ -87,7 +87,7 @@ export const ListChannels = () => {
                                             className="text-decoration-none"
                                         >
                                             <h5 className="card-title">
-                                                {name}
+                                                {title}
                                             </h5>
                                         </Link>
                                         <p className="card-text mute">
