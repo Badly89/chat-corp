@@ -8,6 +8,7 @@ import {
     getMessagesChannel,
 } from "../store/messages/actions";
 import { selectMessages } from "../store/messages/selectors";
+import { sendMessageChannel } from "../utils/echoHelpers";
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
 

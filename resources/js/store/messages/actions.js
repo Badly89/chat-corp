@@ -6,7 +6,7 @@ import {
     GET_MESSAGES_SUCCESS,
     SEND_MESSAGE,
 } from "./types";
-import { AUTHORS } from "../../utils/constant";
+
 import axios from "axios";
 
 export const sendMessage = (channelId, message) => ({
@@ -25,12 +25,10 @@ export const delMessage = (channelId, message) => ({
 
 export const getMessagesChannel =
     (channelId, message) => (dispatch, getState) => {
-        // try {
-
         const offset = getState().messages;
 
         console.log("CURRENTLY SELECTED CHANNEL BELOW");
-        // if (!offset) {
+
         if (channelId !== null) {
             axios
                 .get(`/getMessages/${channelId}`, {
@@ -55,44 +53,33 @@ export const getMessagesChannel =
                     dispatch({ type: GET_MESSAGES_FAIL });
                 });
         }
-        // }
-        // } catch (err) {
-        //     console.log(err);
-        // }
     };
 
 export const UpdateMessages = (channelId, message) => (dispatch, getState) => {
     console.log("Обновляем сообщения");
 };
-export const actionMessage =
-    (channelId, message) => async (dispatch, getState) => {
-        const msg = message.text;
-        const body = JSON.stringify({ msg, channelId });
+export const actionMessage = (channelId, message) => (dispatch, getState) => {
+    // const message = message.text;
+    const body = JSON.stringify({ message, channelId });
 
-        const lrc_token = localStorage.getItem("LRC_TOken");
-        console.log(Object.values(message));
+    console.log(Object.values(message));
+    dispatch(sendMessage(channelId, message));
+    console.log(body);
+    // console.log(lrc_token);
 
-        console.log(body);
-        // console.log(lrc_token);
-        try {
-            axios
-                .post("/sendMessage", body)
-                .then((res) => {
-                    dispatch(sendMessage(channelId, message));
-
-                    console.log(res);
-                })
-                .catch((err) => {
-                    const errors = err.response.data.errors;
-                    console.log(errors);
-                    // Object.values(errors).map((error) => {
-                    //     console.log(error.toString());
-                    // });
-                });
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    axios
+        .post("/sendMessage", body)
+        .then((res) => {
+            console.log(res);
+        })
+        .catch((err) => {
+            const errors = err.response.data.errors;
+            console.log(errors);
+            // Object.values(errors).map((error) => {
+            //     console.log(error.toString());
+            // });
+        });
+};
 
 export const actionDelMessage =
     (channelId, message) => (dispatch, getState) => {

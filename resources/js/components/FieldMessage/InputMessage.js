@@ -14,6 +14,7 @@ export const InputMessage = ({ onSendMessage }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         onSendMessage({ text: value, sender: currUser.name });
+
         setValue("");
     };
 

@@ -12,11 +12,11 @@ export const initEcho = (token) => {
         encrypted: true,
     });
 
-    window.Echo.join("chat").here((users) => {
+    window.Echo.join("chat-corp").here((users) => {
         console.log(users);
     });
 };
-export const sendMessage = (message, channel_id, channel_type) => {
+export const sendMessageChannel = (message, channel_id, channel_type) => {
     const body = JSON.stringify({ message, channel_id, channel_type });
 
     const postHeaders = {
@@ -26,7 +26,7 @@ export const sendMessage = (message, channel_id, channel_type) => {
         },
     };
     axios
-        .post("/api/messages", body, postHeaders)
+        .post("/sendMessage", body, postHeaders)
         .then((res) => {
             console.log(res);
         })

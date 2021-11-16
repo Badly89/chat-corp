@@ -150,6 +150,11 @@ export const login =
                             text: resp.data.message,
                         });
 
+                        returnStatus(
+                            resp.data.message,
+                            resp.data.status,
+                            "LOGIN_SUCCESS"
+                        );
                         dispatch({
                             type: LOGIN_SUCCESS,
                             payload: { currUser: resp.data.username },
@@ -254,27 +259,26 @@ export const logout = () => (dispatch) => {
 export const resetPassword =
     ({ email }) =>
     (dispatch) => {
-        const body = JSON.stringify({ email });
-        axios.get("/sanctum/csrf-cookie").then((respone) => {
-            axios
-                .post("/forgot-password/`${email}`", body)
-                .then((resp) => {
-                    if (resp.data.status === 200) {
-                        console.log(resp);
+        axios
+            .post(`/forgot-password/${email}`, headersObj, {
+                withCredentials: true,
+            })
+            .then((resp) => {
+                if (resp.data.status === 200) {
+                    console.log(resp);
 
-                        Swal.fire({
-                            icon: "success",
-                            title: "Восстановление пароля!",
-                            text: resp.data.message,
-                        });
-                    } else {
-                        // console.log(resp.data.validation_errors);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        });
+                    Swal.fire({
+                        icon: "success",
+                        title: "Восстановление пароля!",
+                        text: resp.data.message,
+                    });
+                } else {
+                    // console.log(resp.data.validation_errors);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
 export const makeHeaders = (getState) => {

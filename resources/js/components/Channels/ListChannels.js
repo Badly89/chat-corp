@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createChannel, deleteChannel } from "../../store/channels/actions";
-import { Spinner } from "../Spinner";
 
 const chatOptions = [
     { value: "allChats", label: "Все чаты" },
