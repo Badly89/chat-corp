@@ -33,111 +33,94 @@ export const register =
         Swal.showLoading();
 
         axios.get("/sanctum/csrf-cookie").then((respone) => {
-            axios.post("/register", body).then((res) => {
-                if (res.data.status === 200) {
-                    localStorage.setItem("auth_token", res.data.token);
-                    localStorage.setItem("auth_name", res.data.username.name);
+            axios
+                .post("/register", body)
+                .then((res) => {
+                    if (res.data.status === 200) {
+                        localStorage.setItem("auth_token", res.data.token);
+                        localStorage.setItem(
+                            "auth_name",
+                            res.data.username.name
+                        );
 
-                    axios.get("/sanctum/csrf-cookie").then((respone) => {
-                        axios
-                            .post("/register", body)
-                            .then((res) => {
-                                if (res.data.status === 200) {
-                                    localStorage.setItem(
-                                        "auth_token",
-                                        res.data.token
-                                    );
-                                    localStorage.setItem(
-                                        "auth_name",
-                                        res.data.username.name
-                                    );
+                        Swal.fire({
+                            icon: "success",
+                            title: res.status.message,
+                            confirmButtonText: "Регистрация прошла успешно!",
+                        });
 
-                                    Swal.fire({
-                                        icon: "success",
-                                        title: res.status.message,
-                                        confirmButtonText:
-                                            "Регистрация прошла успешно!",
-                                    });
-                                    history.push("/login");
-                                    dispatch(
-                                        returnStatus(
-                                            res.data.message,
-                                            res.status,
-                                            "REGISTER_SUCCESS"
-                                        )
-                                    );
-                                    dispatch({ type: REGISTER_SUCCESS });
-                                } else {
-                                    dispatch(
-                                        returnStatus(
-                                            res.data.message,
-                                            res.status,
-                                            "REGISTER_FAIL"
-                                        )
-                                    );
-                                }
-                            })
-                            .catch((error) => {
-                                let errEmail = "",
-                                    errPass = "",
-                                    errPassConfirm = "";
-                                if (error.response) {
-                                    console.log(error.response.data.errors);
-                                    if (error.response.data.errors.email) {
-                                        errEmail =
-                                            error.response.data.errors.email.join(
-                                                " "
-                                            );
-                                    } else {
-                                        errEmail = "";
-                                    }
-                                    if (error.response.data.errors.password) {
-                                        errPass =
-                                            error.response.data.errors.password.join(
-                                                " "
-                                            );
-                                    } else {
-                                        errPass = "";
-                                    }
-                                    if (
-                                        error.response.data.errors.password_confirmation.join(
-                                            " "
-                                        )
-                                    ) {
-                                        errPassConfirm =
-                                            error.response.data.errors
-                                                .password_confirmation;
-                                    } else {
-                                        errPassConfirm = "";
-                                    }
+                        dispatch(
+                            returnStatus(
+                                res.data.message,
+                                res.status,
+                                "REGISTER_SUCCESS"
+                            )
+                        );
+                        dispatch({ type: REGISTER_SUCCESS });
+                    } else {
+                        dispatch(
+                            returnStatus(
+                                res.data.message,
+                                res.status,
+                                "REGISTER_FAIL"
+                            )
+                        );
+                    }
+                })
+                .catch((error) => {
+                    let errEmail = "",
+                        errPass = "",
+                        errPassConfirm = "";
+                    if (error.response) {
+                        console.log(error.response.data.errors);
+                        if (error.response.data.errors.email) {
+                            errEmail =
+                                error.response.data.errors.email.join(" ");
+                        } else {
+                            errEmail = "";
+                        }
+                        if (error.response.data.errors.password) {
+                            errPass =
+                                error.response.data.errors.password.join(" ");
+                        } else {
+                            errPass = "";
+                        }
+                        if (
+                            error.response.data.errors.password_confirmation.join(
+                                " "
+                            )
+                        ) {
+                            errPassConfirm =
+                                error.response.data.errors
+                                    .password_confirmation;
+                        } else {
+                            errPassConfirm = "";
+                        }
 
-                                    Swal.fire({
-                                        icon: "error",
-                                        title: "Внимание!!!",
-                                        html:
-                                            "<div>" +
-                                            errEmail +
-                                            "</div>" +
-                                            " <div>" +
-                                            errPass +
-                                            "</div>" +
-                                            " <div>" +
-                                            errPassConfirm +
-                                            "</div>",
-                                    });
-                                    dispatch(
-                                        returnStatus(
-                                            error.response.data.errors,
-                                            error.response.status,
-                                            "REGISTER_FAIL"
-                                        )
-                                    );
-                                    dispatch({ type: REGISTER_FAIL });
-                                }
-                            });
-                    });
-                }
-            });
+                        Swal.fire({
+                            icon: "error",
+                            title: "Внимание!!!",
+                            html:
+                                "<div>" +
+                                errEmail +
+                                "</div>" +
+                                " <div>" +
+                                errPass +
+                                "</div>" +
+                                " <div>" +
+                                errPassConfirm +
+                                "</div>",
+                        });
+                        dispatch(
+                            returnStatus(
+                                error.response.data.errors,
+                                error.response.status,
+                                "REGISTER_FAIL"
+                            )
+                        );
+                        dispatch({ type: REGISTER_FAIL });
+                    }
+                });
         });
     };
 
