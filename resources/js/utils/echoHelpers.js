@@ -12,29 +12,30 @@ export const initEcho = (token) => {
         encrypted: true,
     });
 
-    window.Echo.join("chat").here((users) => {
+    window.Echo.join("chat-corp").here((users) => {
+        console.log(" IN HERE INSIDE ECHOHELPERS CHAT");
         console.log(users);
     });
 };
-export const sendMessage = (message, channel_id, channel_type) => {
-    const body = JSON.stringify({ message, channel_id, channel_type });
+// export const sendMessage = (message, channel_id, channel_type) => {
+//     const body = JSON.stringify({ message, channel_id, channel_type });
 
-    const postHeaders = {
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("LRC_Token"),
-            "Content-Type": "application/json",
-        },
-    };
-    axios
-        .post("/api/messages", body, postHeaders)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch((err) => {
-            const errors = err.response.data.errors;
-            console.log(errors);
-            Object.values(errors).map((error) => {
-                console.log(error.toString());
-            });
-        });
-};
+//     const postHeaders = {
+//         headers: {
+//             Authorization: "Bearer " + localStorage.getItem("auth_token"),
+//             "Content-Type": "application/json",
+//         },
+//     };
+//     axios
+//         .post("/api/messages", body, postHeaders)
+//         .then((res) => {
+//             console.log(res);
+//         })
+//         .catch((err) => {
+//             const errors = err.response.data.errors;
+//             console.log(errors);
+//             Object.values(errors).map((error) => {
+//                 console.log(error.toString());
+//             });
+//         });
+// };

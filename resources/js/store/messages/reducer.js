@@ -1,9 +1,6 @@
-import { AUTHORS } from "../../utils/constant";
 import {
     SEND_MESSAGE,
     DEL_MESSAGE,
-    GET_MESSAGES,
-    LOAD_MESSAGES,
     UPDATE_MESSAGES,
     GET_MESSAGES_SUCCESS,
     GET_MESSAGES_FAIL,

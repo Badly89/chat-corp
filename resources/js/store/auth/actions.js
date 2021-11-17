@@ -254,26 +254,29 @@ export const logout = () => (dispatch) => {
 export const resetPassword =
     ({ email }) =>
     (dispatch) => {
-        axios.get("/sanctum/csrf-cookie").then((respone) => {
-            axios
-                .post("/forgot-password/`${email}`")
-                .then((resp) => {
-                    if (resp.data.status === 200) {
-                        console.log(resp);
+        console.log(email);
+        const body = JSON.stringify({ email });
+        console.log(body);
+        // axios.get("/sanctum/csrf-cookie").then((respone) => {
+        axios
+            .post(`/forgot-password/${email}`)
+            .then((resp) => {
+                if (resp.data.status === 200) {
+                    console.log(resp);
 
-                        Swal.fire({
-                            icon: "success",
-                            title: "Восстановление пароля!",
-                            text: resp.data.message,
-                        });
-                    } else {
-                        // console.log(resp.data.validation_errors);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        });
+                    Swal.fire({
+                        icon: "success",
+                        title: "Восстановление пароля!",
+                        text: resp.data.message,
+                    });
+                } else {
+                    // console.log(resp.data.validation_errors);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        // });
     };
 
 export const makeHeaders = (getState) => {

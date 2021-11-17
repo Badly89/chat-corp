@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
-import { AUTHORS } from "../../utils/constant";
+
 import { BsArrowReturnLeft } from "react-icons/bs";
 
 export const InputMessage = ({ onSendMessage }) => {

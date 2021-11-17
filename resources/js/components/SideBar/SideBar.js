@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Router, Link, Switch, Route, useHistory } from "react-router-dom";
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../Profile/userProfile";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ChatContainer } from "../ChatContainer";
 import { ListChannels } from "../Channels/ListChannels";
-import { Spinner } from "react-bootstrap";
+
 import { getAllChannelList } from "../../store/channels/actions";
 
 export const SideBar = () => {

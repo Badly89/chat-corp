@@ -8,7 +8,6 @@ import { resetPassword } from "../../../store/auth/actions";
 export const FormResetPassword = () => {
     const [resetInput, setReset] = useState({
         email: "",
-        error_list: [],
     });
     const history = useHistory();
     const status = useSelector((state) => state.status.statusMsg);
@@ -25,7 +24,7 @@ export const FormResetPassword = () => {
         };
 
         dispatch(resetPassword(data));
-        history.push("/login");
+        // history.push("/login");
     };
 
     return (
@@ -87,47 +86,3 @@ export const FormResetPassword = () => {
         </>
     );
 };
-
-// useEffect(() => {
-//     if (status === "REGISTER_FAIL") {
-//         setStatusMsg({ msg: status.statusMsg.message });
-//         console.log("REGISTER_FAIL");
-//     }
-//     if (status === "REGISTER_SUCCESS") {
-//         setStatusMsg({ msg: status.statusMsg.message });
-//         setTimeout(() => {
-//             console.log("LOGIN");
-//         }, 2000);
-//     }
-// }, [status]);
-// if (status !== preventDefault) {
-//     if (status.id === "REGISTER_FAIL") {
-//         setStatusMsg();
-//     }
-// }
-
-// setTimeout(() => {
-//     history.push("/login");
-//     // dispatch(
-//     //     login(registerInput.email, registerInput.password)
-//     // );
-// }, 2500);
-
-{
-    /* {status && (
-                    <div className="form-group">
-                        <div
-                            className={
-                                successful
-                                    ? "alert alert-success"
-                                    : "alert alert-danger"
-                            }
-                            role="alert"
-                        >
-                            {status}
-                        </div>
-                    </div>
-                )} */
-}
-
-//

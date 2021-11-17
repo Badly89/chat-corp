@@ -6,7 +6,7 @@ import {
     GET_MESSAGES_SUCCESS,
     SEND_MESSAGE,
 } from "./types";
-import { AUTHORS } from "../../utils/constant";
+
 import axios from "axios";
 
 export const sendMessage = (channelId, message) => ({
