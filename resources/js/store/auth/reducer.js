@@ -51,7 +51,7 @@ export function authReducer(state = initialState, action) {
         case REGISTER_FAIL:
         case AUTH_FAIL:
             localStorage.removeItem("auth_token");
-            // window.Echo.disconnect();
+
             return {
                 ...state,
                 isAuthenticated: false,
@@ -59,7 +59,6 @@ export function authReducer(state = initialState, action) {
             };
 
         case USER_AVATAR_UPDATED:
-            // Correct way to update key in nested object
             return {
                 ...state,
                 currUser: {

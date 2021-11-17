@@ -7,11 +7,9 @@ import {
 } from "./types";
 
 const initialRoom = {
-    channel: [],
-    // channel: [{ id: "id0", name: "Главный канал" }],
+    currChannel: [],
     allChannels: [],
-    channels: [],
-    ofset: null,
+    offset: null,
 };
 
 export const channelReducer = (state = initialRoom, action) => {
@@ -19,11 +17,11 @@ export const channelReducer = (state = initialRoom, action) => {
         case CREATE_CHANNEL: {
             return {
                 ...state,
-                channel: [
-                    ...state.channel,
+                allChannels: [
+                    ...state.allChannels,
                     {
                         name: action.payload,
-                        id: `id${state.channel.length + 1}`,
+                        id: `id${state.allChannels.length + 1}`,
                     },
                 ],
             };
@@ -31,8 +29,8 @@ export const channelReducer = (state = initialRoom, action) => {
         case DELETE_CHANNEL: {
             return {
                 ...state,
-                channel: [
-                    ...state.channel.filter(
+                currChannel: [
+                    ...state.currChannel.filter(
                         (item) => item.id !== action.payload
                     ),
                 ],
@@ -43,15 +41,15 @@ export const channelReducer = (state = initialRoom, action) => {
             return {
                 ...state,
                 allChannels: action.payload,
-                ofset: true,
+                offset: true,
             };
         }
         case CLEAR_CHANNELS: {
             return {
                 ...state,
                 allChannels: [],
-                channels: [],
-                ofset: false,
+                currChannel: [],
+                offset: false,
             };
         }
         default:

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import PrivateRoute from "../hocs/PrivateRoute";
@@ -7,18 +7,12 @@ import { FormLogin } from "./authorized/Login/FormLogin";
 import { FormRegister } from "./authorized/Register/FormRegister";
 import { SideBar } from "./SideBar/SideBar";
 import { UserProfile } from "../components/Profile/userProfile";
-import { getAllChannelList } from "../store/channels/actions";
-import { getMessagesChannel } from "../store/messages/actions";
 import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword";
 import "../components/asset/css/main-style.css";
 import "../components/asset/css/auth-style.css";
 import "../components/asset/css/style-profile.css";
-import { trackPromise } from "react-promise-tracker";
 
 import axios from "axios";
-import { isEmpty } from "lodash";
-import { Spinner } from "./Spinner";
-import { FaSpinner } from "react-icons/fa";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.get["Accept"] = "application/json";
@@ -50,9 +44,7 @@ export const Routes = () => {
 
     console.log(loading);
 
-    return loading ? (
-        <Spinner />
-    ) : (
+    return (
         <Router>
             <Switch>
                 <PublicRoute
