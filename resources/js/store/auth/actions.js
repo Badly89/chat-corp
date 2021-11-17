@@ -257,7 +257,7 @@ export const resetPassword =
         console.log(email);
         const body = JSON.stringify({ email });
         console.log(body);
-        // axios.get("/sanctum/csrf-cookie").then((respone) => {
+
         axios
             .post(`/forgot-password/${email}`)
             .then((resp) => {
@@ -270,13 +270,11 @@ export const resetPassword =
                         text: resp.data.message,
                     });
                 } else {
-                    // console.log(resp.data.validation_errors);
                 }
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err.response);
             });
-        // });
     };
 
 export const makeHeaders = (getState) => {
