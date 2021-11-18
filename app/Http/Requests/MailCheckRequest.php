@@ -24,7 +24,7 @@ class MailCheckRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'exists:users,email', 'email:rfc,dns', 'min:5'],
+            'email' => 'required|email:rfc,dns|min:5|exists:users,email',
         ];
     }
 
