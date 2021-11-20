@@ -23,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+//         \App\Events\Chat::dispatch("Get test message?");
         return view('home');
     }
 }

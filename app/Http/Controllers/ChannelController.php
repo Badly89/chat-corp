@@ -26,7 +26,7 @@ class ChannelController extends Controller
 
      public function sendMessage(Request $request) {
         $message = auth()->user()->messages()->create([
-            'message' => $request->message,
+            'content' => $request->message,
             'channel_id' => $request->channel_id
         ]);
 
