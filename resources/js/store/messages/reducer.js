@@ -12,8 +12,9 @@ import {
 } from "./types";
 
 const initialMessage = {
-    messages: {},
-    loadMessages: {},
+    content: {},
+    messages: [],
+    loadMessages: [],
     offset: false,
 };
 
@@ -22,7 +23,7 @@ export const msgReducer = (state = initialMessage, action) => {
         case SEND_MESSAGE: {
             return {
                 ...state,
-                messages: {
+                message: {
                     ...state.messages,
                     [action.payload.channelId]: [
                         ...(state.messages[action.payload.channelId] || []),

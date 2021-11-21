@@ -21,8 +21,8 @@ class CreateMessagesTable extends Migration
             $table->foreignId('channel_id')
                 ->constrained('channels')
                 ->onDelete('cascade');
-            $table->text('content')->nullable();
-            $table->integer('is_read');
+            $table->text('content');
+
             $table->timestamps();
         });
     }

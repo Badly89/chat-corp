@@ -58,12 +58,12 @@ export const getMessagesChannel =
 export const UpdateMessages = (channelId, message) => (dispatch, getState) => {
     console.log("Обновляем сообщения");
 };
-export const actionMessage = (channelId, message) => (dispatch, getState) => {
-    // const message = message.text;
-    const body = JSON.stringify({ message, channelId });
+export const actionMessage = (channelId, content) => (dispatch, getState) => {
+    const channel_type = "channel";
+    const body = JSON.stringify({ content, channelId, channel_type });
 
     console.log(Object.values(message));
-    dispatch(sendMessage(channelId, message));
+    // dispatch(sendMessage(channelId, message));
     console.log(body);
     // console.log(lrc_token);
 

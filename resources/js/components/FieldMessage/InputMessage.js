@@ -1,19 +1,21 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 import { AUTHORS } from "../../utils/constant";
 import { BsArrowReturnLeft } from "react-icons/bs";
+import { sendMessageChannel } from "../../utils/echoHelpers";
 
-export const InputMessage = ({ onSendMessage }) => {
+export const InputMessage = ({ onSendMessage, props, selectChannel }) => {
+    console.log(props);
+    console.log(selectChannel);
     const [value, setValue] = useState("");
-    const { currUser } = useSelector((state) => state.auth.currUser);
 
     const handleChange = (e) => {
         setValue(e.target.value);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSendMessage({ text: value, sender: currUser.name });
+        onSendMessage({ value });
 
         setValue("");
     };

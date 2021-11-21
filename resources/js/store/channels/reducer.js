@@ -4,38 +4,38 @@ import {
     DELETE_CHANNEL,
     GET_ALL_CHANNELS,
     GET_CHANNELS,
+    SET_SELECTED_CHANNEL,
 } from "./types";
 
 const initialRoom = {
-    channel: [],
-    // channel: [{ id: "id0", name: "Главный канал" }],
+    currChannel: [],
     allChannels: [],
     channels: [],
-    ofset: null,
 };
 
 export const channelReducer = (state = initialRoom, action) => {
     switch (action.type) {
         case CREATE_CHANNEL: {
+            console.log("успешное создание канала");
             return {
                 ...state,
-                channel: [
-                    ...state.channel,
-                    {
-                        name: action.payload,
-                        id: `id${state.channel.length + 1}`,
-                    },
-                ],
+                channels: state.channels.concat(action.payload),
             };
         }
         case DELETE_CHANNEL: {
             return {
                 ...state,
-                channel: [
+                currChannel: [
                     ...state.channel.filter(
                         (item) => item.id !== action.payload
                     ),
                 ],
+            };
+        }
+        case GET_CHANNELS: {
+            return {
+                ...state,
+                channels: action.payload,
             };
         }
 
@@ -43,7 +43,6 @@ export const channelReducer = (state = initialRoom, action) => {
             return {
                 ...state,
                 allChannels: action.payload,
-                ofset: true,
             };
         }
         case CLEAR_CHANNELS: {
@@ -51,7 +50,14 @@ export const channelReducer = (state = initialRoom, action) => {
                 ...state,
                 allChannels: [],
                 channels: [],
+
                 ofset: false,
+            };
+        }
+        case SET_SELECTED_CHANNEL: {
+            return {
+                ...state,
+                selectedChannel: action.payload,
             };
         }
         default:

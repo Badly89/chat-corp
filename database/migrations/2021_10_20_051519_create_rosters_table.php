@@ -14,13 +14,11 @@ class CreateRostersTable extends Migration
     public function up()
     {
         Schema::create('rosters', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')
-                ->constrained('users')
-                ->onDelete('cascade');
-            $table->foreignId('channels_id')
-                ->constrained('channels')
-                ->onDelete('cascade');
+           $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->bigInteger('channel_id')->unsigned();
+            $table->foreign('channel_id')->references('id')->on('channels');
             $table->timestamps();
         });
     }

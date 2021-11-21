@@ -10,22 +10,27 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatMessageReceived
+class ChatMessageReceived implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $chatMessage;
+    public $content;
     public $user;
+    public $channel;
+    public $is_read;
 
-    public function __construct($chatMessage, $user)
+
+    public function __construct($content, $user, $channel,$is_read)
     {
-        $this->chatMessage = $chatMessage;
+        $this->content = $content;
         $this->user = $user;
+        $this->channel = $channel;
+        $this->is_read = $is_read;
     }
 
     public function broadcastOn()
     {
-        return new PresenceChannel("chat");
+        return ["chat-corp.1"];
     }
 
     public function broadcastAs() {
