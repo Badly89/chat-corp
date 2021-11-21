@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'description'
     ];
 
     /**
@@ -48,9 +50,5 @@ class User extends Authenticatable
     }
     public function channels(){
         return $this->belongsToMany('App\Models\Channel','user_channel')->withTimestamps();
-    }
-    public function detail_channels()
-    {
-        return $this->hasOne('App\Models\UserProfile');
     }
 }
