@@ -23,64 +23,61 @@ export const msgReducer = (state = initialMessage, action) => {
         case SEND_MESSAGE: {
             return {
                 ...state,
-                message: {
+                messages: {
                     ...state.messages,
-                    [action.payload.channelId]: [
-                        ...(state.messages[action.payload.channelId] || []),
-                        action.payload.message,
+                    [action.payload.channel_id]: [
+                        ...(state.messages[action.payload.channel_id] || []),
+                        action.payload.content,
                     ],
                 },
             };
         }
         case GET_MESSAGES_REQUEST: {
+            console.log("check");
             return {
                 ...state,
                 offset: false,
-                messages: {
-                    ...state.messages,
-                    [action.payload.channelId]: [
-                        ...(state.messages[action.payload.channelId] || []),
-                        action.payload.message,
-                    ],
-                },
+                messages: action.payload,
             };
         }
         case GET_MESSAGES_SUCCESS: {
             return {
                 ...state,
-                ofset: true,
+                offset: true,
             };
         }
         case GET_MESSAGES_FAIL: {
             return {
                 ...state,
-                ofset: false,
+                offset: false,
             };
         }
         case UPDATE_MESSAGES: {
-            const oldMessages = state.messages[action.payload.channelId];
+            const oldMessages = state.messages[action.payload.channel_id];
             const newMessages = oldMessages.filter(
                 (item) => item.id !== msg.id
             );
+            console.log(oldMessages);
+            console.log(newMessages);
             return {
                 ...state,
                 messages: {
                     ...state.messages,
-                    [action.payload.channelId]: [...(newMessages || [])],
+                    ...(newMessages || []),
                 },
             };
         }
 
         case DEL_MESSAGE: {
-            const msg = action.payload.message;
-            const arr = state.messages[action.payload.channelId];
+            const msg = action.payload.content;
+            const arr = state.messages[action.payload.channel_id];
             const filterMessage = arr.filter((item) => item.id !== msg.id);
 
             return {
                 ...state,
-                messages: {
+                content: {
                     ...state.messages,
-                    [action.payload.channelId]: [...(filterMessage || [])],
+                    [action.payload.channel_id]: [...(filterMessage || [])],
                 },
             };
         }

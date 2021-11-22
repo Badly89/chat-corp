@@ -8,6 +8,8 @@ import { InputMessage } from "./InputMessage";
 export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
     const { currUser } = useSelector((state) => state.auth.currUser);
 
+    console.log(currUser.id);
+    console.log(messages);
     return (
         <>
             <div className="messageList">
@@ -15,22 +17,13 @@ export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
 
                 <main className="message-field">
                     <div className="message-content">
-                        {messages?.map((message, i) => (
-                            <div
-                                key={i}
-                                className="message"
-                                style={{
-                                    alignSelf:
-                                        message.sender !== currUser.name
-                                            ? "flex-start"
-                                            : "flex-end",
-                                }}
-                            >
-                                <Message
-                                    message={message}
-                                    onDelMessage={onDelMessage}
-                                />
-                            </div>
+                        {messages?.map((message, index) => (
+                            <Message
+                                message={message}
+                                index={index}
+                                currUser={currUser}
+                                onDelMessage={onDelMessage}
+                            />
                         ))}
                     </div>
                 </main>

@@ -4,11 +4,13 @@ import { makeHeaders } from "../auth/actions";
 import { delMessage, getMessagesChannel } from "../messages/actions";
 import { ADD_MESSAGE, GET_MESSAGES } from "../messages/types";
 import {
+    ADD_USER_TO_ROOM,
     CREATE_CHANNEL,
     DELETE_CHANNEL,
     GET_ALL_CHANNELS,
     GET_CHANNELS,
     SET_SELECTED_CHANNEL,
+    SET_USERS_IN_ROOM,
 } from "./types";
 
 export const createChannel = (newChannel) => ({
@@ -62,7 +64,7 @@ export const getAllChannelList = () => (dispatch, getState) => {
 
                 console.log(res.data.channels);
                 dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-                console.log("Список чатов загружен");
+                console.log("Список каналов загружен");
 
                 res.data.channels.map((item) => {
                     console.log(item);
@@ -81,7 +83,7 @@ export const getAllChannelList = () => (dispatch, getState) => {
     }
 };
 
-export const channelSelect = (channel_id, title) => {
+export const channelSelect = (channel_id) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
@@ -92,35 +94,31 @@ export const channelSelect = (channel_id, title) => {
                 withCredentials: true,
             })
             .then((res) => {
+                console.log(res);
                 const users = res.data[0].users;
                 const channel = {
                     id: channel_id,
                     type: "channel",
-                    name: title,
-
                     users: users,
                 };
                 console.log(channel);
-
+                // dispatch(getMessagesChannel(channel_id));
                 dispatch({ type: SET_SELECTED_CHANNEL, payload: channel });
                 // dispatch({ type: ADD_CHANNEL_USERS, payload : users})
                 const selectedChannelInState =
-
                     getState().channels.selectedChannel;
 
-                // dispatch(getMessages(selectedChannelInState.id));
+                dispatch(getMessagesChannel(selectedChannelInState.id));
 
-                window.Echo.join(
-                    `chat-corp.channel.${selectedChannelInState.id}`
-                )
+                window.Echo.join(`chat-corp.${selectedChannelInState.id}`)
                     .here((users) => {
                         console.log(users);
                         // users.forEach(user => (user.name += "FROM.HERE()"));
-                        // dispatch({ type: SET_USERS_IN_ROOM, payload: users });
+                        dispatch({ type: SET_USERS_IN_ROOM, payload: users });
                     })
                     .joining((user) => {
                         console.log(user);
-                        // dispatch({ type: ADD_USER_TO_ROOM, payload: user });
+                        dispatch({ type: ADD_USER_TO_ROOM, payload: user });
 
                         const message = {
                             user: user,

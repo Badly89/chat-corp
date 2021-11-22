@@ -25,16 +25,14 @@ class ChannelController extends Controller
 
 
      public function sendMessage(Request $request) {
-        $message = auth()->user()->messages()->create([
+        $content = auth()->user()->messages()->create([
             'content' => $request->content,
             'channel_id' => $request->channel_id,
-            'type' => $request->type,
-
         ]);
 
-        $user = User::where('id', auth()->user()->id);
+        $user = User::where('id', auth()->user()->id)->first();
 
-        broadcast(new MessageSent($user, $message, $request->channel_id, $request->channel_type));
+        broadcast(new MessageSent($user, $content, $request->channel_id));
 
      }
 

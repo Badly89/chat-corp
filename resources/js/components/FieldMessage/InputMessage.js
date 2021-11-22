@@ -1,23 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
-import { AUTHORS } from "../../utils/constant";
-import { BsArrowReturnLeft } from "react-icons/bs";
-import { sendMessageChannel } from "../../utils/echoHelpers";
 
-export const InputMessage = ({ onSendMessage, props, selectChannel }) => {
-    console.log(props);
-    console.log(selectChannel);
-    const [value, setValue] = useState("");
+import { BsArrowReturnLeft } from "react-icons/bs";
+
+export const InputMessage = ({ onSendMessage }) => {
+    const [content, setContent] = useState("");
 
     const handleChange = (e) => {
-        setValue(e.target.value);
+        setContent(e.target.value);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSendMessage({ value });
+        onSendMessage(content);
 
-        setValue("");
+        setContent("");
     };
 
     return (
@@ -26,7 +23,7 @@ export const InputMessage = ({ onSendMessage, props, selectChannel }) => {
                 <InputGroup className="mb-3">
                     <FormControl
                         type="text"
-                        value={value}
+                        value={content}
                         placeholder="Введите сообщение"
                         aria-label="Введите сообщение"
                         aria-describedby="basic-addon2"

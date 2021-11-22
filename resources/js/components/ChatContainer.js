@@ -2,21 +2,24 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import Echo from "laravel-echo";
-import { actionDelMessage, actionMessage } from "../store/messages/actions";
+import Pusher from "pusher-js";
+import {
+    actionDelMessage,
+    actionMessage,
+    getMessagesChannel,
+} from "../store/messages/actions";
 import { selectMessages } from "../store/messages/selectors";
 
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
 import { channelSelect } from "../store/channels/actions";
 import { sendMessageChannel } from "../utils/echoHelpers";
+import { SideBar } from "./SideBar/SideBar";
+import pusherJs from "pusher-js";
 
 export const ChatContainer = () => {
-    const { channelId } = useParams();
-    const channel = useSelector((state) => {
-        state.channels;
-    });
-    console.log(channel);
-    const [loading, setLoading] = useState(false);
+    const { channel_id } = useParams();
+
     const messages = useSelector(selectMessages);
     const dispatch = useDispatch();
     window.Echo = new Echo({
@@ -26,47 +29,51 @@ export const ChatContainer = () => {
         forceTLS: true,
         encrypted: true,
     });
-    const selectChannel = () => {
-        channelSelect(channelId, "Главный канал");
-    };
+
+    const pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
+        cluster: "eu",
+    });
+
+    const channel = pusher.subscribe("chant-corp");
+    console.log(channel);
+    channel.bind();
+
     useEffect(() => {
-        window.Echo.join(`chat-corp.channel.${channelId}`)
-            .here((users) => {
-                console.log(users);
-                // users.forEach(user => (user.name += "FROM.HERE()"));
-                // dispatch({ type: SET_USERS_IN_ROOM, payload: users });
-            })
-            .joining((user) => {
-                console.log(user);
-            })
+        window.Echo.channel(`chat-corp.channel.${channel_id}`)
+            // .here((users) => {
+            //     console.log(users);
+            //     // users.forEach(user => (user.name += "FROM.HERE()"));
+            //     // dispatch({ type: SET_USERS_IN_ROOM, payload: users });
+            // })
+            // .joining((user) => {
+            //     console.log(user);
+            // })
             .listen("MessageSent", (e) => {
                 console.log(e);
             });
-        // dispatch(selectChannel(channelId));
-    });
+    }, [channel_id]);
 
-    // console.log(messages[channelId]?.length);
+    // const selectChannel = ((channel_id) => {
+    //     dispatch(channelSelect(channel_id));
+    // });
+    useEffect(() => {
+        dispatch(channelSelect(channel_id));
+    }, [channel_id]);
 
-    // useEffect(() => {
-    //     if (!messages.messages) {
-    //         dispatch(getMessagesChannel(channelId));
-    //     }
-    // }, []);
-
-    console.log(loading);
     const sendNewMessage = useCallback(
         (newMessage) => {
-            dispatch(sendMessageChannel(channelId, ...newMessage, "channel"));
-            // dispatch(actionMessage(channelId, ...newMessage));
+            console.log(newMessage);
+            // dispatch(sendMessageChannel(channelId, ...newMessage));
+            dispatch(actionMessage(channel_id, newMessage));
         },
         // после отправки сообщений сделать обновление state messages
         //добавление сообщений путем сравнения id загруженных с последним id уже имеющихся сообщения,
         //не забываем про флаг offset
-        [channelId, messages]
+        [channel_id, messages]
     );
     const deleteMessages = useCallback(
         (selMessage) => {
-            dispatch(actionDelMessage(channelId, { ...selMessage }));
+            dispatch(actionDelMessage(channel_id, { ...selMessage }));
         },
         [messages]
     );
@@ -75,8 +82,7 @@ export const ChatContainer = () => {
         <>
             <ListChannels />
             <FieldMessages
-                selectChannel={selectChannel}
-                messages={messages[channelId]}
+                messages={messages}
                 onSendMessage={sendNewMessage}
                 onDelMessage={deleteMessages}
             />

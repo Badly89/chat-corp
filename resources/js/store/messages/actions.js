@@ -5,86 +5,78 @@ import {
     GET_MESSAGES_REQUEST,
     GET_MESSAGES_SUCCESS,
     SEND_MESSAGE,
+    UPDATE_MESSAGES,
 } from "./types";
 
 import axios from "axios";
 
-export const sendMessage = (channelId, message) => ({
+export const sendMessage = (channel_id, content) => ({
     type: SEND_MESSAGE,
-    payload: { message, channelId },
+    payload: { content, channel_id },
 });
-export const loadMessages = (channelId, message) => ({
+export const loadMessages = (messages) => ({
     type: GET_MESSAGES_REQUEST,
-    payload: { message, channelId },
+    payload: messages,
 });
 
-export const delMessage = (channelId, message) => ({
+export const delMessage = (channel_id, content) => ({
     type: DEL_MESSAGE,
-    payload: { message, channelId },
+    payload: { content, channel_id },
 });
 
-export const getMessagesChannel =
-    (channelId, message) => (dispatch, getState) => {
-        const offset = getState().messages;
+export const getMessagesChannel = (channel_id) => (dispatch, getState) => {
+    const offset = getState().messages;
 
-        console.log("CURRENTLY SELECTED CHANNEL BELOW");
+    console.log("CURRENTLY SELECTED CHANNEL BELOW");
 
-        if (channelId !== null) {
-            axios
-                .get(`/getMessages/${channelId}`, {
-                    withCredentials: true,
-                })
-                .then((res) => {
-                    console.log("LOAD MESSAGES OUTPUT BELOW");
-                    console.log(res.data);
-                    Object.values(res.data).map((value) => {
-                        dispatch(
-                            loadMessages(channelId, {
-                                text: value.message,
-                                sender: value.user.name,
-                                id: value.id,
-                                timestamp: value.created_at,
-                            })
-                        );
-                        dispatch({ type: GET_MESSAGES_SUCCESS });
-                    });
-                })
-                .catch((err) => {
-                    dispatch({ type: GET_MESSAGES_FAIL });
-                });
-        }
-    };
+    if (channel_id !== null) {
+        axios
+            .get(`/getMessages/${channel_id}`, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log("LOAD MESSAGES OUTPUT BELOW");
+                console.log(res.data);
+                // Object.values(res.data).map((value) => {
 
-export const UpdateMessages = (channelId, message) => (dispatch, getState) => {
+                dispatch(loadMessages(res.data));
+                // dispatch({ type: GET_MESSAGES_SUCCESS });
+                // });
+            })
+            .catch((err) => {
+                // dispatch({ type: GET_MESSAGES_FAIL });
+            });
+    }
+};
+
+export const UpdateMessages = (channel_id, content) => (dispatch, getState) => {
     console.log("Обновляем сообщения");
 };
-export const actionMessage = (channelId, content) => (dispatch, getState) => {
-    const channel_type = "channel";
-    const body = JSON.stringify({ content, channelId, channel_type });
+export const actionMessage = (channel_id, content) => (dispatch, getState) => {
+    const body = JSON.stringify({ channel_id, content });
 
-    console.log(Object.values(message));
-    // dispatch(sendMessage(channelId, message));
+    console.log(channel_id);
+    // dispatch(sendMessage(content));
     console.log(body);
     // console.log(lrc_token);
 
     axios
-        .post("/sendMessage", body)
+        .post("/sendMessage", body, {
+            withCredentials: true,
+        })
         .then((res) => {
             console.log(res);
         })
         .catch((err) => {
             const errors = err.response.data.errors;
             console.log(errors);
-            // Object.values(errors).map((error) => {
-            //     console.log(error.toString());
-            // });
         });
 };
 
 export const actionDelMessage =
-    (channelId, message) => (dispatch, getState) => {
-        dispatch(delMessage(channelId, message));
-        const selMessage = getState().messages;
+    (channel_id, content) => (dispatch, getState) => {
+        dispatch(delMessage(channel_id, content));
+        const selMessage = getState().content;
     };
 
 // dispatch(sendMessage(channelId, message));

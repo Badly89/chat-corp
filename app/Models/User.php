@@ -49,8 +49,5 @@ class User extends Authenticatable
     public function channels(){
         return $this->belongsToMany('App\Models\Channel','rosters')->withTimestamps();
     }
-    public function detail_channels()
-    {
-        return $this->hasOne('App\Models\UserProfile');
-    }
+
 }
