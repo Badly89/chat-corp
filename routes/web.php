@@ -29,7 +29,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::post('/logout', [AuthenticationController::class, 'logout']);
     Route::post('/users', [UserController::class, 'store']);
-    Route::put('/users/{id}', [UserController::class, 'update']);
+
+    Route::post('/users/update/{id}', [UserController::class, 'update']);
+
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     //Route from Channels
