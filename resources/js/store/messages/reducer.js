@@ -6,6 +6,7 @@ import {
     GET_MESSAGES_FAIL,
     GET_MESSAGES_REQUEST,
     CLEAR_MESSAGES,
+    ADD_MESSAGE,
 } from "./types";
 
 const initialMessage = {
@@ -76,6 +77,13 @@ export const msgReducer = (state = initialMessage, action) => {
                     ...state.messages,
                     [action.payload.channel_id]: [...(filterMessage || [])],
                 },
+            };
+        }
+        case ADD_MESSAGE: {
+            console.log("Добавление сообщения");
+            return {
+                ...state,
+                messages: state.messages.concat(action.payload),
             };
         }
         case CLEAR_MESSAGES: {

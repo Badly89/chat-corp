@@ -1,6 +1,5 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { makeHeaders } from "../auth/actions";
 import { delMessage, getMessagesChannel } from "../messages/actions";
 import { ADD_MESSAGE, GET_MESSAGES } from "../messages/types";
 import {
@@ -12,6 +11,10 @@ import {
     SET_SELECTED_CHANNEL,
     SET_USERS_IN_ROOM,
 } from "./types";
+import { options } from "../../utils/optionsEcho";
+import Echo from "laravel-echo";
+
+const echo = new Echo(options);
 
 export const createChannel = (newChannel) => ({
     type: CREATE_CHANNEL,
@@ -23,28 +26,7 @@ export const deleteSelectChannel = (id) => ({
     payload: id,
 });
 
-// export const actionChatList = id;
-export const deleteChannel =
-    (channelId, message) => async (dispatch, getState) => {
-        const msg = getState().messages.messages[channelId];
-        const messageLength = getState().messages.messages[channelId].length;
-        if (messageLength > 0) {
-            if (
-                confirm(
-                    "В комнате есть сообщения, вы действительно хотите удалить чат?"
-                )
-            ) {
-                dispatch(deleteSelectChannel(channelId));
-                for (let message of msg) {
-                    dispatch(delMessage(channelId, message));
-                }
-            }
-        } else {
-            dispatch(delRoom(channelId));
-        }
-        console.log("DEL CHANNEL");
-    };
-
+//
 export const getAllChannelList = () => (dispatch, getState) => {
     const ofset = getState().channels.ofset;
     Swal.fire({
@@ -66,11 +48,11 @@ export const getAllChannelList = () => (dispatch, getState) => {
                 dispatch({ type: GET_ALL_CHANNELS, payload: channels });
                 console.log("Список каналов загружен");
 
-                res.data.channels.map((item) => {
-                    console.log(item);
-                    dispatch(getMessagesChannel(item.id));
-                    console.log("Загрузка сообщений канала");
-                });
+                // res.data.channels.map((item) => {
+                //     console.log(item);
+                //     // dispatch(getMessagesChannel(item.id));
+                //     console.log("Загрузка сообщений канала");
+                // });
                 Swal.fire({
                     icon: "success",
                     title: "Добро пожаловать!",
@@ -85,30 +67,29 @@ export const channelSelect = (channel_id) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
-        window.Echo.leave(`chat-corp.${type}.${prevId}`);
-
+        echo.leave(`chat-corp.${type}.${prevId}`);
+        console.log(channel_id);
         axios
-            .get(`/getUsers/${channel_id}`, makeHeaders(getState), {
+            .get(`/getUsers/${channel_id}`, {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log(res);
-                const users = res.data[0].users;
+                console.log(res.data);
+                // const users = res.data[0].users;
                 const channel = {
                     id: channel_id,
                     type: "channel",
-                    users: users,
+                    //     users: users,
                 };
-                console.log(channel);
-                // dispatch(getMessagesChannel(channel_id));
+
                 dispatch({ type: SET_SELECTED_CHANNEL, payload: channel });
                 // dispatch({ type: ADD_CHANNEL_USERS, payload : users})
-                const selectedChannelInState =
-                    getState().channels.selectedChannel;
+                const selectedChannelInState = getState().channels.currChannel;
+                console.log("Загрузка сообщений канала");
+                console.log(selectedChannelInState);
+                dispatch(getMessagesChannel(channel_id));
 
-                dispatch(getMessagesChannel(selectedChannelInState.id));
-
-                window.Echo.join(`chat-corp.${selectedChannelInState.id}`)
+                echo.join(`chat-corp.channel.${selectedChannelInState.id}`)
                     .here((users) => {
                         console.log(users);
                         // users.forEach(user => (user.name += "FROM.HERE()"));
@@ -125,7 +106,7 @@ export const channelSelect = (channel_id) => {
                         };
 
                         if (selectedChannelInState.type === "channel") {
-                            // dispatch({ type: ADD_MESSAGE, payload: message });
+                            dispatch({ type: ADD_MESSAGE, payload: message });
                         }
                     })
                     .leaving((user) => {
@@ -138,7 +119,7 @@ export const channelSelect = (channel_id) => {
                             status: true,
                         };
                         if (selectedChannelInState.type === "channel") {
-                            // dispatch({ type: ADD_MESSAGE, payload: message });
+                            dispatch({ type: ADD_MESSAGE, payload: message });
                         }
                     })
                     .listen("MessageSent", (event) => {
@@ -148,7 +129,7 @@ export const channelSelect = (channel_id) => {
                             message: event.message.message,
                         };
                         console.log(message);
-                        // dispatch({ type: ADD_MESSAGE, payload: message });
+                        dispatch({ type: ADD_MESSAGE, payload: message });
                         const typingEvent = {
                             user: event.user,
                             type: "typing",
@@ -157,33 +138,33 @@ export const channelSelect = (channel_id) => {
                         //     type: REMOVE_TYPING_EVENT,
                         //     payload: typingEvent,
                         // });
+                    })
+                    .listenForWhisper("typing", (event) => {
+                        let timer;
+                        console.log("TYPING");
+                        console.log(event.name);
+                        const message = {
+                            user: event.name,
+                            type: "typing",
+                        };
+                        // dispatch({ type: ADD_TYPING_EVENT, payload: message });
+
+                        clearTimeout(timer);
+
+                        // timer = setTimeout(() => {
+                        //     dispatch({
+                        //         type: REMOVE_TYPING_EVENT,
+                        //         payload: message,
+                        //     });
+                        // }, 2000);
                     });
-                // .listenForWhisper("typing", (event) => {
-                //     let timer;
-                //     console.log("TYPING");
-                //     console.log(event.name);
-                //     const message = {
-                //         user: event.name,
-                //         type: "typing",
-                //     };
-                //     dispatch({ type: ADD_TYPING_EVENT, payload: message });
-
-                //     clearTimeout(timer);
-
-                //     timer = setTimeout(() => {
-                //         dispatch({
-                //             type: REMOVE_TYPING_EVENT,
-                //             payload: message,
-                //         });
-                //     }, 2000);
-                // });
             });
     };
 };
 
 export const getChannels = () => (dispatch, getState) => {
     axios
-        .get("/api/getchannels", makeHeaders(getState), {
+        .get("/api/getchannels", {
             withCredentials: true,
         })
         .then((res) => {
@@ -193,7 +174,7 @@ export const getChannels = () => (dispatch, getState) => {
         .catch((err) => {});
 
     axios
-        .get("/api/getallchannels", makeHeaders(getState), {
+        .get("/api/getallchannels", {
             withCredentials: true,
         })
         .then((res) => {
@@ -203,7 +184,7 @@ export const getChannels = () => (dispatch, getState) => {
         .catch((err) => {});
 
     axios
-        .get("/api/getfriendslist", makeHeaders(getState), {
+        .get("/api/getfriendslist", {
             withCredentials: true,
         })
         .then((res) => {

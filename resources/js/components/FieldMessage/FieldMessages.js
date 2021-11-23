@@ -7,10 +7,18 @@ import { InputMessage } from "./InputMessage";
 
 export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
     const { currUser } = useSelector((state) => state.auth.currUser);
-
-    console.log(currUser.id);
     console.log(messages);
-    return (
+
+    return !messages ? (
+        <div className="messageList">
+            <HeaderChat />
+            <main className="message-field">
+                <div className="message-content">
+                    <div>Сообщений нет</div>
+                </div>
+            </main>
+        </div>
+    ) : (
         <>
             <div className="messageList">
                 <HeaderChat />
@@ -18,12 +26,22 @@ export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
                 <main className="message-field">
                     <div className="message-content">
                         {messages?.map((message, index) => (
-                            <Message
-                                message={message}
-                                index={index}
-                                currUser={currUser}
-                                onDelMessage={onDelMessage}
-                            />
+                            <div
+                                key={index}
+                                className="message"
+                                style={{
+                                    alignSelf:
+                                        message.user_id == currUser.id
+                                            ? "flex-end"
+                                            : "flex-start",
+                                }}
+                            >
+                                <Message
+                                    message={message}
+                                    currUser={currUser}
+                                    onDelMessage={onDelMessage}
+                                />
+                            </div>
                         ))}
                     </div>
                 </main>

@@ -54,12 +54,12 @@ export const channelReducer = (state = initialRoom, action) => {
                 ofset: false,
             };
         }
-        case SET_SELECTED_CHANNEL: {
+        case SET_SELECTED_CHANNEL:
             return {
                 ...state,
-                selectedChannel: action.payload,
+                currChannel: action.payload,
             };
-        }
+
         default:
             return state;
     }

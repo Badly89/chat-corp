@@ -49,7 +49,7 @@ export const getMessagesChannel = (channel_id) => (dispatch, getState) => {
     }
 };
 
-export const UpdateMessages = (channel_id, content) => (dispatch, getState) => {
+export const updateMessages = (channel_id, content) => (dispatch, getState) => {
     console.log("Обновляем сообщения");
 };
 export const actionMessage = (channel_id, content) => (dispatch, getState) => {
@@ -66,6 +66,7 @@ export const actionMessage = (channel_id, content) => (dispatch, getState) => {
         })
         .then((res) => {
             console.log(res);
+            dispatch(getMessagesChannel(channel_id));
         })
         .catch((err) => {
             const errors = err.response.data.errors;

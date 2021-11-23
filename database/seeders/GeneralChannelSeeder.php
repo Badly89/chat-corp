@@ -17,6 +17,7 @@ class GeneralChannelSeeder extends Seeder
         DB::table('channels')->insert([
             'title' => 'Главный канал',
             'type' =>'channel',
+            //  'user_id_creator' => 1,
         ]);
     }
 }

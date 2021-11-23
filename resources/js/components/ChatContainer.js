@@ -13,50 +13,51 @@ import { selectMessages } from "../store/messages/selectors";
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
 import { channelSelect } from "../store/channels/actions";
-import { sendMessageChannel } from "../utils/echoHelpers";
-import { SideBar } from "./SideBar/SideBar";
-import pusherJs from "pusher-js";
 
 export const ChatContainer = () => {
+    const token = window.localStorage.getItem("auth_token");
     const { channel_id } = useParams();
-
     const messages = useSelector(selectMessages);
     const dispatch = useDispatch();
-    window.Echo = new Echo({
+    const [selChannel, setSelChannel] = useState(null);
+
+    const echo = new Echo({
         broadcaster: "pusher",
         key: process.env.MIX_PUSHER_APP_KEY,
-        cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+        wsHost: process.env.MIX_WS_HOST_URL,
+        wsPort: 6001,
+        wssPort: 6001,
+        disableStats: true,
         forceTLS: true,
         encrypted: true,
+        authEndpoint: process.env.MIX_AUTH_ENDPOINT,
+        auth: {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+            },
+        },
     });
-
-    const pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
-        cluster: "eu",
-    });
-
-    const channel = pusher.subscribe("chant-corp");
-    console.log(channel);
-    channel.bind();
 
     useEffect(() => {
-        window.Echo.channel(`chat-corp.channel.${channel_id}`)
-            // .here((users) => {
-            //     console.log(users);
-            //     // users.forEach(user => (user.name += "FROM.HERE()"));
-            //     // dispatch({ type: SET_USERS_IN_ROOM, payload: users });
-            // })
-            // .joining((user) => {
-            //     console.log(user);
-            // })
+        let channel = echo.join(`chat-corp.${token}`);
+        channel
+            .here((users) => {
+                console.log(users);
+            })
+            .joining((user) => {
+                console.log(user);
+            })
             .listen("MessageSent", (e) => {
-                console.log(e);
+                console.log(">>>>>>>>>>>>>", e);
             });
+
+        console.log("проверка работы ");
     }, [channel_id]);
 
-    // const selectChannel = ((channel_id) => {
-    //     dispatch(channelSelect(channel_id));
-    // });
     useEffect(() => {
+        setSelChannel(channel_id);
+        console.log(selChannel);
         dispatch(channelSelect(channel_id));
     }, [channel_id]);
 

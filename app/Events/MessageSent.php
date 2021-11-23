@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcastNow
+class MessageSent implements ShouldBroadcast
 {
    use Dispatchable, InteractsWithSockets;
 
@@ -20,7 +20,7 @@ class MessageSent implements ShouldBroadcastNow
     public $message;
 
     public $channel;
-    public $type;
+    // public $type;
 
     // public function __construct($user, $message, $channel,$type)
     public function __construct($content, $channel, $user)
@@ -40,7 +40,7 @@ class MessageSent implements ShouldBroadcastNow
     public function broadcastOn()
     {
         // if($this->type === "channel") {
-            return new PresenceChannel("chat-corp".$this->channel);
+            return new Channel("chat-corp.".$this->channel);
         // } else if ($this->type === "direct") {
             // return new PresenceChannel("chat-corp.direct.".$this->channel);
         // }
