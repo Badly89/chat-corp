@@ -11,13 +11,13 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+class MessageSent implements ShouldBroadcastNow
 {
    use Dispatchable, InteractsWithSockets;
 
     public $user;
 
-    public $message;
+    public $content;
 
     public $channel;
     // public $type;
@@ -39,8 +39,9 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastOn()
     {
+        // return ['chat-corp'];
         // if($this->type === "channel") {
-            return new Channel("chat-corp.".$this->channel);
+            return new PresenceChannel("chat-corp.".$this->content->channel);
         // } else if ($this->type === "direct") {
             // return new PresenceChannel("chat-corp.direct.".$this->channel);
         // }

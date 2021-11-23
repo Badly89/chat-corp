@@ -14,8 +14,6 @@ import {
 import { options } from "../../utils/optionsEcho";
 import Echo from "laravel-echo";
 
-const echo = new Echo(options);
-
 export const createChannel = (newChannel) => ({
     type: CREATE_CHANNEL,
     payload: newChannel,
@@ -67,7 +65,7 @@ export const channelSelect = (channel_id) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
-        echo.leave(`chat-corp.${type}.${prevId}`);
+        window.Echo.leave(`chat-corp.${type}.${prevId}`);
         console.log(channel_id);
         axios
             .get(`/getUsers/${channel_id}`, {
@@ -89,7 +87,9 @@ export const channelSelect = (channel_id) => {
                 console.log(selectedChannelInState);
                 dispatch(getMessagesChannel(channel_id));
 
-                echo.join(`chat-corp.channel.${selectedChannelInState.id}`)
+                window.Echo.join(
+                    `chat-corp.channel.${selectedChannelInState.id}`
+                )
                     .here((users) => {
                         console.log(users);
                         // users.forEach(user => (user.name += "FROM.HERE()"));
