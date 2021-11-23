@@ -78,8 +78,6 @@ export const getAllChannelList = () => (dispatch, getState) => {
                 });
                 Swal.close;
             });
-
-        // dispatch(getMessagesChannel(chat_id));
     }
 };
 

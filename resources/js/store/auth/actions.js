@@ -282,20 +282,13 @@ export const resetPassword =
     };
 
 export const makeHeaders = (getState) => {
-    // Get token from localstorage
     const token = getState().auth.token;
-    // console.log(token);
-    // Headers
+
     const headersObj = {
         headers: {
             "Content-type": "application/json",
         },
     };
-
-    // If token, add to headers
-    // if (token) {
-    //   headersObj.headers["Authorization"] = "Bearer " + token;
-    // }
 
     return headersObj;
 };

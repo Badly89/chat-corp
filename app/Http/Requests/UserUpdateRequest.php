@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MailCheckRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,20 @@ class MailCheckRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email:rfc,dns|min:5|exists:users,email',
+            'email' => ['email:rfc,dns', 'min:5'],
+            'password' => ['min:6', 'max:100'],
+            'avatar' => ['image'],
+            'description' => ['string:nullable', 'min:6', 'max:200'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'exists' => 'Пользователь с таким email адресом не зарегистрирован',
-            'required' => 'Поле :attribute нужно заполнить!',
             'min' => 'Поле :attribute содержит недопустимое количество символов!',
-            'email' => 'Неверно указан e-mail!'
+            'max' => 'Поле :attribute содержит недопустимое количество символов!',
+            'email' => 'Неверно указан e-mail!',
+            'image' => 'В поле аватар могут быть загружены только файлы в форматах: jpg, jpeg, png или svg!'
         ];
     }
 
@@ -42,6 +45,8 @@ class MailCheckRequest extends FormRequest
     {
         return  [
             'email' => 'e-mail',
+            'password' => 'пароль',
+            'description' => 'описание'
         ];
     }
 }

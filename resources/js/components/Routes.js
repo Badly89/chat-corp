@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import PrivateRoute from "../hocs/PrivateRoute";
@@ -7,7 +7,6 @@ import { FormLogin } from "./authorized/Login/FormLogin";
 import { FormRegister } from "./authorized/Register/FormRegister";
 import { SideBar } from "./SideBar/SideBar";
 import { UserProfile } from "../components/Profile/userProfile";
-
 import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword";
 import "../components/asset/css/main-style.css";
 import "../components/asset/css/auth-style.css";

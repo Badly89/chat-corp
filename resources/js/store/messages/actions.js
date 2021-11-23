@@ -78,27 +78,3 @@ export const actionDelMessage =
         dispatch(delMessage(channel_id, content));
         const selMessage = getState().content;
     };
-
-// dispatch(sendMessage(channelId, message));
-
-// if (channelId !== null) {
-//     const res = await fetch(
-//         `https://www.botlibre.com/rest/api/form-chat?instance=165&message="${message.text}"&application=428262090517998158`
-//     );
-
-//     const response = await res.text();
-//     const answer = response.substring(
-//         response.lastIndexOf("<message>") + 9,
-//         response.lastIndexOf("</message>")
-//     );
-
-//     const messLength =
-//         getState().messages.messages[channelId]?.length;
-
-//     dispatch(
-//         sendMessage(channelId, {
-//             text: answer,
-//             sender: AUTHORS.BOT,
-//             id: `${channelId}-${messLength + 1}`,
-//         })
-//     )

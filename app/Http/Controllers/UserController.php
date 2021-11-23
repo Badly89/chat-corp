@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -25,10 +26,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-       $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-                    ]);
+
     }
 
     /**
@@ -46,13 +44,22 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, int $id)
     {
         $user= User::find($id);
-        $user->update($request ->all());
+
+        $user = $user->fill(
+            $request->only(['name', 'email', 'description', 'avatar'])
+        )->save();
+
+        if($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $file->move(public_path() . '/path','avatar' . $id . $file->extension());
+        }
+
         return $user;
     }
 
@@ -62,7 +69,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
        return User::destroy($id);
     }
