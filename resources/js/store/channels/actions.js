@@ -13,6 +13,7 @@ import {
 } from "./types";
 import { options } from "../../utils/optionsEcho";
 import Echo from "laravel-echo";
+const echo = new Echo(options);
 
 export const createChannel = (newChannel) => ({
     type: CREATE_CHANNEL,
@@ -65,14 +66,14 @@ export const channelSelect = (channel_id) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
-        window.Echo.leave(`chat-corp.${type}.${prevId}`);
+        echo.leave(`chat-corp.${type}.${prevId}`);
         console.log(channel_id);
         axios
             .get(`/getUsers/${channel_id}`, {
                 withCredentials: true,
             })
             .then((res) => {
-                console.log(res.data);
+                console.log("Юзверы канала", res.data);
                 // const users = res.data[0].users;
                 const channel = {
                     id: channel_id,
@@ -85,14 +86,11 @@ export const channelSelect = (channel_id) => {
                 const selectedChannelInState = getState().channels.currChannel;
                 console.log("Загрузка сообщений канала");
                 console.log(selectedChannelInState);
-                dispatch(getMessagesChannel(channel_id));
+                dispatch(getMessagesChannel(selectedChannelInState.id));
 
-                window.Echo.join(
-                    `chat-corp.channel.${selectedChannelInState.id}`
-                )
+                echo.join(`chat-corp.channel.${selectedChannelInState.id}`)
                     .here((users) => {
                         console.log(users);
-                        // users.forEach(user => (user.name += "FROM.HERE()"));
                         dispatch({ type: SET_USERS_IN_ROOM, payload: users });
                     })
                     .joining((user) => {
@@ -111,85 +109,47 @@ export const channelSelect = (channel_id) => {
                     })
                     .leaving((user) => {
                         console.log(user);
-                        // dispatch({ type: USER_LEAVES_ROOM, payload: user });
-
-                        const message = {
-                            user: user,
-                            message: "Left",
-                            status: true,
-                        };
-                        if (selectedChannelInState.type === "channel") {
-                            dispatch({ type: ADD_MESSAGE, payload: message });
-                        }
                     })
                     .listen("MessageSent", (event) => {
                         console.log("FROM CHANNEL EVENT FUNCTION");
-                        const message = {
-                            user: event.user,
-                            message: event.message.message,
-                        };
-                        console.log(message);
-                        dispatch({ type: ADD_MESSAGE, payload: message });
-                        const typingEvent = {
-                            user: event.user,
-                            type: "typing",
-                        };
-                        // dispatch({
-                        //     type: REMOVE_TYPING_EVENT,
-                        //     payload: typingEvent,
-                        // });
+                        сonsole.log(event);
                     })
                     .listenForWhisper("typing", (event) => {
-                        let timer;
                         console.log("TYPING");
-                        console.log(event.name);
-                        const message = {
-                            user: event.name,
-                            type: "typing",
-                        };
-                        // dispatch({ type: ADD_TYPING_EVENT, payload: message });
-
-                        clearTimeout(timer);
-
-                        // timer = setTimeout(() => {
-                        //     dispatch({
-                        //         type: REMOVE_TYPING_EVENT,
-                        //         payload: message,
-                        //     });
-                        // }, 2000);
+                        console.log(event);
                     });
             });
     };
 };
 
-export const getChannels = () => (dispatch, getState) => {
-    axios
-        .get("/api/getchannels", {
-            withCredentials: true,
-        })
-        .then((res) => {
-            const channels = res.data;
-            dispatch({ type: GET_CHANNELS, payload: channels });
-        })
-        .catch((err) => {});
+// export const getChannels = () => (dispatch, getState) => {
+//     axios
+//         .get("/api/getchannels", {
+//             withCredentials: true,
+//         })
+//         .then((res) => {
+//             const channels = res.data;
+//             dispatch({ type: GET_CHANNELS, payload: channels });
+//         })
+//         .catch((err) => {});
 
-    axios
-        .get("/api/getallchannels", {
-            withCredentials: true,
-        })
-        .then((res) => {
-            const channels = res.data;
-            dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-        })
-        .catch((err) => {});
+//     axios
+//         .get("/api/getallchannels", {
+//             withCredentials: true,
+//         })
+//         .then((res) => {
+//             const channels = res.data;
+//             dispatch({ type: GET_ALL_CHANNELS, payload: channels });
+//         })
+//         .catch((err) => {});
 
-    axios
-        .get("/api/getfriendslist", {
-            withCredentials: true,
-        })
-        .then((res) => {
-            console.log("FRIENDS LIST BELOW");
-            console.log(res.data);
-        })
-        .catch((err) => {});
-};
+//     axios
+//         .get("/api/getfriendslist", {
+//             withCredentials: true,
+//         })
+//         .then((res) => {
+//             console.log("FRIENDS LIST BELOW");
+//             console.log(res.data);
+//         })
+//         .catch((err) => {});
+// };

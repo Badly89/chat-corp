@@ -17,9 +17,9 @@ class CreateChannelsTable extends Migration
            $table->id();
            $table->text('title');
            $table->text('description')->nullable();
-        //    $table->foreignId('user_id_creator')
-        //        ->constrained('users')
-        //        ->onDelete('cascade');
+           $table->foreignId('user_id_creator')
+               ->constrained('users')
+               ->onDelete('cascade');
            $table->timestamps();
            $table->text('image')->nullable();
            $table->boolean('visible')->nullable();

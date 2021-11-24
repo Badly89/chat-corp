@@ -243,8 +243,8 @@ export const logout = () => (dispatch) => {
                         type: LOGOUT_SUCCESS,
                         isAuthenticated: false,
                     });
-                    dispatch({ type: CLEAR_CHANNELS });
-                    dispatch({ type: CLEAR_MESSAGES });
+                    // dispatch({ type: CLEAR_CHANNELS });
+                    // dispatch({ type: CLEAR_MESSAGES });
                 } else {
                 }
             })

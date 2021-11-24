@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
             ]);
             $user->save();
 
-        //  $channel = Channel::find(1);
-        //   $channel->users()->attach($user->id);
+         $channel = Channel::find(1);
+          $channel->users()->attach($user->id);
 
     }
 }

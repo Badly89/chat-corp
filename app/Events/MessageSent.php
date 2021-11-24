@@ -41,7 +41,7 @@ class MessageSent implements ShouldBroadcastNow
     {
         // return ['chat-corp'];
         // if($this->type === "channel") {
-            return new PresenceChannel("chat-corp.".$this->content->channel);
+            return new Channel("chat-corp");
         // } else if ($this->type === "direct") {
             // return new PresenceChannel("chat-corp.direct.".$this->channel);
         // }
