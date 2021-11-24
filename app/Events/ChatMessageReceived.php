@@ -30,7 +30,7 @@ class ChatMessageReceived implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        return ["chat-corp"];
+        return new PresenceChannel("chat-corp");
     }
 
     public function broadcastAs() {
