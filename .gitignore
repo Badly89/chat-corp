@@ -16,7 +16,7 @@ yarn-error.log
 /.idea
 /.vscode
 
-/config/database.php
 
 /resources/js/components/asset/css/*.css
 /resources/js/components/asset/css/*.css.map
+/resources/js/store/channels/dist

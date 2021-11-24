@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { createChannel, deleteChannel } from "../../store/channels/actions";
+import { createChannel } from "../../store/channels/actions";
 
 const chatOptions = [
     { value: "allChats", label: "Все чаты" },
@@ -32,7 +32,7 @@ export const ListChannels = () => {
         setValue("");
     };
     const handleDelete = (id) => {
-        dispatch(deleteChannel(id));
+        // dispatch(deleteChannel(id));
     };
     return (
         <div className="chatList">

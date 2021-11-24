@@ -1,47 +1,36 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-
-import {
-    actionDelMessage,
-    actionMessage,
-    getMessagesChannel,
-} from "../store/messages/actions";
+import { actionDelMessage, actionMessage } from "../store/messages/actions";
 import { selectMessages } from "../store/messages/selectors";
+
 import { ListChannels } from "./Channels/ListChannels";
 import { FieldMessages } from "./FieldMessage/FieldMessages";
+import { channelSelect } from "../store/channels/actions";
 
 export const ChatContainer = () => {
-    const { channelId } = useParams();
-    const [loading, setLoading] = useState(false);
+    const { channel_id } = useParams();
     const messages = useSelector(selectMessages);
     const dispatch = useDispatch();
-    // console.log(messages[channelId]?.length);
+    const [selChannel, setSelChannel] = useState(null);
 
-    // useEffect(() => {
-    //     if (!messages.messages) {
-    //         dispatch(getMessagesChannel(channelId));
-    //     }
-    // }, []);
+    useEffect(() => {
+        setSelChannel(channel_id);
 
-    console.log(loading);
+        dispatch(channelSelect(channel_id));
+    }, [setSelChannel]);
+    console.log(selChannel);
     const sendNewMessage = useCallback(
         (newMessage) => {
-            dispatch(
-                actionMessage(channelId, {
-                    ...newMessage,
-                    id: `${(messages[channelId]?.length || 0) - 1}`,
-                })
-            );
+            console.log(newMessage);
+            // dispatch(sendMessageChannel(channelId, ...newMessage));
+            dispatch(actionMessage(channel_id, newMessage));
         },
-        // после отправки сообщений сделать обновление state messages
-        //добавление сообщений путем сравнения id загруженных с последним id уже имеющихся сообщения,
-        //не забываем про флаг offset
-        [channelId, messages]
+        [channel_id, messages]
     );
     const deleteMessages = useCallback(
         (selMessage) => {
-            dispatch(actionDelMessage(channelId, { ...selMessage }));
+            dispatch(actionDelMessage(channel_id, { ...selMessage }));
         },
         [messages]
     );
@@ -50,7 +39,7 @@ export const ChatContainer = () => {
         <>
             <ListChannels />
             <FieldMessages
-                messages={messages[channelId]}
+                messages={messages}
                 onSendMessage={sendNewMessage}
                 onDelMessage={deleteMessages}
             />

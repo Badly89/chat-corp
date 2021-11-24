@@ -7,27 +7,38 @@ import { InputMessage } from "./InputMessage";
 
 export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
     const { currUser } = useSelector((state) => state.auth.currUser);
+    console.log(messages);
 
-    return (
+    return !messages ? (
+        <div className="messageList">
+            <HeaderChat />
+            <main className="message-field">
+                <div className="message-content">
+                    <div>Сообщений нет</div>
+                </div>
+            </main>
+        </div>
+    ) : (
         <>
             <div className="messageList">
                 <HeaderChat />
 
                 <main className="message-field">
                     <div className="message-content">
-                        {messages?.map((message, i) => (
+                        {messages?.map((message, index) => (
                             <div
-                                key={i}
+                                key={index}
                                 className="message"
                                 style={{
                                     alignSelf:
-                                        message.sender !== currUser.name
-                                            ? "flex-start"
-                                            : "flex-end",
+                                        message.user_id == currUser.id
+                                            ? "flex-end"
+                                            : "flex-start",
                                 }}
                             >
                                 <Message
                                     message={message}
+                                    currUser={currUser}
                                     onDelMessage={onDelMessage}
                                 />
                             </div>

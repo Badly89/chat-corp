@@ -42,8 +42,6 @@ export const Routes = () => {
         }
     });
 
-    console.log(loading);
-
     return (
         <Router>
             <Switch>

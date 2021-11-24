@@ -7,44 +7,29 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent
+class MessageSent implements ShouldBroadcastNow
 {
    use Dispatchable, InteractsWithSockets;
 
-    /**
-     * User that sent the message
-     *
-     * @var \App\User
-     */
     public $user;
 
-    /**
-     * Message details
-     *
-     * @var \App\Message
-     */
-    public $message;
-
+    public $content;
 
     public $channel;
-
     // public $type;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct($user, $message, $channel)
+    // public function __construct($user, $message, $channel,$type)
+    public function __construct($content, $channel, $user)
     {
-        error_log($user);
+        // error_log($user);
 
         $this->user = $user;
 
-        $this->message = $message;
+        $this->content = $content;
 
         $this->channel = $channel;
 
@@ -52,18 +37,14 @@ class MessageSent
 
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel|array
-     */
     public function broadcastOn()
     {
-        if($this->type === "public") {
-            return new PresenceChannel("chat.channel.".$this->channel);
-        } else if ($this->type === "private") {
-            return new PresenceChannel("chat.dm.".$this->channel);
-        }
+        // return ['chat-corp'];
+        // if($this->type === "channel") {
+            return new Channel("chat-corp");
+        // } else if ($this->type === "direct") {
+            // return new PresenceChannel("chat-corp.direct.".$this->channel);
+        // }
     }
 
 }

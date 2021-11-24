@@ -14,7 +14,7 @@ class ChannelController extends Controller
     public function getAllChannels() {
          auth()->user()->id;
 
-         $channels = Channel::where('type','public')->select('title','id')->get();
+         $channels = Channel::where('type','channel')->select('title','id')->get();
 
          return response ([
                 'status' => 200,
@@ -25,25 +25,24 @@ class ChannelController extends Controller
 
 
      public function sendMessage(Request $request) {
-        $message = auth()->user()->messages()->create([
-            'content' => $request->message,
-            'channel_id' => $request->channel_id
+        $content = auth()->user()->messages()->create([
+            'content' => $request->content,
+            'channel_id' => $request->channel_id,
         ]);
 
-        $user = User::where('id', auth()->user()->id)->with('detail_channels')->first();
+        $user = User::where('id', auth()->user()->id)->first();
 
-        broadcast(new MessageSent($user, $message, $request->channel_id));
+        broadcast(new MessageSent($user, $content, $request->channel_id));
 
      }
 
     public function getMessages(Request $request, $channel_id) {
-        return Message::where("channel_id", $channel_id)->with('user.detail_channels')->get();
+        return Message::where("channel_id", $channel_id)->get();
     }
 
     public function getChannelsUsers($channel_id) {
-        $channel = Channel::where("type","public")->where('id',$channel_id)->with(["users"])->get();
+        $channel = Channel::where("type","channel")->where('id',$channel_id)->with(["users"])->get();
 
-        $channel = $this->listOnlineUsers($channel);
 
         error_log("Получаем список пользователей канала");
         error_log($channel);

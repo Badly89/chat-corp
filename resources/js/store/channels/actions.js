@@ -1,14 +1,19 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { makeHeaders } from "../auth/actions";
 import { delMessage, getMessagesChannel } from "../messages/actions";
 import { ADD_MESSAGE, GET_MESSAGES } from "../messages/types";
 import {
+    ADD_USER_TO_ROOM,
     CREATE_CHANNEL,
     DELETE_CHANNEL,
     GET_ALL_CHANNELS,
     GET_CHANNELS,
+    SET_SELECTED_CHANNEL,
+    SET_USERS_IN_ROOM,
 } from "./types";
+import { options } from "../../utils/optionsEcho";
+import Echo from "laravel-echo";
+const echo = new Echo(options);
 
 export const createChannel = (newChannel) => ({
     type: CREATE_CHANNEL,
@@ -20,30 +25,8 @@ export const deleteSelectChannel = (id) => ({
     payload: id,
 });
 
-// export const actionChatList = id;
-export const deleteChannel =
-    (channelId, message) => async (dispatch, getState) => {
-        const msg = getState().messages.messages[channelId];
-        const messageLength = getState().messages.messages[channelId].length;
-        if (messageLength > 0) {
-            if (
-                confirm(
-                    "В комнате есть сообщения, вы действительно хотите удалить чат?"
-                )
-            ) {
-                dispatch(deleteSelectChannel(channelId));
-                for (let message of msg) {
-                    dispatch(delMessage(channelId, message));
-                }
-            }
-        } else {
-            dispatch(delRoom(channelId));
-        }
-        console.log("DEL CHANNEL");
-    };
-
+//
 export const getAllChannelList = () => (dispatch, getState) => {
-    const token = getState().auth.token;
     const ofset = getState().channels.ofset;
     Swal.fire({
         title: "Загружаем данные",
@@ -62,13 +45,13 @@ export const getAllChannelList = () => (dispatch, getState) => {
 
                 console.log(res.data.channels);
                 dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-                console.log("Список чатов загружен");
+                console.log("Список каналов загружен");
 
-                res.data.channels.map((item) => {
-                    console.log(item);
-                    dispatch(getMessagesChannel(item.id));
-                    console.log("Загрузка сообщений канала");
-                });
+                // res.data.channels.map((item) => {
+                //     console.log(item);
+                //     // dispatch(getMessagesChannel(item.id));
+                //     console.log("Загрузка сообщений канала");
+                // });
                 Swal.fire({
                     icon: "success",
                     title: "Добро пожаловать!",
@@ -78,3 +61,95 @@ export const getAllChannelList = () => (dispatch, getState) => {
             });
     }
 };
+
+export const channelSelect = (channel_id) => {
+    return (dispatch, getState) => {
+        const prevId = getState().channels.currChannel.id;
+        const type = getState().channels.currChannel.type;
+        echo.leave(`chat-corp.${type}.${prevId}`);
+        console.log(channel_id);
+        axios
+            .get(`/getUsers/${channel_id}`, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log("Юзверы канала", res.data);
+                // const users = res.data[0].users;
+                const channel = {
+                    id: channel_id,
+                    type: "channel",
+                    //     users: users,
+                };
+
+                dispatch({ type: SET_SELECTED_CHANNEL, payload: channel });
+                // dispatch({ type: ADD_CHANNEL_USERS, payload : users})
+                const selectedChannelInState = getState().channels.currChannel;
+                console.log("Загрузка сообщений канала");
+                console.log(selectedChannelInState);
+                dispatch(getMessagesChannel(selectedChannelInState.id));
+
+                echo.join(`chat-corp.channel.${selectedChannelInState.id}`)
+                    .here((users) => {
+                        console.log(users);
+                        dispatch({ type: SET_USERS_IN_ROOM, payload: users });
+                    })
+                    .joining((user) => {
+                        console.log(user);
+                        dispatch({ type: ADD_USER_TO_ROOM, payload: user });
+
+                        const message = {
+                            user: user,
+                            message: "Joined",
+                            status: true,
+                        };
+
+                        if (selectedChannelInState.type === "channel") {
+                            dispatch({ type: ADD_MESSAGE, payload: message });
+                        }
+                    })
+                    .leaving((user) => {
+                        console.log(user);
+                    })
+                    .listen("MessageSent", (event) => {
+                        console.log("FROM CHANNEL EVENT FUNCTION");
+                        сonsole.log(event);
+                    })
+                    .listenForWhisper("typing", (event) => {
+                        console.log("TYPING");
+                        console.log(event);
+                    });
+            });
+    };
+};
+
+// export const getChannels = () => (dispatch, getState) => {
+//     axios
+//         .get("/api/getchannels", {
+//             withCredentials: true,
+//         })
+//         .then((res) => {
+//             const channels = res.data;
+//             dispatch({ type: GET_CHANNELS, payload: channels });
+//         })
+//         .catch((err) => {});
+
+//     axios
+//         .get("/api/getallchannels", {
+//             withCredentials: true,
+//         })
+//         .then((res) => {
+//             const channels = res.data;
+//             dispatch({ type: GET_ALL_CHANNELS, payload: channels });
+//         })
+//         .catch((err) => {});
+
+//     axios
+//         .get("/api/getfriendslist", {
+//             withCredentials: true,
+//         })
+//         .then((res) => {
+//             console.log("FRIENDS LIST BELOW");
+//             console.log(res.data);
+//         })
+//         .catch((err) => {});
+// };
