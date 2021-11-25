@@ -37,7 +37,7 @@ class ChannelController extends Controller
      }
 
     public function getMessages(Request $request, $channel_id) {
-        return Message::where("channel_id", $channel_id)->get();
+        return Message::where("channel_id", $channel_id)->with('user')->get();
     }
 
     public function getChannelsUsers($channel_id) {

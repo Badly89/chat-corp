@@ -1,5 +1,7 @@
 import axios from "axios";
+import Echo from "laravel-echo";
 import Swal from "sweetalert2";
+import { connectEcho } from "../../utils/connectEcho";
 import { delMessage, getMessagesChannel } from "../messages/actions";
 import { ADD_MESSAGE, GET_MESSAGES } from "../messages/types";
 import {
@@ -11,9 +13,6 @@ import {
     SET_SELECTED_CHANNEL,
     SET_USERS_IN_ROOM,
 } from "./types";
-import { options } from "../../utils/optionsEcho";
-import Echo from "laravel-echo";
-const echo = new Echo(options);
 
 export const createChannel = (newChannel) => ({
     type: CREATE_CHANNEL,
@@ -46,12 +45,6 @@ export const getAllChannelList = () => (dispatch, getState) => {
                 console.log(res.data.channels);
                 dispatch({ type: GET_ALL_CHANNELS, payload: channels });
                 console.log("Список каналов загружен");
-
-                // res.data.channels.map((item) => {
-                //     console.log(item);
-                //     // dispatch(getMessagesChannel(item.id));
-                //     console.log("Загрузка сообщений канала");
-                // });
                 Swal.fire({
                     icon: "success",
                     title: "Добро пожаловать!",
@@ -66,8 +59,9 @@ export const channelSelect = (channel_id) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
-        echo.leave(`chat-corp.${type}.${prevId}`);
+        // window.Echo.leave(`chat-corp.${type}.${prevId}`);
         console.log(channel_id);
+        const echoInit = new Echo(connectEcho);
         axios
             .get(`/getUsers/${channel_id}`, {
                 withCredentials: true,
@@ -88,7 +82,8 @@ export const channelSelect = (channel_id) => {
                 console.log(selectedChannelInState);
                 dispatch(getMessagesChannel(selectedChannelInState.id));
 
-                echo.join(`chat-corp.channel.${selectedChannelInState.id}`)
+                echoInit
+                    .join("chat-corp." + selectedChannelInState.id)
                     .here((users) => {
                         console.log(users);
                         dispatch({ type: SET_USERS_IN_ROOM, payload: users });
@@ -110,7 +105,7 @@ export const channelSelect = (channel_id) => {
                     .leaving((user) => {
                         console.log(user);
                     })
-                    .listen("MessageSent", (event) => {
+                    .listen("MessageSent", (event, message) => {
                         console.log("FROM CHANNEL EVENT FUNCTION");
                         сonsole.log(event);
                     })
