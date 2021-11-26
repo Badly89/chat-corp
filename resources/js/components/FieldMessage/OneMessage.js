@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 
 import { MdDelete } from "react-icons/md";
 
-export const Message = ({ message, onDelMessage, currUser }) => {
+export const Message = ({ message, onDelMessage }) => {
     const handleDelete = () => {
         onDelMessage(message);
     };
@@ -20,8 +20,10 @@ export const Message = ({ message, onDelMessage, currUser }) => {
     return (
         <>
             <div>{message.content}</div>
-            <div className="message-sender">{message.user_id}</div>
-            <div ref={bottomRef}>{message.timestamp}</div>
+            <div className="message-sender">{message.user.name}</div>
+            <div className="text-small text-muted" ref={bottomRef}>
+                {message.created_at}
+            </div>
             <div className="btn-del">
                 <MdDelete onClick={handleDelete} />
             </div>
