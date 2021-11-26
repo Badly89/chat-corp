@@ -22,8 +22,7 @@ class MessageSent implements ShouldBroadcast
     public $channel;
     // public $type;
 
-    // public function __construct($user, $message, $channel,$type)
-    public function __construct($user, $content, $channel)
+    public function __construct($content, $channel, $user)
     {
         // error_log($user);
 
@@ -39,12 +38,9 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        // return ['chat-corp'];
-        // if($this->type === "channel") {
-            return new PresenceChannel("chat-corp.channel.".$this->channel);
-        // } else if ($this->type === "direct") {
-            // return new PresenceChannel("chat-corp.direct.".$this->channel);
-        // }
+
+            return new Channel("chat-corp");
+
     }
 
 }

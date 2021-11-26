@@ -23,7 +23,7 @@ class Channel extends Model
     protected $hidden = ['pivot'];
 
    public function users() {
-        return $this->belongsToMany(User::class, 'rosters')->withTimestamps()->select('channel','id');
+        return $this->belongsToMany(User::class, 'rosters')->withTimestamps()->select('channel_id','user_id');
     }
 
 }
