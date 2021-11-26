@@ -32,7 +32,7 @@ class ChannelController extends Controller
 
         $user = User::where('id', auth()->user()->id)->first();
 
-        broadcast(new MessageSent($user, $content, $request->channel_id));
+        broadcast(new MessageSent($content, $request->channel_id, $user))->toOthers();
 
      }
 

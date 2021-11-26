@@ -19,7 +19,7 @@ export const ChatContainer = () => {
     useEffect(() => {
         const echoInit = new Echo(connectEcho);
         const chat = echoInit
-            .join("chat-corp")
+            .join("chat-corp." + channel_id)
             .here((users) => {
                 console.log(users);
             })
