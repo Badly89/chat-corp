@@ -83,4 +83,24 @@
   height: calc(100vh - 80px);
   overflow-y: auto;
 }
+
+.btn-setting {
+  -ms-flex-item-align: baseline;
+      align-self: baseline;
+  border: 0;
+}
+
+.user-info-nmain {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.user-profile {
+  width: 100%;
+}
 /*# sourceMappingURL=style-profile.css.map */
