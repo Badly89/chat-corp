@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Channel;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class GeneralChannelSeeder extends Seeder
 {
@@ -14,10 +15,17 @@ class GeneralChannelSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('channels')->insert([
+
+        $channel = new Channel([
+            'id' => 1,
             'title' => 'Главный канал',
             'type' =>'channel',
-             'user_id_creator' => 1,
+            'user_id_creator' => 1,
         ]);
+        $channel->save();
+
+        $user = User::find(1);
+        $channel->users()->attach($user->id);
+
     }
 }
