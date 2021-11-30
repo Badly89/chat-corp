@@ -17,15 +17,12 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user = new User([
-
+                'id' => 1,
                 'name' => 'admin',
                 'email' => 'chat-corp@mail.ru',
                 'password' => Hash::make('123456'),
             ]);
             $user->save();
-
-         $channel = Channel::find(1);
-          $channel->users()->attach($user->id);
 
     }
 }
