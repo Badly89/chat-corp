@@ -2,6 +2,7 @@ import {
     GET_PROFILE_FAILURE,
     GET_PROFILE_REQUEST,
     GET_PROFILE_SUCCESS,
+    USER_UPDATE,
 } from "./types";
 
 const initialState = {
@@ -39,6 +40,16 @@ export const profileReducer = (state = initialState, action) => {
                 request: { error: action.erorr, loading: false },
             };
         }
+        case USER_UPDATE:
+            return {
+                ...state,
+                currUser: {
+                    ...state.currUser,
+                    name: action.payload.name,
+                    email: action.payload.description,
+                    description: action.payload.description,
+                },
+            };
         default:
             return state;
     }
