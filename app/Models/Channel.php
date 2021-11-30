@@ -23,6 +23,6 @@ class Channel extends Model
 
    public function users() {
         return $this->belongsToMany('App\Models\User', 'rosters')->withTimestamps();//->select('channel','id');
-    }
+   }
 
 }
