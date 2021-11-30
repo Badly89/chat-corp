@@ -61,7 +61,7 @@ export const channelSelect = (channel_id) => {
         const type = getState().channels.currChannel.type;
         // window.Echo.leave(`chat-corp.${type}.${prevId}`);
         console.log(channel_id);
-        const echoInit = new Echo(connectEcho);
+        // const echoInit = new Echo(connectEcho);
         axios
             .get(`/getUsers/${channel_id}`, {
                 withCredentials: true,

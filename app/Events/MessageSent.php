@@ -15,31 +15,21 @@ class MessageSent implements ShouldBroadcast
 {
    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
 
-    public $content;
+    public $message;
 
-    public $channel;
-    // public $type;
 
-    public function __construct($content, $channel, $user)
+    public function __construct($message)
     {
-        // error_log($user);
 
-        $this->user = $user;
-
-        $this->content = $content;
-
-         $this->channel = $channel;
-
-        // $this->type = $type;
+        $this->message = $message;
 
     }
 
     public function broadcastOn()
     {
 
-            return new Channel("chat-corp");
+            return new PrivateChannel("chat");
 
     }
 

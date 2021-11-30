@@ -15,27 +15,26 @@ export const ChatContainer = () => {
     const messages = useSelector(selectMessages);
     const dispatch = useDispatch();
     const [selChannel, setSelChannel] = useState(null);
-
+    const token = localStorage.getItem("auth_token");
     useEffect(() => {
-        const echoInit = new Echo(connectEcho);
-        const chat = echoInit
-            .join("chat-corp." + channel_id)
-            .here((users) => {
-                console.log(users);
-            })
-            .joining((user) => {
-                console.log(user);
-            })
-            .listen("MessageSent", (content) => {
-                dispatch(actionMessage(channel_id, content));
-                console.log(content);
+        connectEcho(token, channel_id);
+        const chat = window.Echo.private("chat")
+            // .here((users) => {
+            //     console.log(users);
+            // })
+            // .joining((user) => {
+            //     console.log(user);
+            // })
+            .listen("MessageSent", (e) => {
+                // dispatch(actionMessage(channel_id, content));
+                console.log(e);
             });
         console.log("chat: ", chat);
         console.log("Проверка работы Echo");
     });
 
     useEffect(() => {
-        setSelChannel(channel_id);
+        // setSelChannel(channel_id);
 
         dispatch(channelSelect(channel_id));
     }, [setSelChannel]);

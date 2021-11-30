@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('chat-corp', function(){
-return Auth::check();
+Broadcast::channel('chat.{channel_id}', function ($user, $channel_id) {
+        return $user->channels->contains($channel_id);
+});
+
+Broadcast::channel('chat', function($user){
+        return $user;
 });
