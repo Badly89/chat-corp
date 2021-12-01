@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Roster;
 use App\Http\Requests\{UserCheckRequest, UserCreateRequest};
-
+use App\Models\Roster;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -30,7 +29,7 @@ class AuthenticationController extends Controller
             'password_confirmation' => $fields['password_confirmation']
         ]);
 
-        $roster = new Roster([
+          $roster = new Roster([
             'user_id' => $user->id,
             'channel_id' => 1,
         ]);

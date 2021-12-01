@@ -32,12 +32,12 @@ class ChannelController extends Controller
 
         $user = User::where('id', auth()->user()->id)->first();
 
-        broadcast(new MessageSent($user, $content, $request->channel_id));
+        broadcast(new MessageSent($content, $request->channel_id, $user))->toOthers();
 
      }
 
     public function getMessages(Request $request, $channel_id) {
-        return Message::where("channel_id", $channel_id)->get();
+        return Message::where("channel_id", $channel_id)->with('user')->get();
     }
 
     public function getChannelsUsers($channel_id) {

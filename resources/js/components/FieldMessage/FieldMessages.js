@@ -8,6 +8,9 @@ import { InputMessage } from "./InputMessage";
 export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
     const { currUser } = useSelector((state) => state.auth.currUser);
     console.log(messages);
+    messages.map((message) => {
+        // console.log(message.user.name);
+    });
 
     return !messages ? (
         <div className="messageList">
@@ -38,7 +41,6 @@ export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
                             >
                                 <Message
                                     message={message}
-                                    currUser={currUser}
                                     onDelMessage={onDelMessage}
                                 />
                             </div>

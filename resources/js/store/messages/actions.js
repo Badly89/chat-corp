@@ -37,9 +37,8 @@ export const getMessagesChannel = (channel_id) => (dispatch, getState) => {
             .then((res) => {
                 console.log("LOAD MESSAGES OUTPUT BELOW");
                 console.log(res.data);
-                // Object.values(res.data).map((value) => {
-
                 dispatch(loadMessages(res.data));
+
                 // dispatch({ type: GET_MESSAGES_SUCCESS });
                 // });
             })
@@ -55,7 +54,6 @@ export const updateMessages = (channel_id, content) => (dispatch, getState) => {
 export const actionMessage = (channel_id, content) => (dispatch, getState) => {
     const body = JSON.stringify({ channel_id, content });
 
-    console.log(channel_id);
     // dispatch(sendMessage(content));
     console.log(body);
     // console.log(lrc_token);

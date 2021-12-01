@@ -13,5 +13,4 @@ class Roster extends Model
         'user_id',
         'channel_id',
     ];
-
 }
