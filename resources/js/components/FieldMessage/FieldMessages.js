@@ -1,53 +1,60 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useRef } from "react";
 import { Message } from "./OneMessage";
-
 import { HeaderChat } from "./HeaderChat";
 import { InputMessage } from "./InputMessage";
-
-export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
-    const { currUser } = useSelector((state) => state.auth.currUser);
-    console.log(messages);
-    messages.map((message) => {
-        // console.log(message.user.name);
+import { Alert, Col, Row } from "react-bootstrap";
+export const FieldMessages = ({
+    messages,
+    channel_id,
+    currUser,
+    arrTyping,
+    usersInRoom,
+}) => {
+    const messageList = messages.map((value, index) => {
+        if (value.status) {
+            return (
+                <>
+                    <Alert className="systemMsg" key={index}>
+                        <strong>{value.user.name}</strong>
+                        <span className="text-primary">{value.content}</span>
+                    </Alert>
+                </>
+            );
+        } else {
+            if (value.user.name !== currUser.name) {
+                return (
+                    <div
+                        key={index}
+                        className="message"
+                        style={{ alignSelf: "flex-start" }}
+                    >
+                        <Message message={value} />
+                    </div>
+                );
+            } else {
+                return (
+                    <div
+                        key={index}
+                        className="message"
+                        style={{ alignSelf: "flex-end" }}
+                    >
+                        <Message message={value} />
+                    </div>
+                );
+            }
+        }
     });
 
-    return !messages ? (
-        <div className="messageList">
-            <HeaderChat />
-            <main className="message-field">
-                <div className="message-content">
-                    <div>Сообщений нет</div>
-                </div>
-            </main>
-        </div>
-    ) : (
+    return (
         <>
             <div className="messageList">
-                <HeaderChat />
+                <HeaderChat usersInRoom={usersInRoom} arrTyping={arrTyping} />
 
                 <main className="message-field">
-                    <div className="message-content">
-                        {messages?.map((message, index) => (
-                            <div
-                                key={index}
-                                className="message"
-                                style={{
-                                    alignSelf:
-                                        message.user_id == currUser.id
-                                            ? "flex-end"
-                                            : "flex-start",
-                                }}
-                            >
-                                <Message
-                                    message={message}
-                                    onDelMessage={onDelMessage}
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <div className="message-content">{messageList}</div>
                 </main>
-                <InputMessage onSendMessage={onSendMessage} />
+
+                <InputMessage channel_id={channel_id} currUser={currUser} />
             </div>
         </>
     );

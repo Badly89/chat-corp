@@ -38,9 +38,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Route from Channels
     Route::get('/getAllChannels',[ChannelController::class,'getAllChannels']);
     Route::post('/sendMessage',[ChannelController::class,'sendMessage']);
-    // Route::post('/sendMessage',function(Request $request){
-    //     MessageSent::dispatch($request->input($request->all()));
-    // });
+
+    Route::get('/online/{user_id}', [ChannelController::class,'isOnline']);
+    Route::get('/offline/{user_id}', [ChannelController::class,'isOffline']);
+
     Route::get('/getMessages/{channel_id}', [ChannelController::class,'getMessages']);
     Route::get('/getUsers/{channel_id}',[ChannelController::class,'getChannelsUsers']);
 });

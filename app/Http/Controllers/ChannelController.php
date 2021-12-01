@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Events\UserOffline;
+use App\Events\UserOnline;
 use App\Models\Channel;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ChannelController extends Controller
@@ -32,7 +35,7 @@ class ChannelController extends Controller
 
         $user = User::where('id', auth()->user()->id)->first();
 
-        broadcast(new MessageSent($content, $request->channel_id, $user))->toOthers();
+        broadcast(new MessageSent($user, $content, $request->channel_id, ));
 
      }
 
@@ -49,5 +52,17 @@ class ChannelController extends Controller
 
 
         return response()->json($channel);
+    }
+    public function isOnline(Request $request, $user_id)
+    {
+        $user['id'] = $user_id;
+        Cache::put('user-online'.$user_id, $user_id, 3600);
+        broadcast(new UserOnline($user));
+    }
+    public function isOffline(Request $request, $user_id)
+    {
+        $user['id'] = $user_id;
+        Cache::forget('user-offline'.$user_id);
+        broadcast(new UserOffline($user));
     }
 }

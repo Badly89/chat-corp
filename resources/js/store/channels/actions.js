@@ -3,8 +3,14 @@ import Echo from "laravel-echo";
 import Swal from "sweetalert2";
 import { connectEcho } from "../../utils/connectEcho";
 import { delMessage, getMessagesChannel } from "../messages/actions";
-import { ADD_MESSAGE, GET_MESSAGES } from "../messages/types";
 import {
+    ADD_MESSAGE,
+    ADD_TYPING_EVENT,
+    GET_MESSAGES,
+    REMOVE_TYPING_EVENT,
+} from "../messages/types";
+import {
+    ADD_CHANNEL_USERS,
     ADD_USER_TO_ROOM,
     CREATE_CHANNEL,
     DELETE_CHANNEL,
@@ -59,31 +65,29 @@ export const channelSelect = (channel_id) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
-        // window.Echo.leave(`chat-corp.${type}.${prevId}`);
+        window.Echo.leave(`chat-corp.${type}.${prevId}`);
         console.log(channel_id);
-        // const echoInit = new Echo(connectEcho);
         axios
             .get(`/getUsers/${channel_id}`, {
                 withCredentials: true,
             })
             .then((res) => {
                 console.log("Юзверы канала", res.data);
-                // const users = res.data[0].users;
+                const users = res.data[0].users;
                 const channel = {
                     id: channel_id,
                     type: "channel",
-                    //     users: users,
+                    users: users,
                 };
 
                 dispatch({ type: SET_SELECTED_CHANNEL, payload: channel });
-                // dispatch({ type: ADD_CHANNEL_USERS, payload : users})
+                dispatch({ type: ADD_CHANNEL_USERS, payload: users });
                 const selectedChannelInState = getState().channels.currChannel;
                 console.log("Загрузка сообщений канала");
                 console.log(selectedChannelInState);
                 dispatch(getMessagesChannel(selectedChannelInState.id));
 
-                echoInit
-                    .join("chat-corp." + selectedChannelInState.id)
+                window.Echo.join("chat.channel." + selectedChannelInState.id)
                     .here((users) => {
                         console.log(users);
                         dispatch({ type: SET_USERS_IN_ROOM, payload: users });
@@ -92,59 +96,54 @@ export const channelSelect = (channel_id) => {
                         console.log(user);
                         dispatch({ type: ADD_USER_TO_ROOM, payload: user });
 
-                        const message = {
+                        const content = {
                             user: user,
-                            message: "Joined",
+                            content: "присоединился",
                             status: true,
                         };
 
                         if (selectedChannelInState.type === "channel") {
-                            dispatch({ type: ADD_MESSAGE, payload: message });
+                            dispatch({ type: ADD_MESSAGE, payload: content });
                         }
                     })
                     .leaving((user) => {
                         console.log(user);
                     })
-                    .listen("MessageSent", (event, message) => {
+                    .listen("MessageSent", (event) => {
                         console.log("FROM CHANNEL EVENT FUNCTION");
-                        сonsole.log(event);
+                        console.log(event);
+                        const content = {
+                            user: event.user,
+                            content: event.message.content,
+                        };
+                        console.log(content);
+                        dispatch({ type: ADD_MESSAGE, payload: content });
+                        const typingEvent = {
+                            user: event.user,
+                            type: "typing",
+                        };
+                        dispatch({
+                            type: REMOVE_TYPING_EVENT,
+                            payload: typingEvent,
+                        });
                     })
                     .listenForWhisper("typing", (event) => {
+                        let timer;
                         console.log("TYPING");
                         console.log(event);
+                        const conent = {
+                            user: event.name,
+                            type: "typing",
+                        };
+                        dispatch({ type: ADD_TYPING_EVENT, payload: conent });
+                        clearTimeout(timer);
+                        timer = setTimeout(() => {
+                            dispatch({
+                                type: REMOVE_TYPING_EVENT,
+                                payload: conent,
+                            });
+                        }, 2000);
                     });
             });
     };
 };
-
-// export const getChannels = () => (dispatch, getState) => {
-//     axios
-//         .get("/api/getchannels", {
-//             withCredentials: true,
-//         })
-//         .then((res) => {
-//             const channels = res.data;
-//             dispatch({ type: GET_CHANNELS, payload: channels });
-//         })
-//         .catch((err) => {});
-
-//     axios
-//         .get("/api/getallchannels", {
-//             withCredentials: true,
-//         })
-//         .then((res) => {
-//             const channels = res.data;
-//             dispatch({ type: GET_ALL_CHANNELS, payload: channels });
-//         })
-//         .catch((err) => {});
-
-//     axios
-//         .get("/api/getfriendslist", {
-//             withCredentials: true,
-//         })
-//         .then((res) => {
-//             console.log("FRIENDS LIST BELOW");
-//             console.log(res.data);
-//         })
-//         .catch((err) => {});
-// };

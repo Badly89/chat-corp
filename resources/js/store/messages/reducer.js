@@ -7,6 +7,8 @@ import {
     GET_MESSAGES_REQUEST,
     CLEAR_MESSAGES,
     ADD_MESSAGE,
+    ADD_TYPING_EVENT,
+    REMOVE_TYPING_EVENT,
 } from "./types";
 
 const initialMessage = {
@@ -14,22 +16,13 @@ const initialMessage = {
     messages: [],
     loadMessages: [],
     offset: false,
+    typings: [],
 };
 
 export const msgReducer = (state = initialMessage, action) => {
     switch (action.type) {
-        case SEND_MESSAGE: {
-            return {
-                ...state,
-                messages: {
-                    ...state.messages,
-                    [action.payload.channel_id]: [
-                        ...(state.messages[action.payload.channel_id] || []),
-                        action.payload.content,
-                    ],
-                },
-            };
-        }
+        case SEND_MESSAGE:
+
         case GET_MESSAGES_REQUEST: {
             console.log("check");
             return {
@@ -66,21 +59,11 @@ export const msgReducer = (state = initialMessage, action) => {
             };
         }
 
-        case DEL_MESSAGE: {
-            const msg = action.payload.content;
-            const arr = state.messages[action.payload.channel_id];
-            const filterMessage = arr.filter((item) => item.id !== msg.id);
+        case DEL_MESSAGE:
 
-            return {
-                ...state,
-                content: {
-                    ...state.messages,
-                    [action.payload.channel_id]: [...(filterMessage || [])],
-                },
-            };
-        }
         case ADD_MESSAGE: {
             console.log("Добавление сообщения");
+            console.log(action.payload);
             return {
                 ...state,
                 messages: state.messages.concat(action.payload),
@@ -89,6 +72,25 @@ export const msgReducer = (state = initialMessage, action) => {
         case CLEAR_MESSAGES: {
             return { ...state, messages: {} };
         }
+        case ADD_TYPING_EVENT:
+            console.log(action.payload);
+            let isFound = state.typings.find(
+                (typing) => typing.user.id === action.payload.user.id
+            );
+            return {
+                ...state,
+                typings: isFound
+                    ? state.typings
+                    : state.typings.concat(action.payload),
+            };
+        case REMOVE_TYPING_EVENT:
+            console.log(action.payload);
+            return {
+                ...state,
+                typings: state.typings.filter(
+                    (typing) => typing.user.id !== action.payload.user.id
+                ),
+            };
         default:
             return state;
     }

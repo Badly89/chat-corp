@@ -210,12 +210,16 @@ export const login =
         });
     };
 
-export const logout = () => (dispatch) => {
+export const logout = (id, channel_id) => (dispatch) => {
+    // window.Echo.leave("chat");
     Swal.fire({
         title: "Завершение сеанса",
         allowOutsideClick: false,
     });
     Swal.showLoading();
+    // window.Echo.leave(`chat.channel.${channel_id}`);
+    // window.Echo.disconnect();
+    axios.get(`/offline/${id}`, { withCredentials: true });
     // window.Echo.disconnect();
     try {
         axios
