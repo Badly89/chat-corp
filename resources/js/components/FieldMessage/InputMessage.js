@@ -3,17 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 
 import { BsArrowReturnLeft } from "react-icons/bs";
+import { sendMessage } from "../../utils/connectEcho";
 
-export const InputMessage = ({ onSendMessage }) => {
+export const InputMessage = ({ channel_id, currUser }) => {
     const [content, setContent] = useState("");
-
     const handleChange = (e) => {
         setContent(e.target.value);
+        setTimeout(() => {
+            window.Echo.join(`chat.channel.${channel_id}`).whisper("typing", {
+                name: currUser.name,
+            });
+        }, 300);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSendMessage(content);
-
+        sendMessage(channel_id, content);
         setContent("");
     };
 
@@ -36,6 +40,10 @@ export const InputMessage = ({ onSendMessage }) => {
                         variant="contained"
                         color="outline-secondary"
                         id="button-addon2"
+                        style={{
+                            fontSize: "1.3rem",
+                            textTransform: "lowercase",
+                        }}
                     >
                         <BsArrowReturnLeft />
                     </Button>

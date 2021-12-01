@@ -1,16 +1,20 @@
 import {
+    ADD_CHANNEL_USERS,
     CLEAR_CHANNELS,
     CREATE_CHANNEL,
     DELETE_CHANNEL,
     GET_ALL_CHANNELS,
     GET_CHANNELS,
     SET_SELECTED_CHANNEL,
+    SET_USERS_IN_ROOM,
 } from "./types";
 
 const initialRoom = {
     currChannel: [],
     allChannels: [],
     channels: [],
+    usersInRoom: [],
+    usersList: [],
 };
 
 export const channelReducer = (state = initialRoom, action) => {
@@ -51,13 +55,27 @@ export const channelReducer = (state = initialRoom, action) => {
                 allChannels: [],
                 channels: [],
 
-                ofset: false,
+                offset: false,
             };
         }
         case SET_SELECTED_CHANNEL:
             return {
                 ...state,
                 currChannel: action.payload,
+            };
+
+        case ADD_CHANNEL_USERS:
+            return {
+                ...state,
+                currChannel: {
+                    ...state.currChannel,
+                    users: action.payload,
+                },
+            };
+        case SET_USERS_IN_ROOM:
+            return {
+                ...state,
+                usersInRoom: action.payload,
             };
 
         default:
