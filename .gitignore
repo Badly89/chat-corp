@@ -21,4 +21,5 @@ yarn-error.log
 /resources/js/components/asset/css/*.css.map
 /resources/js/store/channels/dist
 /.env
-/database/database.sqlite
+/.env.*
+/database/*.sqlite
