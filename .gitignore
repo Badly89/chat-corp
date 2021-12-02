@@ -17,9 +17,8 @@ yarn-error.log
 /.vscode
 
 
-/resources/js/components/asset/css/*.css
-/resources/js/components/asset/css/*.css.map
-/resources/js/store/channels/dist
-/.env
-/.env.*
+
 /database/*.sqlite
+*.sqlite
+/.env
+*.css
