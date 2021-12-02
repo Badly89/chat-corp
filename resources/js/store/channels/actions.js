@@ -61,10 +61,11 @@ export const getAllChannelList = () => (dispatch, getState) => {
     }
 };
 
-export const channelSelect = (channel_id) => {
+export const channelSelect = (channel_id, title) => {
     return (dispatch, getState) => {
         const prevId = getState().channels.currChannel.id;
         const type = getState().channels.currChannel.type;
+
         window.Echo.leave(`chat-corp.${type}.${prevId}`);
         console.log(channel_id);
         axios
@@ -76,8 +77,9 @@ export const channelSelect = (channel_id) => {
                 const users = res.data[0].users;
                 const channel = {
                     id: channel_id,
-                    type: "channel",
+                    type: type,
                     users: users,
+                    title: title,
                 };
 
                 dispatch({ type: SET_SELECTED_CHANNEL, payload: channel });

@@ -1,5 +1,6 @@
 import {
     ADD_CHANNEL_USERS,
+    ADD_USER_TO_ROOM,
     CLEAR_CHANNELS,
     CREATE_CHANNEL,
     DELETE_CHANNEL,
@@ -7,6 +8,7 @@ import {
     GET_CHANNELS,
     SET_SELECTED_CHANNEL,
     SET_USERS_IN_ROOM,
+    USER_LEAVES_ROOM,
 } from "./types";
 
 const initialRoom = {
@@ -77,7 +79,18 @@ export const channelReducer = (state = initialRoom, action) => {
                 ...state,
                 usersInRoom: action.payload,
             };
-
+        case ADD_USER_TO_ROOM:
+            return {
+                ...state,
+                usersInRoom: state.usersInRoom.concat(action.payload),
+            };
+        case USER_LEAVES_ROOM:
+            return {
+                ...state,
+                usersInRoom: state.usersInRoom.filter(
+                    (user) => user.id !== action.payload.id
+                ),
+            };
         default:
             return state;
     }
