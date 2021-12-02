@@ -10,6 +10,7 @@ import { connectEcho } from "../utils/connectEcho";
 
 export const ChatContainer = () => {
     const { channel_id } = useParams();
+    const { title } = useParams();
     const { currUser } = useSelector((state) => state.auth.currUser);
     const arrTyping = useSelector((state) => state.messages.typings);
     const messages = useSelector(selectMessages);
@@ -19,7 +20,7 @@ export const ChatContainer = () => {
     const usersInRoom = useSelector((state) => state.channels.usersInRoom);
 
     useEffect(() => {
-        setSelChannel(channel_id);
+        setSelChannel(channel_id, title);
         connectEcho(token);
         dispatch(channelSelect(selChannel));
     }, [channel_id]);
@@ -29,6 +30,7 @@ export const ChatContainer = () => {
             <ListChannels />
             <FieldMessages
                 arrTyping={arrTyping}
+                title={title}
                 channel_id={channel_id}
                 currUser={currUser}
                 messages={messages}

@@ -1,14 +1,17 @@
-import React from "react";
-import { List } from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { Card } from "react-bootstrap";
+import { Header, List } from "semantic-ui-react";
 
-export const HeaderChat = ({ usersInRoom, arrTyping }) => {
-    console.log(usersInRoom);
-
+export const HeaderChat = ({ usersInRoom, arrTyping, title }) => {
+    const [countUsersIrChannel, setCountUsersInChannel] = useState(0);
+    useEffect(() => {
+        setCountUsersInChannel(usersInRoom.length);
+    });
     const typingEvent = arrTyping.map((item, index) => {
         return (
-            <div className="typing-container">
+            <div className="typing-container" key={index}>
                 <div>
-                    <div className="typingBubble" key={index}>
+                    <div className="typingBubble">
                         <div className="dot"></div>
                         <div className="dot"></div>
                         <div className="dot"></div>
@@ -22,29 +25,28 @@ export const HeaderChat = ({ usersInRoom, arrTyping }) => {
         <header className="title-message-field">
             <div className="container">
                 <div className="wrap-title-message">
-                    <div className="card mb-3 w-100 justify-content-start">
+                    <Card className="mb-3 w-100 justify-content-start">
                         <div className="d-flex justify-content-between align-items-center ">
-                            <img
+                            <Card.Img
+                                variant="left"
                                 src="/image/photo.png"
                                 className="img-fluid rounded-start"
                                 alt="..."
                             />
-                            <div className="card-body">
-                                <List horizontal>
-                                    {usersInRoom?.map((value, i) => {
-                                        <List.Item key={i}>
-                                            <List.Header>
-                                                {value.name}
-                                            </List.Header>
-                                        </List.Item>;
-                                    })}
-                                </List>
-                                <div className="card-text text-muted">
-                                    {typingEvent}
-                                </div>
-                            </div>
+                            <Card.Body>
+                                <Card.Title>{title}</Card.Title>
+                                <Card.Subtitle>
+                                    Количество пользователей подключенных к
+                                    каналу: {countUsersIrChannel}
+                                </Card.Subtitle>
+                                <Card.Text>
+                                    <small className="text-muted">
+                                        {typingEvent}
+                                    </small>
+                                </Card.Text>
+                            </Card.Body>
                         </div>
-                    </div>
+                    </Card>
                 </div>
             </div>
         </header>

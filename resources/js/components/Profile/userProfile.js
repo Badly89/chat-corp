@@ -73,7 +73,7 @@ export const UserProfile = () => {
                                                     <img
                                                         src="/image/photo.png"
                                                         alt="avatar"
-                                                        className="avatar"
+                                                        className="avatar-profile"
                                                     />
                                                     <h3>{currUser.name}</h3>
                                                 </div>
