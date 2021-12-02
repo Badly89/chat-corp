@@ -21,6 +21,8 @@ class UserSeeder extends Seeder
                 'name' => 'admin',
                 'email' => 'chat-corp@mail.ru',
                 'password' => Hash::make('123456'),
+                'role_id' => 1,
+
             ]);
             $user->save();
 
