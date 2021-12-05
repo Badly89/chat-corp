@@ -2,12 +2,20 @@ import React from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { Routes } from "./components/Routes";
-
+import "../css/app.css";
 import { store, persistor } from "./store";
-export const App = () => (
-    <Provider store={store}>
-        <PersistGate loading={<span>loading....</span>} persistor={persistor}>
-            <Routes />
-        </PersistGate>
-    </Provider>
-);
+
+// const dispatch = useDispatch();
+
+export const App = () => {
+    return (
+        <Provider store={store}>
+            <PersistGate
+                loading={<span>loading....</span>}
+                persistor={persistor}
+            >
+                <Routes />
+            </PersistGate>
+        </Provider>
+    );
+};

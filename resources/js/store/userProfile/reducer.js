@@ -2,10 +2,12 @@ import {
     GET_PROFILE_FAILURE,
     GET_PROFILE_REQUEST,
     GET_PROFILE_SUCCESS,
+    USER_UPDATE,
 } from "./types";
 
 const initialState = {
     profile: {},
+    token: "",
     request: {
         loading: false,
         error: null,
@@ -18,6 +20,7 @@ export const profileReducer = (state = initialState, action) => {
             return {
                 ...state,
                 request: {
+                    token: action.payload.token,
                     erorr: null,
                     loading: true,
                 },
@@ -26,6 +29,7 @@ export const profileReducer = (state = initialState, action) => {
         case GET_PROFILE_SUCCESS: {
             return {
                 ...state,
+                token: action.payload.token,
                 userProfile: action.payload.Profile,
                 request: { error: null, loading: false },
             };
@@ -36,6 +40,16 @@ export const profileReducer = (state = initialState, action) => {
                 request: { error: action.erorr, loading: false },
             };
         }
+        case USER_UPDATE:
+            return {
+                ...state,
+                currUser: {
+                    ...state.currUser,
+                    name: action.payload.name,
+                    email: action.payload.description,
+                    description: action.payload.description,
+                },
+            };
         default:
             return state;
     }

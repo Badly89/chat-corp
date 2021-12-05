@@ -1,57 +1,43 @@
 import React from "react";
-import { DEL_MESSAGE, SEND_MESSAGE } from "./types";
-import { AUTHORS } from "../../utils/constant";
+import {
+    DEL_MESSAGE,
+    GET_MESSAGES_FAIL,
+    GET_MESSAGES_REQUEST,
+    GET_MESSAGES_SUCCESS,
+} from "./types";
 
-export const sendMessage = (chatId, message) => ({
-    type: SEND_MESSAGE,
-    payload: { message, chatId },
+import axios from "axios";
+
+export const loadMessages = (messages) => ({
+    type: GET_MESSAGES_REQUEST,
+    payload: messages,
 });
 
-export const delMessage = (chatId, message) => ({
+export const delMessage = (channel_id, content) => ({
     type: DEL_MESSAGE,
-    payload: { message, chatId },
+    payload: { content, channel_id },
 });
 
-export const actionMessage =
-    (chatId, message) => async (dispatch, getState) => {
-        try {
-            dispatch(sendMessage(chatId, message));
+export const getMessagesChannel = (channel_id) => (dispatch, getState) => {
+    const offset = getState().messages;
 
-            if (chatId !== null) {
-                const res = await fetch(
-                    `https://www.botlibre.com/rest/api/form-chat?instance=165&message="${message.text}"&application=428262090517998158`
-                );
+    console.log("CURRENTLY SELECTED CHANNEL BELOW");
 
-                const response = await res.text();
-                const answer = response.substring(
-                    response.lastIndexOf("<message>") + 9,
-                    response.lastIndexOf("</message>")
-                );
+    if (channel_id !== null) {
+        axios
+            .get(`/getMessages/${channel_id}`, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log("LOAD MESSAGES OUTPUT BELOW");
+                console.log(res.data);
+                dispatch(loadMessages(res.data));
 
-                const messLength = getState().messages.messages[chatId]?.length;
-
-                dispatch(
-                    sendMessage(chatId, {
-                        text: answer,
-                        sender: AUTHORS.BOT,
-                        id: `${chatId}-${messLength + 1}`,
-                    })
-                );
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-// export const actionDelMessage = (chatId, message) => async (
-//   dispatch,
-//   getState
-// ) => {
-//   dispatch(delMessage(chatId, message));
-// };
-export const actionDelMessage = (message) => (dispatch, getState) => {
-    dispatch(delMessage(message));
-    const selMessage = getState().messages;
-    console.log(selMessage);
-    console.log("update");
+                dispatch({ type: GET_MESSAGES_SUCCESS });
+                // });
+            })
+            .catch((err) => {
+                dispatch({ type: GET_MESSAGES_FAIL });
+            });
+    }
 };

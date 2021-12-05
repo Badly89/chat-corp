@@ -1,94 +1,121 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { Message, MessageField } from "./message";
-import { selectMessages } from "../../store/messages/selectors";
-
-import { actionDelMessage, actionMessage } from "../../store/messages/actions";
+import React, { useRef, useEffect } from "react";
+import { Message } from "./OneMessage";
 import { HeaderChat } from "./HeaderChat";
-import { InputMessage } from "./input";
+import { InputMessage } from "./InputMessage";
+import { Alert, Card } from "react-bootstrap";
+import Moment from "react-moment";
+import "moment-timezone";
 
-export const FieldMessages = () => {
-    const { chatId } = useParams();
-    const messages = useSelector(selectMessages);
+Moment.globalLocale = "ru";
+Moment.globalFormat = "hh:mm:ss";
 
-    const dispatch = useDispatch();
+export const FieldMessages = ({
+    messages,
+    channel_id,
+    currUser,
+    arrTyping,
+    usersInRoom,
+    title,
+}) => {
+    const calendarStrings = {
+        lastDay: "[Вчера at] LT",
+        sameDay: "[Сегодня at] LT",
+        nextDay: "[Завтра at] LT",
+        lastWeek: "[последнее] dddd [at] LT",
+        nextWeek: "dddd [at] LT",
+        sameElse: "L",
+    };
+    const messagesRef = useRef(null);
+    const scrollBottom = () => {
+        messagesRef.current?.scrollIntoView({
+            behavior: "smooth",
+        });
+    };
+    useEffect(() => {
+        scrollBottom();
+    }, [messages]);
 
-    const sendNewMessage = useCallback(
-        (newMessage) => {
-            dispatch(
-                actionMessage(chatId, {
-                    ...newMessage,
-                    id: `${chatId}-${(messages[chatId]?.length || 0) + 1}`,
-                })
+    const messageList = messages.map((value, index) => {
+        if (value.status) {
+            return (
+                <>
+                    <Alert className="systemMsg" key={index}>
+                        <strong>{value.user.name}</strong>
+                        <span className="text-primary">{value.content}</span>
+                    </Alert>
+                </>
             );
-        },
-        [chatId, messages]
-    );
-    const delMessages = useCallback(
-        (selMessage) => {
-            dispatch(
-                actionDelMessage(chatId, {
-                    ...selMessage,
-                    messages,
-                    // id: `${chatId}-${messages[chatId]},
-                })
-            );
-        },
-        [chatId, messages]
-    );
+        } else {
+            if (value.user.name !== currUser.name) {
+                return (
+                    <Card className="card-guest" key={value.id}>
+                        <Card.Img
+                            src="/image/avatar.png"
+                            className="avatar-img-guest"
+                            title={value.user.name}
+                        />
+                        <Card.Body className="message-guest">
+                            <Card.Text className="card-text-message">
+                                {value.content}
+                            </Card.Text>
+                            <Card.Text className="text-muted pw-1">
+                                <small>
+                                    <Moment
+                                        fromNow
+                                        calendar={calendarStrings}
+                                        date={value.created_at}
+                                    />
+                                </small>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                );
+            } else {
+                return (
+                    <Card className="card-sender" key={value.id}>
+                        <Card.Body className="message-sender">
+                            <Card.Text className="text-muted pe-1">
+                                <small>
+                                    <Moment
+                                        fromNow
+                                        calendar={calendarStrings}
+                                        date={value.created_at}
+                                    />
+                                </small>
+                            </Card.Text>
+                            <Card.Text className="card-text-message">
+                                {value.content}
+                            </Card.Text>
+                        </Card.Body>
+                        <Card.Img
+                            src="/image/avatar.png"
+                            className="avatar-img-sender"
+                            title={value.user.name}
+                        />
+                    </Card>
+                );
+            }
+        }
+    });
+
     return (
         <>
             <div className="messageList">
-                <HeaderChat />
+                <HeaderChat
+                    usersInRoom={usersInRoom}
+                    arrTyping={arrTyping}
+                    title={title}
+                />
 
                 <main className="message-field">
-                    <Message
-                        messages={messages[chatId]}
-                        onDelMessage={delMessages}
-                    />
+                    <div className="message-content">
+                        {messageList}
+                        <div ref={messagesRef} />
+                    </div>
                 </main>
-                <InputMessage onSendMessage={sendNewMessage} />
+
+                <InputMessage channel_id={channel_id} currUser={currUser} />
             </div>
         </>
     );
 };
-
-// const delMessages = useCallback(
-//     (selMessage) => {
-//         dispatch(
-//             actionDelMessage(chatId, {
-//                 ...selMessage,
-//             })
-//         );
-//     },
-
-//     [messages]
-// );
-
-//  <div className="px-4 py-5 my-5 text-center">
-//             <img
-//                 className="d-block mx-auto mb-4"
-//                 src="./image/photo.png"
-//                 alt=""
-//                 width="100"
-//                 height="100"
-//             />
-//             <h1 className="display-5 fw-bold title-welcome">
-//                 Добро пожаловать, Имя!
-//             </h1>
-//             <div className="col-lg-6 mx-auto">
-//                 <p className="lead mb-4 text-welcome">
-//                     Пожалуйста, выберите чат для начала переписки.
-//                 </p>
-//                 <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
-//                     <button
-//                         type="button"
-//                         className="btn btn-outline-success px-4 gap-3"
-//                     >
-//                         Начать общение
-//                     </button>
-//                 </div>
-//             </div>
-//         </div>
-// </div>}
