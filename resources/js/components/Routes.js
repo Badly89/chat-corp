@@ -8,9 +8,6 @@ import { FormRegister } from "./authorized/Register/FormRegister";
 import { SideBar } from "./SideBar/SideBar";
 import { UserProfile } from "../components/Profile/userProfile";
 import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword";
-import "../components/asset/css/main-style.css";
-import "../components/asset/css/auth-style.css";
-import "../components/asset/css/style-profile.css";
 
 import axios from "axios";
 
@@ -25,20 +22,14 @@ axios.interceptors.request.use(function (config) {
 });
 axios.defaults.withCredentials = true;
 export const Routes = () => {
-    const [loading, setLoading] = useState(true);
     const [authed, setAuth] = useState(false);
-    const { user: currentUser } = useSelector((state) => state.auth);
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
-    const dispatch = useDispatch();
 
     useEffect(() => {
         if (isAuthenticated) {
             setAuth(true);
-            setLoading(false);
         } else {
             setAuth(false);
-            setLoading(false);
         }
     });
 

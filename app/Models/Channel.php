@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
 {
-    protected $guarded =[];
-     protected $attributes = [
+    use HasFactory;
+
+    protected $guarded = [];
+    protected $attributes = [
         'title' => null,
     ];
 
@@ -18,12 +20,14 @@ class Channel extends Model
         'image',
         'visible',
         'type',
+        'user_id_creator'
 
     ];
+
     protected $hidden = ['pivot'];
 
-   public function users() {
-        return $this->belongsToMany('App\Models\User', 'rosters')->withTimestamps();
+    public function users() {
+        return $this->belongsToMany('App\Models\User', 'rosters')->withTimestamps()->select('name','user_id');
     }
 
 }

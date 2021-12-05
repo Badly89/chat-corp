@@ -78,8 +78,7 @@ export const SideBar = () => {
                     <Route exact path="/channels" component={ListChannels} />
 
                     <Route
-                        exact
-                        path="/channels/:channel_id"
+                        path="/channels/:channel_id/:title"
                         component={ChatContainer}
                     />
 

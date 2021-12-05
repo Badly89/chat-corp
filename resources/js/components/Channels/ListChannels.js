@@ -71,7 +71,7 @@ export const ListChannels = () => {
                     {/* <!-- отрисовка компонента список чатов --> */}
                     <div className="group-chats">
                         {channels.channels.map(({ id, title }) => (
-                            <div className="card " key={id}>
+                            <div className="card card-channel" key={id}>
                                 <div className="">
                                     <img
                                         src="/image/photo.png"
@@ -80,21 +80,21 @@ export const ListChannels = () => {
                                     />
                                 </div>
                                 <div className="">
-                                    <div className="card-body">
+                                    <div className="card-body card-body-channel">
                                         <Link
-                                            to={`/channels/${id}`}
+                                            to={`/channels/${id}/${title}`}
                                             className="text-decoration-none"
                                         >
-                                            <h5 className="card-title">
+                                            <h5 className="card-title card-title-channel">
                                                 {title}
                                             </h5>
                                         </Link>
-                                        <p className="card-text mute">
+                                        <p className="card-text card-text-channel mute">
                                             часть последнего сообщения
                                         </p>
                                     </div>
                                 </div>
-                                <p className="card-text">
+                                <p className="card-text card-text-channel">
                                     <small className="text-muted">
                                         был вчера
                                     </small>
