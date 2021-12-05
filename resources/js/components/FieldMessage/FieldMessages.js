@@ -1,53 +1,120 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useRef, useEffect } from "react";
 import { Message } from "./OneMessage";
-
 import { HeaderChat } from "./HeaderChat";
 import { InputMessage } from "./InputMessage";
+import { Alert, Card } from "react-bootstrap";
+import Moment from "react-moment";
+import "moment-timezone";
 
-export const FieldMessages = ({ messages, onSendMessage, onDelMessage }) => {
-    const { currUser } = useSelector((state) => state.auth.currUser);
-    console.log(messages);
-    messages.map((message) => {
-        // console.log(message.user.name);
+Moment.globalLocale = "ru";
+Moment.globalFormat = "hh:mm:ss";
+
+export const FieldMessages = ({
+    messages,
+    channel_id,
+    currUser,
+    arrTyping,
+    usersInRoom,
+    title,
+}) => {
+    const calendarStrings = {
+        lastDay: "[Вчера at] LT",
+        sameDay: "[Сегодня at] LT",
+        nextDay: "[Завтра at] LT",
+        lastWeek: "[последнее] dddd [at] LT",
+        nextWeek: "dddd [at] LT",
+        sameElse: "L",
+    };
+    const messagesRef = useRef(null);
+    const scrollBottom = () => {
+        messagesRef.current?.scrollIntoView({
+            behavior: "smooth",
+        });
+    };
+    useEffect(() => {
+        scrollBottom();
+    }, [messages]);
+
+    const messageList = messages.map((value, index) => {
+        if (value.status) {
+            return (
+                <>
+                    <Alert className="systemMsg" key={index}>
+                        <strong>{value.user.name}</strong>
+                        <span className="text-primary">{value.content}</span>
+                    </Alert>
+                </>
+            );
+        } else {
+            if (value.user.name !== currUser.name) {
+                return (
+                    <Card className="card-guest" key={value.id}>
+                        <Card.Img
+                            src="/image/avatar.png"
+                            className="avatar-img-guest"
+                            title={value.user.name}
+                        />
+                        <Card.Body className="message-guest">
+                            <Card.Text className="card-text-message">
+                                {value.content}
+                            </Card.Text>
+                            <Card.Text className="text-muted pw-1">
+                                <small>
+                                    <Moment
+                                        fromNow
+                                        calendar={calendarStrings}
+                                        date={value.created_at}
+                                    />
+                                </small>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                );
+            } else {
+                return (
+                    <Card className="card-sender" key={value.id}>
+                        <Card.Body className="message-sender">
+                            <Card.Text className="text-muted pe-1">
+                                <small>
+                                    <Moment
+                                        fromNow
+                                        calendar={calendarStrings}
+                                        date={value.created_at}
+                                    />
+                                </small>
+                            </Card.Text>
+                            <Card.Text className="card-text-message">
+                                {value.content}
+                            </Card.Text>
+                        </Card.Body>
+                        <Card.Img
+                            src="/image/avatar.png"
+                            className="avatar-img-sender"
+                            title={value.user.name}
+                        />
+                    </Card>
+                );
+            }
+        }
     });
 
-    return !messages ? (
-        <div className="messageList">
-            <HeaderChat />
-            <main className="message-field">
-                <div className="message-content">
-                    <div>Сообщений нет</div>
-                </div>
-            </main>
-        </div>
-    ) : (
+    return (
         <>
             <div className="messageList">
-                <HeaderChat />
+                <HeaderChat
+                    usersInRoom={usersInRoom}
+                    arrTyping={arrTyping}
+                    title={title}
+                />
 
                 <main className="message-field">
                     <div className="message-content">
-                        {messages?.map((message, index) => (
-                            <div
-                                key={index}
-                                className="message"
-                                style={{
-                                    alignSelf:
-                                        message.user_id == currUser.id
-                                            ? "flex-end"
-                                            : "flex-start",
-                                }}
-                            >
-                                <Message
-                                    message={message}
-                                    onDelMessage={onDelMessage}
-                                />
-                            </div>
-                        ))}
+                        {messageList}
+                        <div ref={messagesRef} />
                     </div>
                 </main>
-                <InputMessage onSendMessage={onSendMessage} />
+
+                <InputMessage channel_id={channel_id} currUser={currUser} />
             </div>
         </>
     );

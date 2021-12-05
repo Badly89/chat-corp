@@ -1,10 +1,17 @@
 import React, { useRef, useEffect } from "react";
+import Moment from "react-moment";
+import "moment-timezone";
+Moment.globalLocale = "ru";
+Moment.globalFormat = "D MMM YYYY hh:mm:ss";
 
-import { MdDelete } from "react-icons/md";
-
-export const Message = ({ message, onDelMessage }) => {
-    const handleDelete = () => {
-        onDelMessage(message);
+export const Message = ({ message }) => {
+    const calendarStrings = {
+        lastDay: "[Вчера at] LT",
+        sameDay: "[Сегодня at] LT",
+        nextDay: "[Завтра at] LT",
+        lastWeek: "[последнее] dddd [at] LT",
+        nextWeek: "dddd [at] LT",
+        sameElse: "L",
     };
 
     const bottomRef = useRef(null);
@@ -19,14 +26,14 @@ export const Message = ({ message, onDelMessage }) => {
     }, [message]);
     return (
         <>
-            <div>{message.content}</div>
             <div className="message-sender">{message.user.name}</div>
-            <div className="text-small text-muted" ref={bottomRef}>
-                {message.created_at}
-            </div>
-            <div className="btn-del">
-                <MdDelete onClick={handleDelete} />
-            </div>
+            <div>{message.content}</div>
+            <Moment
+                calendar={calendarStrings}
+                date={message.created_at}
+                className="text-small text-muted"
+            />
+            <div ref={bottomRef}></div>
         </>
     );
 };
