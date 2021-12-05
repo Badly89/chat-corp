@@ -4,6 +4,7 @@ import {
     Card,
     Col,
     Collapse,
+    Fade,
     FloatingLabel,
     Form,
     Row,
@@ -135,7 +136,7 @@ export const UserProfile = () => {
                         </div>
                     </Col>
                     <Col md={6}>
-                        <Collapse in={open} dimension="width">
+                        <Fade in={open} dimension="width">
                             <div id="user-profile-setting">
                                 <header>
                                     <div>
@@ -233,7 +234,7 @@ export const UserProfile = () => {
                                     </Card.Body>
                                 </Card>
                             </div>
-                        </Collapse>
+                        </Fade>
                     </Col>
                 </Row>
             </div>
