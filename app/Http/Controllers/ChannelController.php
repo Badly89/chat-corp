@@ -61,7 +61,6 @@ class ChannelController extends Controller
         Cache::put('user-online'.$user_id, $user_id, 3600);
         broadcast(new UserOnline($user));
     }
-
     public function isOffline(Request $request, $user_id)
     {
         $user['id'] = $user_id;
