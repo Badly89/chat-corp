@@ -80,7 +80,7 @@ export const FormRegister = () => {
                                 onChange={handleChange}
                                 required
                             />
-                            <label htmlFor="name">Введите имя</label>
+                            <label htmlFor="name">Введите ваш email</label>
                             {status.email ? (
                                 <div
                                     className="alert alert-danger d-flex align-items-center"
