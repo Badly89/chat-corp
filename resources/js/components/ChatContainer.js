@@ -20,9 +20,9 @@ export const ChatContainer = () => {
     const usersInRoom = useSelector((state) => state.channels.usersInRoom);
 
     useEffect(() => {
-        setSelChannel(channel_id, title);
+        setSelChannel(channel_id);
         connectEcho(token);
-        dispatch(channelSelect(selChannel));
+        dispatch(channelSelect(selChannel, title));
     }, [channel_id]);
 
     return (

@@ -1,20 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Router, Link, Switch, Route, useHistory } from "react-router-dom";
 import { ListFriends } from "../ListFriends/ListFriends";
 import { UserProfile } from "../Profile/userProfile";
-import { useDispatch } from "react-redux";
 import { ChatContainer } from "../ChatContainer";
 import { ListChannels } from "../Channels/ListChannels";
-
-import { getAllChannelList } from "../../store/channels/actions";
+import {
+    FaRegCommentDots,
+    FaRegUserCircle,
+    FaUserFriends,
+} from "react-icons/fa";
 
 export const SideBar = () => {
-    const dispatch = useDispatch();
     const history = useHistory();
 
-    useEffect(() => {
-        // dispatch(getAllChannelList());
-    }, []);
     return (
         <div className=" main-window">
             <Router history={history}>
@@ -40,7 +38,8 @@ export const SideBar = () => {
                                         data-bs-placement="right"
                                         data-bs-original-title="chats"
                                     >
-                                        <i className="far fa-comment-dots"></i>
+                                        <FaRegCommentDots className="svg-icon" />
+                                        {/* <i className="far fa-comment-dots"></i> */}
                                     </Link>
                                 </li>
 
@@ -52,7 +51,8 @@ export const SideBar = () => {
                                         data-bs-placement="right"
                                         data-bs-original-title="friends"
                                     >
-                                        <i className="fas fa-user-friends"></i>
+                                        <FaUserFriends className="svg-icon" />
+                                        {/* <i className="fas fa-user-friends"></i> */}
                                     </Link>
                                 </li>
                                 <li>
@@ -64,7 +64,8 @@ export const SideBar = () => {
                                         data-bs-placement="right"
                                         data-bs-original-title="profile"
                                     >
-                                        <i className="far fa-user-circle"></i>
+                                        <FaRegUserCircle className="svg-icon" />
+                                        {/* <i className="far fa-user-circle"></i> */}
                                     </Link>
                                 </li>
                             </ul>

@@ -23,31 +23,25 @@ export const HeaderChat = ({ usersInRoom, arrTyping, title }) => {
     });
     return (
         <header className="title-message-field">
-            <div className="container">
-                <div className="wrap-title-message">
-                    <Card className="mb-3 w-100 justify-content-start">
-                        <div className="d-flex justify-content-between align-items-center ">
-                            <Card.Img
-                                variant="left"
-                                src="/image/photo.png"
-                                className="img-fluid rounded-start"
-                                alt="..."
-                            />
-                            <Card.Body>
-                                <Card.Title>{title}</Card.Title>
-                                <Card.Subtitle>
-                                    Количество пользователей подключенных к
-                                    каналу: {countUsersIrChannel}
-                                </Card.Subtitle>
-                                <Card.Text>
-                                    <small className="text-muted">
-                                        {typingEvent}
-                                    </small>
-                                </Card.Text>
-                            </Card.Body>
-                        </div>
-                    </Card>
-                </div>
+            <div className="wrap-title-message">
+                <Card className="card-header-channel">
+                    <Card.Img
+                        variant="left"
+                        src="/image/photo.png"
+                        className="img-fluid rounded-start"
+                        alt="..."
+                    />
+                    <Card.Body>
+                        <Card.Title>{title}</Card.Title>
+                        <Card.Subtitle>
+                            Количество пользователей подключенных к каналу:{" "}
+                            {countUsersIrChannel}
+                        </Card.Subtitle>
+                        <Card.Text>
+                            <small className="text-muted">{typingEvent}</small>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             </div>
         </header>
     );

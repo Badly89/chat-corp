@@ -46,9 +46,10 @@ export const FieldMessages = ({
                 </>
             );
         } else {
+            <Moment fromNow calendar={calendarStrings} date={Date()} />;
             if (value.user.name !== currUser.name) {
                 return (
-                    <Card className="card-guest" key={value.id}>
+                    <Card className="card-guest" key={index}>
                         <Card.Img
                             src="/image/avatar.png"
                             className="avatar-img-guest"
@@ -58,7 +59,7 @@ export const FieldMessages = ({
                             <Card.Text className="card-text-message">
                                 {value.content}
                             </Card.Text>
-                            <Card.Text className="text-muted pw-1">
+                            <Card.Text className="text-muted card-text-time-guest">
                                 <small>
                                     <Moment
                                         fromNow
@@ -72,9 +73,9 @@ export const FieldMessages = ({
                 );
             } else {
                 return (
-                    <Card className="card-sender" key={value.id}>
+                    <Card className="card-sender" key={index}>
                         <Card.Body className="message-sender">
-                            <Card.Text className="text-muted pe-1">
+                            <Card.Text className="text-muted card-text-time-sender">
                                 <small>
                                     <Moment
                                         fromNow
