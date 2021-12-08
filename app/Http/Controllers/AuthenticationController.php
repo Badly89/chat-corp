@@ -22,14 +22,14 @@ class AuthenticationController extends Controller
 
         $fields = $request->only(['name', 'email', 'password', 'password_confirmation']);
 
-        $user= User::create([
+        $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => Hash::make($fields['password']),
             'password_confirmation' => $fields['password_confirmation']
         ]);
 
-          $roster = new Roster([
+        $roster = new Roster([
             'user_id' => $user->id,
             'channel_id' => 1,
         ]);
@@ -44,7 +44,6 @@ class AuthenticationController extends Controller
                 'token' => $token,
                 'message'=> 'Регистрация прошла успешно',
             ]);
-        // }
     }
 
     public function login(UserCheckRequest $request) {
@@ -73,8 +72,6 @@ class AuthenticationController extends Controller
 
     }
 
-
-
     public function logout(Request $request) {
 
         auth()->user()->tokens()->delete();
@@ -84,8 +81,6 @@ class AuthenticationController extends Controller
             'message' => 'Successfully logged out'
         ]);
     }
-
-
 
     public function user(Request $request){
         $user = $request->user();

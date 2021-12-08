@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChannelCreateRequest;
+
 use App\Events\MessageSent;
 use App\Events\UserOffline;
 use App\Events\UserOnline;
@@ -27,7 +29,7 @@ class ChannelController extends Controller
     }
 
 
-     public function sendMessage(Request $request) {
+    public function sendMessage(Request $request) {
         $content = auth()->user()->messages()->create([
             'content' => $request->content,
             'channel_id' => $request->channel_id,
@@ -53,8 +55,8 @@ class ChannelController extends Controller
 
         return response()->json($channel);
     }
-    public function isOnline(Request $request, $user_id)
-    {
+
+    public function isOnline(Request $request, $user_id) {
         $user['id'] = $user_id;
         Cache::put('user-online'.$user_id, $user_id, 3600);
         broadcast(new UserOnline($user));
@@ -64,5 +66,21 @@ class ChannelController extends Controller
         $user['id'] = $user_id;
         Cache::forget('user-offline'.$user_id);
         broadcast(new UserOffline($user));
+    }
+
+    public function createChannel(ChannelCreateRequest $request) {
+
+        $fields = $request->only(['title', 'description', 'user_id_creator', 'image', 'type']);
+
+        $channel =  new Channel([
+            'title' => $fields['title'],
+            'user_id_creator' => $fields['user_id_creator'],
+            'image' => $fields['image'],
+            'description' => $fields['description'],
+            'type' => $fields['type'],
+        ]);
+
+        $channel->save();
+
     }
 }
