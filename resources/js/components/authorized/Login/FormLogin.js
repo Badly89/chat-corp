@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Button, FloatingLabel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
@@ -50,21 +50,18 @@ export const FormLogin = () => {
                         className="form-signin form-floating pb-4"
                         onSubmit={handleLogin}
                     >
-                        <div className="input-block">
-                            <div className="form-floating pb-3">
-                                <input
-                                    value={loginInput.email}
-                                    name="email"
-                                    type="text"
-                                    className="form-control input"
-                                    id="email"
-                                    placeholder="Укажите ваш email"
-                                    onChange={handleInput}
-                                    required
-                                />
-                                <label htmlFor="email">
-                                    Введите ваш e-mail
-                                </label>
+                        <FloatingLabel className="mb-3">
+                            <Form.Control
+                                className="input"
+                                type="email"
+                                placeholder="Укажите ваш email"
+                                value={loginInput.email}
+                                name="email"
+                                onChange={handleInput}
+                                id="email"
+                            />
+                            <label htmlFor="email">Укажите ваш email</label>
+                            <div>
                                 {statusMesg.email ? (
                                     <div
                                         className="alert alert-danger d-flex align-items-center"
@@ -86,43 +83,41 @@ export const FormLogin = () => {
                                     </div>
                                 ) : null}
                             </div>
-
-                            <div className="form-floating pb-">
-                                <input
-                                    value={loginInput.password}
-                                    type="password"
-                                    name="password"
-                                    className="form-control input"
-                                    id="floatingPassword"
-                                    placeholder="Password"
-                                    onChange={handleInput}
-                                    required
-                                />
-                                <label htmlFor="floatingPassword">
-                                    Введите пароль
-                                </label>
-                            </div>
-                            {statusMesg.password ? (
-                                <div
-                                    className="alert alert-danger d-flex align-items-center"
-                                    role="alert"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        fill="currentColor"
-                                        className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
-                                        viewBox="0 0 16 16"
-                                        role="img"
-                                        aria-label="Danger:"
+                        </FloatingLabel>
+                        <FloatingLabel className="mb-3">
+                            <Form.Control
+                                className="input"
+                                type="password"
+                                placeholder="Введите пароль"
+                                value={loginInput.password}
+                                name="password"
+                                id="password"
+                                onChange={handleInput}
+                            />
+                            <label htmlFor="password">Введите пароль</label>
+                            <div>
+                                {statusMesg.password ? (
+                                    <div
+                                        className="alert alert-danger d-flex align-items-center"
+                                        role="alert"
                                     >
-                                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                    </svg>
-                                    <div>{statusMesg.password}</div>
-                                </div>
-                            ) : null}
-                        </div>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            fill="currentColor"
+                                            className="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                                            viewBox="0 0 16 16"
+                                            role="img"
+                                            aria-label="Danger:"
+                                        >
+                                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                        </svg>
+                                        <div>{statusMesg.password}</div>
+                                    </div>
+                                ) : null}
+                            </div>
+                        </FloatingLabel>
 
                         <div className="checkbox mb-3">
                             <label className="px-3">
@@ -136,12 +131,13 @@ export const FormLogin = () => {
                             </label>
                         </div>
 
-                        <button
-                            className="btn btn-lg btn-success"
+                        <Button
+                            variant="outline-success"
                             type="submit"
+                            className="btn-auth"
                         >
                             Войти
-                        </button>
+                        </Button>
                     </Form>
                 </div>
 

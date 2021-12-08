@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MessageSent;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\MailController;
@@ -37,8 +38,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //Route from Channels
     Route::get('/getAllChannels',[ChannelController::class,'getAllChannels']);
     Route::post('/sendMessage',[ChannelController::class,'sendMessage']);
+
+    Route::get('/online/{user_id}', [ChannelController::class,'isOnline']);
+    Route::get('/offline/{user_id}', [ChannelController::class,'isOffline']);
+
     Route::get('/getMessages/{channel_id}', [ChannelController::class,'getMessages']);
-    // Route::get('/getChannelsUsers/{channel_id}',[ChatController::class,'getChannelsUsers']);
+    Route::get('/getUsers/{channel_id}',[ChannelController::class,'getChannelsUsers']);
 });
 
 Route::post('/register', [AuthenticationController::class, 'register']);

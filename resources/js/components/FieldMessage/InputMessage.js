@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
 
 import { BsArrowReturnLeft } from "react-icons/bs";
+import { sendMessage } from "../../utils/connectEcho";
 
-export const InputMessage = ({ onSendMessage }) => {
-    const [value, setValue] = useState("");
-    const { currUser } = useSelector((state) => state.auth.currUser);
-
+export const InputMessage = ({ channel_id, currUser }) => {
+    const [content, setContent] = useState("");
     const handleChange = (e) => {
-        setValue(e.target.value);
+        setContent(e.target.value);
+        setTimeout(() => {
+            window.Echo.join(`chat.channel.${channel_id}`).whisper("typing", {
+                name: currUser.name,
+            });
+        }, 300);
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSendMessage(value);
-        setValue("");
+        sendMessage(channel_id, content);
+        setContent("");
     };
 
     return (
@@ -23,7 +27,7 @@ export const InputMessage = ({ onSendMessage }) => {
                 <InputGroup className="mb-3">
                     <FormControl
                         type="text"
-                        value={value}
+                        value={content}
                         placeholder="Введите сообщение"
                         aria-label="Введите сообщение"
                         aria-describedby="basic-addon2"
@@ -36,6 +40,10 @@ export const InputMessage = ({ onSendMessage }) => {
                         variant="contained"
                         color="outline-secondary"
                         id="button-addon2"
+                        style={{
+                            fontSize: "1.3rem",
+                            textTransform: "lowercase",
+                        }}
                     >
                         <BsArrowReturnLeft />
                     </Button>

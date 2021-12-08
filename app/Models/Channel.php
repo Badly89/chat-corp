@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
 {
+    protected $guarded =[];
      protected $attributes = [
         'title' => null,
     ];
@@ -22,7 +23,7 @@ class Channel extends Model
     protected $hidden = ['pivot'];
 
    public function users() {
-        return $this->belongsToMany('App\Models\User', 'user_channel')->withTimestamps()->select('title','id');
+        return $this->belongsToMany('App\Models\User', 'rosters')->withTimestamps()->select('name','user_id');
     }
 
 }

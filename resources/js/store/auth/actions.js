@@ -150,6 +150,11 @@ export const login =
                             text: resp.data.message,
                         });
 
+                        returnStatus(
+                            resp.data.message,
+                            resp.data.status,
+                            "LOGIN_SUCCESS"
+                        );
                         dispatch({
                             type: LOGIN_SUCCESS,
                             payload: { currUser: resp.data.username },
@@ -205,12 +210,16 @@ export const login =
         });
     };
 
-export const logout = () => (dispatch) => {
+export const logout = (id, channel_id) => (dispatch) => {
+    // window.Echo.leave("chat");
     Swal.fire({
         title: "Завершение сеанса",
         allowOutsideClick: false,
     });
     Swal.showLoading();
+    // window.Echo.leave(`chat.channel.${channel_id}`);
+    // window.Echo.disconnect();
+    axios.get(`/offline/${id}`, { withCredentials: true });
     // window.Echo.disconnect();
     try {
         axios
@@ -238,8 +247,8 @@ export const logout = () => (dispatch) => {
                         type: LOGOUT_SUCCESS,
                         isAuthenticated: false,
                     });
-                    dispatch({ type: CLEAR_CHANNELS });
-                    dispatch({ type: CLEAR_MESSAGES });
+                    // dispatch({ type: CLEAR_CHANNELS });
+                    // dispatch({ type: CLEAR_MESSAGES });
                 } else {
                 }
             })
@@ -254,12 +263,10 @@ export const logout = () => (dispatch) => {
 export const resetPassword =
     ({ email }) =>
     (dispatch) => {
-        console.log(email);
-        const body = JSON.stringify({ email });
-        console.log(body);
-
         axios
-            .post(`/forgot-password/${email}`)
+            .post(`/forgot-password/${email}`, headersObj, {
+                withCredentials: true,
+            })
             .then((resp) => {
                 if (resp.data.status === 200) {
                     console.log(resp);
@@ -270,10 +277,11 @@ export const resetPassword =
                         text: resp.data.message,
                     });
                 } else {
+                    // console.log(resp.data.validation_errors);
                 }
             })
             .catch((err) => {
-                console.log(err.response);
+                console.log(err);
             });
     };
 
