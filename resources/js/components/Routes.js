@@ -10,6 +10,7 @@ import { UserProfile } from "../components/Profile/userProfile";
 import { FormResetPassword } from "./authorized/ResetPassword/FormResetPassword";
 
 import axios from "axios";
+import { ChatContainer } from "./ChatContainer";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.get["Accept"] = "application/json";
@@ -55,6 +56,11 @@ export const Routes = () => {
                     path="/"
                     isAuthenticated={authed}
                     component={SideBar}
+                />
+                <PrivateRoute
+                    path="/channels"
+                    isAuthenticated={authed}
+                    component={ChatContainer}
                 />
                 <PrivateRoute
                     path="/userProfile"

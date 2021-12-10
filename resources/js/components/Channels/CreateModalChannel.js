@@ -1,13 +1,34 @@
-import React from "react";
-import { Modal, Form, Button } from "react-bootstrap";
-export const CreateModalChannel = (props) => {
+import React, { useState } from "react";
+import { Modal, Form, Button, InputGroup } from "react-bootstrap";
+export const CreateModalChannel = ({ show, onHide, userIdCreator }) => {
+    console.log(userIdCreator);
+    const [inputChannel, setInputChannel] = useState({
+        title: "",
+        description: "",
+        image: "",
+        type: "",
+    });
+    const handleChange = (e) => {
+        setInputChannel({ ...inputChannel, [e.target.name]: e.target.value });
+    };
+    const handleClose = () => {
+        onHide();
+        setInputChannel({
+            title: "",
+            description: "",
+            image: "",
+            type: "",
+        });
+    };
+    console.log(inputChannel);
     return (
         <div>
             <Modal
                 animation
                 size="lg"
                 backdrop="static"
-                {...props}
+                // {...props}
+                show={show}
                 centered
                 aria-labelledby="modalCreateChannel"
             >
@@ -16,42 +37,81 @@ export const CreateModalChannel = (props) => {
                         Создание нового чата
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="channelName">
-                            <Form.Label>Название канала</Form.Label>
+
+                <Form>
+                    <Modal.Body>
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="title">
+                                Название канала
+                            </Form.Label>
                             <Form.Control
+                                id="title"
+                                name="title"
+                                value={inputChannel.title}
                                 type="text"
                                 placeholder="Введите название канала"
+                                onChange={handleChange}
                             />
                         </Form.Group>
-
-                        <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Выберите файл</Form.Label>
-                            <Form.Control type="file" />
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="description">
+                                Описание
+                            </Form.Label>
+                            <Form.Control
+                                name="description"
+                                id="description"
+                                value={inputChannel.description}
+                                as="textarea"
+                                placeholder="Описание канала"
+                                onChange={handleChange}
+                            />
                         </Form.Group>
-
-                        <Form.Check
-                            label="Публичный канал"
-                            type="radio"
-                            inline
-                            name="groupChannelSelect"
-                        />
-                        <Form.Check
-                            label="Приватный канал"
-                            type="radio"
-                            inline
-                            name="groupChannelSelect"
-                        />
-
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                id="image"
+                                name="image"
+                                value={inputChannel.image}
+                                type="file"
+                                onChange={handleChange}
+                            />
+                            <Form.Label htmlFor="image">
+                                Выберите файл
+                            </Form.Label>
+                        </Form.Group>
+                        <InputGroup>
+                            <Form.Label htmlFor="direct">
+                                Приватный канал
+                            </Form.Label>
+                            <Form.Check
+                                id="direct"
+                                name="type"
+                                value="direct"
+                                type="radio"
+                                onChange={handleChange}
+                                inline
+                            />
+                            <Form.Label htmlFor="public">
+                                Публичный канал
+                            </Form.Label>
+                            <Form.Check
+                                name="type"
+                                id="public"
+                                type="radio"
+                                inline
+                                value="public"
+                                onChange={handleChange}
+                            />
+                        </InputGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button variant="success" type="submit">
                             Submit
                         </Button>
-                        <Button variant="secondary" onClick={props.onHide}>
+                        <Button variant="secondary" onClick={handleClose}>
                             Отмена
                         </Button>
-                    </Form>
-                </Modal.Body>
+                    </Modal.Footer>
+                </Form>
             </Modal>
         </div>
     );
