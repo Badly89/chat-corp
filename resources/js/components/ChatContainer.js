@@ -27,7 +27,7 @@ export const ChatContainer = () => {
 
     return (
         <>
-            <ListChannels />
+            <ListChannels currUser={currUser} />
             <FieldMessages
                 arrTyping={arrTyping}
                 title={title}

@@ -12,13 +12,13 @@ const chatOptions = [
     { value: "groups", label: "Группы" },
     { value: "arhives", label: "Архивы" },
 ];
-export const ListChannels = () => {
+export const ListChannels = ({ currUser }) => {
     const [selectedChat, useSelectChat] = useState("allChats");
     const [modalShow, setModalShow] = useState(false);
 
-    const [value, setValue] = useState("");
     const channels = useSelector((state) => state.channels.allChannels);
-
+    console.log(currUser);
+    const userIdCreator = currUser;
     const dispatch = useDispatch();
 
     const handleClose = () => setModalShow(false);
@@ -28,17 +28,6 @@ export const ListChannels = () => {
         useSelectChat(selectedChat);
     };
 
-    const handleChange = (e) => {
-        setValue(e.target.value);
-    };
-
-    const handleClick = () => {
-        dispatch(createChannel(value));
-        setValue("");
-    };
-    const handleDelete = (id) => {
-        // dispatch(deleteChannel(id));
-    };
     return (
         <div className="chatList">
             <div className="d-flex flex-column   bg-white">
@@ -63,6 +52,7 @@ export const ListChannels = () => {
                             <CreateModalChannel
                                 show={modalShow}
                                 onHide={handleClose}
+                                userIdCreator={userIdCreator}
                             />
                         </div>
                     </div>
@@ -98,8 +88,9 @@ export const ListChannels = () => {
                         <Link
                             to={`/channels/${id}/${title}`}
                             className="text-decoration-none"
+                            key={id}
                         >
-                            <Card className="card-channel" key={id}>
+                            <Card className="card-channel">
                                 <Card.Img
                                     src="/image/photo.png"
                                     className="img-fluid rounded-start"
